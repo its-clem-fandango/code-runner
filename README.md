@@ -2,25 +2,19 @@
 
 This is an official starter Turborepo.
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
 ## What's inside?
 
 This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `client`: a [Next.js](https://nextjs.org/) app
+- `server`: [Nest.js](https://docs.nestjs.com/) app
+- `@repo/ui`: a stub React component library shared by both `client` and `server` applications
+- `monaco editor`: a [Monaco](https://microsoft.github.io/monaco-editor/) text editor
+- `cors`: a [cors](https://www.npmjs.com/package/cors) node.js package that can be used to enable CORS
+- `morgan`: [Morgan](https://www.npmjs.com/package/morgan) to keep track of HTTP requests
+- `nodemon`: [nodemon](https://www.npmjs.com/package/nodemon) to automatically restart the node application on file changes
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -37,8 +31,7 @@ This Turborepo has some additional tools already setup for you:
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-pnpm build
+yarn build
 ```
 
 ### Develop
@@ -46,8 +39,7 @@ pnpm build
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-pnpm dev
+yarn dev
 ```
 
 ### Remote Caching
