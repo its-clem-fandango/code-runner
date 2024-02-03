@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AppService } from './app.service';
-import { testRunner } from './services/testRunner.service';
 import { codingChallengesList } from './database/codingChallenges';
 import { strict as assert } from 'assert';
 
@@ -15,6 +14,7 @@ export class AppController {
 
   @Post('answer')
   submitCode(
+    // Body @decorator automatically parses request body and extracts its contents into a defined object structure
     @Body()
     body: {
       userId: number;
@@ -23,26 +23,60 @@ export class AppController {
       submittedAnswer: string;
     },
   ): string {
-    const { submittedAnswer, userId, battleId, challengeId } = body;
+    // Destructure the received body to get the submitted answer and challengeID
+    const { submittedAnswer, challengeId } = body;
+
+    // Find the challenge in the list by its ID and get its details and tests, i.e. returns object in codingChallenges.ts
     const codingChallenge = codingChallengesList.find(
       (challenge) => challenge.challengeId === challengeId,
     );
 
-    console.log('codingChallenge log:', codingChallenge);
-
-    console.log('assert module:', assert);
-
     let didAssertPass = false;
+    const testResults = []; // Declare the testResults array here
+    const runUserFunction = eval(`(${submittedAnswer})`);
 
+    // Attempt to run each test case
     try {
-      assert.equal(4, 5); // This will pass silently
-      didAssertPass = true;
+      codingChallenge.tests.forEach((testCase) => {
+        const [a, b] = testCase.input;
+        const expected = testCase.expected;
+        const result = runUserFunction(a, b);
+        assert.strictEqual(result, expected); // Use assert.strictEqual for strict equality
+
+        // If the test case passes without throwing an assertion error, push the pass result
+        testResults.push({
+          input: [a, b],
+          expected,
+          result,
+          passed: true,
+        });
+      });
+
+      // If all tests are pushed as passed, then didAssertPass becomes true
+      if (testResults.every((test) => test.passed)) {
+        didAssertPass = true;
+      }
     } catch (error) {
-      console.error('Assertion failed:', error.message);
+      // If an error is caught, log the failing test case but don't stop the execution.
+      // The didAssertPass remains false as initialized.
+      testResults.push({
+        input: error.input, // This assumes you have access to the input at this point, which you may need to adjust
+        expected: error.expected,
+        result: 'Execution Error',
+        passed: false,
+        error: error.message,
+      });
     }
 
-    console.log('Did the assertion pass?', didAssertPass);
+    // Logging the results for visibility
+    console.log('Test Results: ', testResults);
+    console.log('Did the test pass?', didAssertPass);
 
-    return `Coding Challenge Description: ${codingChallenge.description}, \n Submited Answer: ${submittedAnswer}`;
+    let responseMessage = `Coding Challenge Description: ${codingChallenge.description}, \nSubmitted Answer: ${submittedAnswer}\n`;
+    responseMessage += didAssertPass
+      ? 'All tests passed.'
+      : 'Some tests failed. Check test results for details.';
+
+    return responseMessage;
   }
 }

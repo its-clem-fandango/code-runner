@@ -7,7 +7,7 @@ export const codingChallengesList = [
     difficultyOfChallenge: 'easy',
     tests: [
       { name: 'test1', input: [2, 2], expected: 4 },
-      { name: 'test2', input: [0, 0], expected: 0 },
+      { name: 'test2', input: [13, -7], expected: 6 },
     ],
   },
 ];
