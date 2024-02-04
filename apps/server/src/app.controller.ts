@@ -35,13 +35,16 @@ export class AppController {
     const testResults = []; // Declare the testResults array here
     const runUserFunction = eval(`(${submittedAnswer})`);
 
-    // Attempt to run each test case
+    // Attempt to run each test case within ID
     try {
       codingChallenge.tests.forEach((testCase) => {
-        const [a, b] = testCase.input;
+        const [a, b] = testCase.input; //destructured from codingChallenges.ts
         const expected = testCase.expected;
         const result = runUserFunction(a, b);
-        assert.strictEqual(result, expected); // Use assert.strictEqual for strict equality
+
+        console.log('EVALUATE USER FUNCTION: ', runUserFunction);
+
+        assert.strictEqual(result, expected); // Use assert.strictEqual for error reporting intstead of ===
 
         // If the test case passes without throwing an assertion error, push the pass result
         testResults.push({
@@ -60,7 +63,6 @@ export class AppController {
       // If an error is caught, log the failing test case but don't stop the execution.
       // The didAssertPass remains false as initialized.
       testResults.push({
-        input: error.input, // This assumes you have access to the input at this point, which you may need to adjust
         expected: error.expected,
         result: 'Execution Error',
         passed: false,
