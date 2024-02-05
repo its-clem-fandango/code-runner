@@ -22,9 +22,9 @@ export class AnswerService {
     const testResults = [];
     try {
       codingChallenge.tests.forEach((testCase) => {
-        const [a, b] = testCase.input; //destructured from codingChallenges.ts
+        const inputValues = testCase.input; //destructured from codingChallenges.ts
         const expected = testCase.expected;
-        const result = userFunction(a, b);
+        const result = userFunction(...inputValues);
 
         console.log('EVALUATE USER FUNCTION: ', userFunction);
 
@@ -32,7 +32,7 @@ export class AnswerService {
 
         // If the test case passes without throwing an assertion error, push the pass result
         testResults.push({
-          input: [a, b],
+          input: inputValues,
           expected,
           result,
           passed: true,
@@ -43,10 +43,10 @@ export class AnswerService {
       if (testResults.every((test) => test.passed)) {
         didAssertPass = true;
       }
-      return { didAssertPass, testResults };
     } catch (error) {
       // If an error is caught, log the failing test case but don't stop the execution.
       // The didAssertPass remains false as initialized.
+      console.log(error);
       testResults.push({
         expected: error.expected,
         result: 'Execution Error',
@@ -54,5 +54,6 @@ export class AnswerService {
         error: error.message,
       });
     }
+    return { didAssertPass, testResults };
   }
 }
