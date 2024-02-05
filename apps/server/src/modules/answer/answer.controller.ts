@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AnswerService } from './answer.service';
 
-@Controller('answer')
+@Controller('answer') //handles all HTTP requests related to 'answer' endpoint
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
   @Post()
