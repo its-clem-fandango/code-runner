@@ -1,4 +1,5 @@
 import react from 'react'
+import { Button } from "@/components/ui/button";
 
 function Dashboard (){
 
@@ -6,6 +7,7 @@ function Dashboard (){
     
     <div>
       <div>
+      <Button>This is my ShadCN Button</Button>
         <button> Start Battle </button>
         <div><h3> Join a Battle </h3>
         <div> The table here</div>
