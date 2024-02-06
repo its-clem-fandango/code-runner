@@ -2,21 +2,27 @@
 
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from 'react'
-import { Payment, columns } from '@/app/dataTable/columns'
+import { Battle, columns } from '@/app/dataTable/columns'
 import {DataTable} from '@/app/dataTable/data-table'
 
 
-async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Battle[]> {
   // Fetch data from your API here.
   
-  const data: Payment[] = [
+  const data: Battle[] = [
     
       {
-        id: "728ed52f",
-        amount: 100,
-        status: "pending",
-        email: "m@example.com",
-      },
+        BattleName: "Battle me and my monkey",
+        Username: "Manel",
+        Difficulty: "easy",
+        Join: "m@example.com",
+    },
+    {
+      BattleName: "wtf did u just say to me u lil bitch",
+      Username: "Juneau",
+      Difficulty: "easy",
+      Join: "fightme@example.com",
+    },
       // ...
       
       
@@ -27,7 +33,7 @@ async function getData(): Promise<Payment[]> {
  function Dashboard() {
 
   
-  const [battleList,setBattleList] = useState<Payment[]>([])
+  const [battleList,setBattleList] = useState<Battle[]>([])
 
    useEffect(() => {
      const fetchData = async () => {
@@ -47,8 +53,8 @@ async function getData(): Promise<Payment[]> {
   return (
     
     <div>
-      <div>
-      <Button onClick={handleNewGame}>Start Battle</Button>
+      <div className="flex">
+      <Button className="flex-end" onClick={handleNewGame}>Start Battle</Button>
         </div>
       
       <div>
@@ -58,7 +64,6 @@ async function getData(): Promise<Payment[]> {
         <h3> Join a Battle </h3>
              <DataTable columns={columns} data={battleList} />
 
-         <div> The table here</div>
       </div>
     </div>
   )
