@@ -2,6 +2,11 @@ import react from 'react'
 
 function Dashboard (){
 
+  function handleNewGame(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    console.log("Button Clicked")
+  }
+
   return (
     
     <div>
