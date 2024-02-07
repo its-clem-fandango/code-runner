@@ -31,7 +31,8 @@ export default function MonacoCodeEditor() {
   }
 
   const sendMessage = (code: string | undefined) => {
-    if (!code) return
+    // check later for undefined code
+    //if (!code) return
     console.log(`EMIT MSG:`, code)
     socket.emit('codeChanged', { room: roomName, player: 1, message: code })
   }
