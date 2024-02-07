@@ -798,6 +798,14 @@
     multer "1.4.4-lts.1"
     tslib "2.6.2"
 
+"@nestjs/platform-socket.io@^10.3.2":
+  version "10.3.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-socket.io/-/platform-socket.io-10.3.2.tgz#07ca9f669a9bb2325c7e946d2b057084a526e817"
+  integrity sha512-BnU2tmH6cMSY6PUxen8QKmmLu7fZwe5b/IEx0kipBV9jGnidii+9VhW9sbdbZOQhrZVdGLByYEuaX7rdguq0lg==
+  dependencies:
+    socket.io "4.7.4"
+    tslib "2.6.2"
+
 "@nestjs/schematics@^10.0.0", "@nestjs/schematics@^10.0.1":
   version "10.1.0"
   resolved "https://registry.yarnpkg.com/@nestjs/schematics/-/schematics-10.1.0.tgz#bf9be846bafad0f45f0ea5ed80aaaf971bb90873"
@@ -814,6 +822,15 @@
   resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-10.3.1.tgz#ea28a7d29122dd3a2df1542842e741a52dd7c474"
   integrity sha512-74aSAugWT31jSPnStyRWDXgjHXWO3GYaUfAZ2T7Dml88UGkGy95iwaWgYy7aYM8/xVFKcDYkfL5FAYqZYce/yg==
   dependencies:
+    tslib "2.6.2"
+
+"@nestjs/websockets@^10.3.2":
+  version "10.3.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/websockets/-/websockets-10.3.2.tgz#0b4df8c0603ff6508693595ec05be5004143fe5b"
+  integrity sha512-SMQM8hcRgngOabnluRLei46JUYvZ6j3DaZ2bDNYu57G3nlmkxXNktz7/pJG07NcetZL4CyF9pNyuICZql4Nhww==
+  dependencies:
+    iterare "1.2.1"
+    object-hash "3.0.0"
     tslib "2.6.2"
 
 "@next/env@14.1.0":
@@ -5471,7 +5488,7 @@ object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.1:
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==
 
-object-hash@^3.0.0:
+object-hash@3.0.0, object-hash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-3.0.0.tgz#73f97f753e7baffc0e2cc9d6e079079744ac82e9"
   integrity sha512-RSn9F68PjH9HqtltsSnqYC1XXoWe9Bju5+213R98cNGttag9q9yAOTzdbsqvIa7aNm5WffBZFpWYr2aWrklWAw==
@@ -6550,7 +6567,7 @@ socket.io-parser@~4.2.4:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.3.1"
 
-socket.io@^4.7.4:
+socket.io@4.7.4, socket.io@^4.7.4:
   version "4.7.4"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-4.7.4.tgz#2401a2d7101e4bdc64da80b140d5d8b6a8c7738b"
   integrity sha512-DcotgfP1Zg9iP/dH9zvAQcWrE0TtbMVwXmlV4T4mqsvY+gw+LqUGPfx2AoVyRk0FLME+GQhufDMyacFmw7ksqw==

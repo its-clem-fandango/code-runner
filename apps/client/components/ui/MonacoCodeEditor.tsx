@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { socket } from '@/components/ui/socket'
 import { Editor } from '@monaco-editor/react'
 import '../../app/globals.css'
@@ -24,21 +24,28 @@ export default function MonacoCodeEditor() {
     event.preventDefault()
   }
 
-  /* const handleEditorChange = (newValue) => {
+  const handleEditorChange = (newValue) => {
     setCode(newValue)
     sendMessage(newValue)
   }
 
   const sendMessage = (code) => {
     console.log(`EMIT MSG:`, code)
-    socket.emit('chat message', { room: roomName, message: code })
+    socket.emit('codeChanged', { room: roomName, player: 1, message: code })
   }
+  useEffect(() => {
+    socket.on('opponentCode', (msg) => {
+      if (msg.player !== 1) {
+        console.log(`This is the message: ${msg.message}`)
+        setRecievedCode(msg.message)
+        console.log(`This is recieved: ${recievedCode}`)
+
+      }
+    })
+  }, [])
   socket.emit('join room', roomName)
-  socket.on('chat message', (msg) => {
-    console.log(`This is the message: ${msg}`)
-    setRecievedCode(msg)
-    console.log(`This is recieved: ${recievedCode}`)
-  }) */
+
+
 
   return (
     <>
@@ -57,7 +64,7 @@ export default function MonacoCodeEditor() {
             theme='vs-dark'
             path={file.name}
             defaultLanguage={file.language}
-            //onChange={handleEditorChange}
+            onChange={handleEditorChange}
           />
 
           <Editor
