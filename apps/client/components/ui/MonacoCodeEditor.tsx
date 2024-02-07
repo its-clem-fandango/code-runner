@@ -1,35 +1,37 @@
 'use client'
 
-import React from 'react'
+import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from 'react'
 import { useState, useEffect } from 'react'
 import { socket } from '@/components/ui/socket'
 import { Editor } from '@monaco-editor/react'
 import '../../app/globals.css'
 
-const files = {
-  'script.js': {
-    name: 'script.js',
-    language: 'javascript',
-    value: 'let number = 5',
-  },
+interface File {
+  name: string
+  language: string
+  value: string
 }
 
 export default function MonacoCodeEditor() {
-  const [fileName, setFileName] = useState('script.js')
-  const file = files[fileName]
-  const [code, setCode] = useState('')
-  const [recievedCode, setRecievedCode] = useState('')
+  const [fileName, setFileName] = useState<string>('script.js')
+  const [code, setCode] = useState<string | undefined>('')
+  const [recievedCode, setRecievedCode] = useState<string>('')
+
   const roomName = 1
-  const handleReadOnlyEditorMouseDown = (event) => {
-    event.preventDefault()
+  const files = {
+    name: 'script.js',
+    language: 'javascript',
+    value: 'let number = 5',
+  }
+  const file: File = files
+
+  const handleEditorChange = (code: string | undefined) => {
+    setCode(code)
+    sendMessage(code)
   }
 
-  const handleEditorChange = (newValue) => {
-    setCode(newValue)
-    sendMessage(newValue)
-  }
-
-  const sendMessage = (code) => {
+  const sendMessage = (code: string | undefined) => {
+    if (!code) return
     console.log(`EMIT MSG:`, code)
     socket.emit('codeChanged', { room: roomName, player: 1, message: code })
   }
@@ -39,13 +41,10 @@ export default function MonacoCodeEditor() {
         console.log(`This is the message: ${msg.message}`)
         setRecievedCode(msg.message)
         console.log(`This is recieved: ${recievedCode}`)
-
       }
     })
   }, [])
   socket.emit('join room', roomName)
-
-
 
   return (
     <>
@@ -64,7 +63,7 @@ export default function MonacoCodeEditor() {
             theme='vs-dark'
             path={file.name}
             defaultLanguage={file.language}
-            onChange={handleEditorChange}
+            onChange={(value: string | undefined) => handleEditorChange(value)}
           />
 
           <Editor
@@ -76,7 +75,6 @@ export default function MonacoCodeEditor() {
             options={{
               readOnly: true,
             }}
-            onMouseDown={handleReadOnlyEditorMouseDown}
             className='read-only-editor editor'
           />
         </div>
