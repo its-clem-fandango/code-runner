@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { useState } from 'react'
 import { socket } from '@/components/ui/socket'
@@ -53,7 +55,6 @@ export default function MonacoCodeEditor() {
             height='60vh'
             width='40vw'
             theme='vs-dark'
-            className='editor'
             path={file.name}
             defaultLanguage={file.language}
             //onChange={handleEditorChange}
