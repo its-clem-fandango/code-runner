@@ -1,0 +1,96 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+const FormSchema = z.object({
+  battleName: z
+    .string({ required_error: "Set a name." })
+    .min(2, "TOO SHORT MFER")
+    .max(25, "TOO LONG MFUCKER"),
+  type: z.enum(["easy", "medium", "hard"], {
+    required_error: "You need to select a difficulty.",
+  }),
+});
+
+export default function BattleForm() {
+  const formProps = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  function handleBattleSubmit() {
+    console.log("Battle Submitted");
+  }
+
+  return (
+    <Form {...formProps}>
+      <form onSubmit={formProps.handleSubmit(handleBattleSubmit)}>
+        <FormField
+          control={formProps.control}
+          name="battleName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="font-normal">Room Name</FormLabel>
+
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formProps.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Choose your difficulty...</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="flex flex-col space-y-1"
+                >
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="easy" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Easy</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="medium" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Medium</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value="hard" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Hard</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <DialogFooter>
+          <Button type="submit">Create Battle</Button>
+        </DialogFooter>
+      </form>
+    </Form>
+  );
+}

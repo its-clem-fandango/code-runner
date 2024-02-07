@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Battle, columns } from "@/app/dataTable/columns";
 import { DataTable } from "@/app/dataTable/data-table";
@@ -53,7 +52,6 @@ function Dashboard() {
       <div>
         {/* rendert a table with 4 columns ( battle name, username, level of challenge, jopin button) */}
         <DataTable columns={columns} data={battleList} />
-        <ButtonPopUp />
       </div>
     </div>
   );
