@@ -1,75 +1,75 @@
-import React from "react";
-import { useState } from "react";
-import { socket } from "@/components/ui/socket";
-import { Editor } from "@monaco-editor/react";
-import "../../app/globals.css";
+import React from 'react'
+import { useState } from 'react'
+import { socket } from '@/components/ui/socket'
+import { Editor } from '@monaco-editor/react'
+import '../../app/globals.css'
 
 const files = {
-  "script.js": {
-    name: "script.js",
-    language: "javascript",
-    value: "let number = 5",
+  'script.js': {
+    name: 'script.js',
+    language: 'javascript',
+    value: 'let number = 5',
   },
-};
+}
 
 export default function MonacoCodeEditor() {
-  const [fileName, setFileName] = useState("script.js");
-  const file = files[fileName];
-  const [code, setCode] = useState("");
-  const [recievedCode, setRecievedCode] = useState("");
-  const roomName = 1;
+  const [fileName, setFileName] = useState('script.js')
+  const file = files[fileName]
+  const [code, setCode] = useState('')
+  const [recievedCode, setRecievedCode] = useState('')
+  const roomName = 1
   const handleReadOnlyEditorMouseDown = (event) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
-  const handleEditorChange = (newValue) => {
-    setCode(newValue);
-    sendMessage(newValue);
-  };
+  /* const handleEditorChange = (newValue) => {
+    setCode(newValue)
+    sendMessage(newValue)
+  }
 
   const sendMessage = (code) => {
-    console.log(`EMIT MSG:`, code);
-    socket.emit("chat message", { room: roomName, message: code });
-  };
-  socket.emit("join room", roomName);
-  socket.on("chat message", (msg) => {
-    console.log(`This is the message: ${msg}`);
-    setRecievedCode(msg);
-    console.log(`This is recieved: ${recievedCode}`);
-  });
+    console.log(`EMIT MSG:`, code)
+    socket.emit('chat message', { room: roomName, message: code })
+  }
+  socket.emit('join room', roomName)
+  socket.on('chat message', (msg) => {
+    console.log(`This is the message: ${msg}`)
+    setRecievedCode(msg)
+    console.log(`This is recieved: ${recievedCode}`)
+  }) */
 
   return (
     <>
-      <div className="container">
+      <div className='container'>
         <button
-          disabled={fileName === "script.js"}
-          onClick={() => setFileName("script.js")}
-          className="btn-top"
+          disabled={fileName === 'script.js'}
+          onClick={() => setFileName('script.js')}
+          className='btn-top'
         >
           script.js
         </button>
-        <div className="editors-container">
+        <div className='editors-container'>
           <Editor
-            height="60vh"
-            width="40vw"
-            theme="vs-dark"
-            className="editor"
+            height='60vh'
+            width='40vw'
+            theme='vs-dark'
+            className='editor'
             path={file.name}
             defaultLanguage={file.language}
-            onChange={handleEditorChange}
+            //onChange={handleEditorChange}
           />
 
           <Editor
-            height="60vh"
-            width="40vw"
-            theme="vs-dark"
+            height='60vh'
+            width='40vw'
+            theme='vs-dark'
             defaultLanguage={file.language}
             value={recievedCode}
             options={{
               readOnly: true,
             }}
             onMouseDown={handleReadOnlyEditorMouseDown}
-            className="read-only-editor editor"
+            className='read-only-editor editor'
           />
         </div>
         <div>
@@ -79,5 +79,5 @@ export default function MonacoCodeEditor() {
         </div>
       </div>
     </>
-  );
+  )
 }
