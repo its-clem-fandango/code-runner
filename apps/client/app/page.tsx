@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import Dashboard from "./dashboard/dashboard";
 
 export default function Home() {
   return (
-    <div>
-      <Button>This is my ShadCN Button</Button>
-      <Link href="/new-game">
-        <Button>New Game</Button>
-      </Link>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <Dashboard />
+    </main>
   );
 }
