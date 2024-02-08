@@ -4,6 +4,8 @@ module.exports = {
   ignorePatterns: ["apps/**", "packages/**"],
   extends: ["@repo/eslint-config/library.js"],
   parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
+  root: true,
   parserOptions: {
     project: true,
   },

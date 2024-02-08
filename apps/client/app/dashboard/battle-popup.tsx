@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import BattleForm from "./battle-form";
+import { Button } from "@/components/ui/button"
+import BattleForm from "./battle-form"
 
 import {
   Dialog,
@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog"
 
 export default function ButtonPopUp() {
   return (
@@ -26,5 +26,5 @@ export default function ButtonPopUp() {
         <BattleForm />
       </DialogContent>
     </Dialog>
-  );
+  )
 }
