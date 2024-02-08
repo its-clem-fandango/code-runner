@@ -13,11 +13,12 @@ interface File {
 }
 
 export default function MonacoCodeEditor() {
-  const [fileName, setFileName] = useState<string>("script.js");
+
   const [code, setCode] = useState<string | undefined>("");
   const [recievedCode, setRecievedCode] = useState<string>("");
   const [playerNumber, setPlayerNumber] = useState<number>(1);
-  const [answerToChallenge, setAnswerToChallenge] = useState({});
+  const [answerToChallenge, setAnswerToChallenge] = useState(null);
+  const [submitMessage, setSubmitMessage] = useState<string>('')
 
   const roomName = 1;
   const files = {
@@ -40,11 +41,10 @@ export default function MonacoCodeEditor() {
       message: code,
       challengeId: 1,
     });
-    listenToAnswer();
   };
 
   const sendMessage = (code: string | undefined) => {
-    console.log(`Emitting message:`, code);
+    // console.log(`Emitting message:`, code);
     socket.emit("codeChanged", {
       room: roomName,
       player: playerNumber,
@@ -52,13 +52,21 @@ export default function MonacoCodeEditor() {
     });
   };
 
-  const listenToAnswer = () => {
+  useEffect(() => {
+
     socket.on("testResult", (answer) => {
-      console.log("answer", answer);
-      setAnswerToChallenge(answer);
-      console.log(`Printing the state`, answerToChallenge.didAssertPass);
+      if (answer.message) {
+        setSubmitMessage(answer.message)
+        return
+      }
+      if (answer.didAssertPass === false) {
+        setSubmitMessage(answer.testResults[0].error)
+        return
+      }
+      setSubmitMessage('Success: All tests passed!')
     });
-  };
+  }, [])
+
 
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
@@ -71,19 +79,12 @@ export default function MonacoCodeEditor() {
   }, [playerNumber]);
   socket.emit("join room", roomName);
 
-  console.log("answerToChallenge", answerToChallenge);
-  console.log("true or false", answerToChallenge ? "true" : "false");
-
   return (
     <>
       <div className="container">
-        <button
-          disabled={fileName === "script.js"}
-          onClick={() => setFileName("script.js")}
-          className="btn-top"
-        >
+        <h3 className="btn-top">
           script.js
-        </button>
+        </h3>
         <button
           onClick={() =>
             playerNumber === 1 ? setPlayerNumber(2) : setPlayerNumber(1)
@@ -121,15 +122,9 @@ export default function MonacoCodeEditor() {
         </div>
         <br />
         <div>
-          {answerToChallenge.didAssertPass ? (
-            <h3>
-              {answerToChallenge.didAssertPass
-                ? " Response : SUCCESS"
-                : " Response: Try Again"}
-            </h3>
-          ) : (
-            ""
-          )}
+          <h3>
+            {submitMessage !== '' ? submitMessage : null}
+          </h3>
         </div>
       </div>
     </>

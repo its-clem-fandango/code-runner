@@ -40,9 +40,19 @@ export class EditorGateway {
   ) {
     console.log('log data', data);
     const challenge = await this.answerService.findChallenge(data.challengeId);
-    const runUserFunction = eval(`(${data.message})`);
-    const result = await this.answerService.runTest(runUserFunction, challenge);
-    this.server.emit('testResult', result);
-    console.log('result', result);
+    try {
+      const runUserFunction = eval(`(${data.message})`);
+      const result = await this.answerService.runTest(
+        runUserFunction,
+        challenge,
+      );
+      this.server.emit('testResult', result);
+      console.log('result', result);
+    } catch (error) {
+      const errorMsg = {
+        message: `${error}`,
+      };
+      this.server.emit('testResult', errorMsg);
+    }
   }
 }
