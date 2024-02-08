@@ -12,26 +12,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DialogFooter } from "@/components/ui/dialog";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { io } from "socket.io-client";
 
 const FormSchema = z.object({
   battleName: z
     .string({ required_error: "Set a name." })
     .min(2, "TOO SHORT MFER")
     .max(25, "TOO LONG MFUCKER"),
-  type: z.enum(["easy", "medium", "hard"], {
+  difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
 });
 
 export default function BattleForm() {
+  const socket = io("ws://localhost:8082");
   const formProps = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   function handleBattleSubmit() {
-    console.log("Battle Submitted");
+    const values = formProps.getValues();
+    socket.emit("createBattle", values);
   }
 
   return (
@@ -53,7 +56,7 @@ export default function BattleForm() {
         />
         <FormField
           control={formProps.control}
-          name="type"
+          name="difficulty"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Choose your difficulty...</FormLabel>
@@ -88,7 +91,9 @@ export default function BattleForm() {
           )}
         />
         <DialogFooter>
-          <Button type="submit">Create Battle</Button>
+          <DialogClose>
+            <Button type="submit">Create Battle</Button>
+          </DialogClose>
         </DialogFooter>
       </form>
     </Form>

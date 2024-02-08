@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { Battle, columns } from "@/app/dataTable/columns";
 import { DataTable } from "@/app/dataTable/data-table";
 import ButtonPopUp from "./battle-popup";
+import { io } from "socket.io-client";
 
-async function getData(): Promise<Battle[]> {
+/* async function getData(): Promise<Battle[]> {
   // Fetch data from your API here.
 
   const data: Battle[] = [
@@ -24,18 +25,17 @@ async function getData(): Promise<Battle[]> {
     // ...
   ];
   return data;
-}
+} */
 
 function Dashboard() {
   const [battleList, setBattleList] = useState<Battle[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getData();
-      setBattleList(data);
-    };
+  const socket = io("ws://localhost:8082");
 
-    fetchData();
+  useEffect(() => {
+    socket.on("availableBattles", (data) => {
+      setBattleList(data);
+    });
   }, []);
 
   function handleNewGame(e: React.MouseEvent<HTMLButtonElement>) {

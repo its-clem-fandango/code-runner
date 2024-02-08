@@ -5,15 +5,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
-
-import { Label } from "@/components/ui/label";
-
-import { toast } from "@/components/ui/use-toast";
 
 export default function ButtonPopUp() {
   return (
