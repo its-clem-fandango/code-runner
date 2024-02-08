@@ -9,7 +9,9 @@ describe('SocketCodeEditorController', () => {
       controllers: [SocketCodeEditorController],
     }).compile();
 
-    controller = module.get<SocketCodeEditorController>(SocketCodeEditorController);
+    controller = module.get<SocketCodeEditorController>(
+      SocketCodeEditorController,
+    );
   });
 
   it('should be defined', () => {

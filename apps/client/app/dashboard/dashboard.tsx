@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Battle, columns } from "@/app/dataTable/columns";
 import { DataTable } from "@/app/dataTable/data-table";
-import ButtonPopUp from "./battle-popup";
+import NewBattlePopup from "./battle-popup";
 import { io } from "socket.io-client";
 
 /* async function getData(): Promise<Battle[]> {
@@ -46,7 +46,7 @@ function Dashboard() {
   return (
     <div>
       <div className="flex justify-end">
-        <ButtonPopUp />
+        <NewBattlePopup />
       </div>
 
       <div>
