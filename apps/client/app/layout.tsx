@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
-import { cn } from "../../client/lib/utils";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter as FontSans } from 'next/font/google'
+import { cn } from '../../client/lib/utils'
+import './globals.css'
 
 /* const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
  */
 
 export const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+  subsets: ['latin'],
+  variable: '--font-sans',
+})
 export const metadata: Metadata = {
   title: "Code Racer",
   description: "",
@@ -18,16 +18,20 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html>
-      <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        fontSans.variable
-      )} >
-        {children}
+      <body>
+        <div
+          className={cn(
+            'min-h-screen bg-background font-sans antialiased',
+            fontSans.variable
+          )}
+        >
+          {children}
+        </div>
       </body>
     </html>
-  );
+  )
 }
