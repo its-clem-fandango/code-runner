@@ -5,8 +5,11 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
+import { AnswerService } from 'src/modules/answer/answer.service';
 @WebSocketGateway(8081, { cors: true })
 export class EditorGateway {
+  constructor(private readonly answerService: AnswerService) {}
+
   @WebSocketServer() server: Server;
   @SubscribeMessage('codeChanged')
   sendToOpponent(
@@ -23,5 +26,21 @@ export class EditorGateway {
       player: data.player,
       message: data.message,
     });
+  }
+
+  @SubscribeMessage('submit')
+  async checkCode(
+    @MessageBody()
+    data: {
+      room: number;
+      player: number;
+      message: string;
+      challengeId: number;
+    },
+  ) {
+    const challenge = await this.answerService.findChallenge(data.challengeId);
+    const runUserFunction = eval(`(${data.message})`);
+    const result = await this.answerService.runTest(runUserFunction, challenge);
+    this.server.emit('testResult', result);
   }
 }
