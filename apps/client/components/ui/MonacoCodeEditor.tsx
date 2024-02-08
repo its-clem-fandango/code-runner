@@ -17,6 +17,7 @@ export default function MonacoCodeEditor() {
   const [code, setCode] = useState<string | undefined>("");
   const [recievedCode, setRecievedCode] = useState<string>("");
   const [playerNumber, setPlayerNumber] = useState<number>(1);
+  const [answerToChallenge, setAnswerToChallenge] = useState({});
 
   const roomName = 1;
   const files = {
@@ -39,6 +40,7 @@ export default function MonacoCodeEditor() {
       message: code,
       challengeId: 1,
     });
+    listenToAnswer();
   };
 
   const sendMessage = (code: string | undefined) => {
@@ -47,6 +49,14 @@ export default function MonacoCodeEditor() {
       room: roomName,
       player: playerNumber,
       message: code,
+    });
+  };
+
+  const listenToAnswer = () => {
+    socket.on("testResult", (answer) => {
+      console.log("answer", answer);
+      setAnswerToChallenge(answer);
+      console.log(`Printing the state`, answerToChallenge.didAssertPass);
     });
   };
 
@@ -60,6 +70,9 @@ export default function MonacoCodeEditor() {
     });
   }, [playerNumber]);
   socket.emit("join room", roomName);
+
+  console.log("answerToChallenge", answerToChallenge);
+  console.log("true or false", answerToChallenge ? "true" : "false");
 
   return (
     <>
@@ -102,9 +115,21 @@ export default function MonacoCodeEditor() {
           />
         </div>
         <div>
-          <h2>Editor Value:</h2>
-          <pre>{code}</pre>
+          {/* <h2>Editor Value:</h2> */}
+          {/* <pre>{code}</pre> */}
           <button onClick={handleSubmit}>Submit</button>
+        </div>
+        <br />
+        <div>
+          {answerToChallenge.didAssertPass ? (
+            <h3>
+              {answerToChallenge.didAssertPass
+                ? " Response : SUCCESS"
+                : " Response: Try Again"}
+            </h3>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>
