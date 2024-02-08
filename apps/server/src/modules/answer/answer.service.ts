@@ -54,6 +54,9 @@ export class AnswerService {
         error: error.message,
       });
     }
+
+    console.log('testResults', testResults);
+
     return { didAssertPass, testResults };
   }
 }
