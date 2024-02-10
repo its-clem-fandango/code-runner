@@ -1,30 +1,29 @@
-"use client"
+'use client'
 
-import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
-import { useState, useEffect } from "react"
-import { socket } from "@/components/ui/socket"
-import { Editor } from "@monaco-editor/react"
-import "../../app/globals.css"
+import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from 'react'
+import { useState, useEffect } from 'react'
+import { socket } from '@/components/ui/socket'
+import { Editor } from '@monaco-editor/react'
+import '../../app/globals.css'
 
 interface File {
-  name: string;
-  language: string;
-  value: string;
+  name: string
+  language: string
+  value: string
 }
 
 export default function MonacoCodeEditor() {
-
-  const [code, setCode] = useState<string | undefined>("")
-  const [recievedCode, setRecievedCode] = useState<string>("")
+  const [code, setCode] = useState<string | undefined>('')
+  const [recievedCode, setRecievedCode] = useState<string>('')
   const [playerNumber, setPlayerNumber] = useState<number>(1)
   const [answerToChallenge, setAnswerToChallenge] = useState(null)
   const [submitMessage, setSubmitMessage] = useState<string>('')
 
   const roomName = 1
   const files = {
-    name: "script.js",
-    language: "javascript",
-    value: "let number = 5",
+    name: 'script.js',
+    language: 'javascript',
+    value: 'let number = 5',
   }
   const file: File = files
 
@@ -35,7 +34,7 @@ export default function MonacoCodeEditor() {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    socket.emit("submit", {
+    socket.emit('submit', {
       room: roomName,
       player: playerNumber,
       message: code,
@@ -45,7 +44,7 @@ export default function MonacoCodeEditor() {
 
   const sendMessage = (code: string | undefined) => {
     // console.log(`Emitting message:`, code);
-    socket.emit("codeChanged", {
+    socket.emit('codeChanged', {
       room: roomName,
       player: playerNumber,
       message: code,
@@ -53,8 +52,7 @@ export default function MonacoCodeEditor() {
   }
 
   useEffect(() => {
-
-    socket.on("testResult", (answer) => {
+    socket.on('testResult', (answer) => {
       console.log(`answer right now ---->`, answer)
       if (answer.message) {
         setSubmitMessage(answer.message)
@@ -72,9 +70,8 @@ export default function MonacoCodeEditor() {
     })
   }, [])
 
-
   useEffect(() => {
-    socket.on("opponentCode", (msg) => {
+    socket.on('opponentCode', (msg) => {
       if (msg.player !== playerNumber) {
         console.log(`This is the message: ${msg.message}`)
         setRecievedCode(msg.message)
@@ -82,14 +79,12 @@ export default function MonacoCodeEditor() {
       }
     })
   }, [playerNumber])
-  socket.emit("join room", roomName)
+  socket.emit('join room', roomName)
 
   return (
     <>
       <div className="container">
-        <h3 className="btn-top">
-          script.js
-        </h3>
+        <h3 className="btn-top">script.js</h3>
         <button
           onClick={() =>
             playerNumber === 1 ? setPlayerNumber(2) : setPlayerNumber(1)
@@ -127,9 +122,7 @@ export default function MonacoCodeEditor() {
         </div>
         <br />
         <div>
-          <h3>
-            {submitMessage !== '' ? submitMessage : null}
-          </h3>
+          <h3>{submitMessage !== '' ? submitMessage : null}</h3>
         </div>
       </div>
     </>
