@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react";
-import { useState, useEffect } from "react";
-import { socket } from "@/components/ui/socket";
-import { Editor } from "@monaco-editor/react";
-import "../../app/globals.css";
+import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
+import { useState, useEffect } from "react"
+import { socket } from "@/components/ui/socket"
+import { Editor } from "@monaco-editor/react"
+import "../../app/globals.css"
 
 interface File {
   name: string;
@@ -14,34 +14,34 @@ interface File {
 
 export default function MonacoCodeEditor() {
 
-  const [code, setCode] = useState<string | undefined>("");
-  const [recievedCode, setRecievedCode] = useState<string>("");
-  const [playerNumber, setPlayerNumber] = useState<number>(1);
-  const [answerToChallenge, setAnswerToChallenge] = useState(null);
+  const [code, setCode] = useState<string | undefined>("")
+  const [recievedCode, setRecievedCode] = useState<string>("")
+  const [playerNumber, setPlayerNumber] = useState<number>(1)
+  const [answerToChallenge, setAnswerToChallenge] = useState(null)
   const [submitMessage, setSubmitMessage] = useState<string>('')
 
-  const roomName = 1;
+  const roomName = 1
   const files = {
     name: "script.js",
     language: "javascript",
     value: "let number = 5",
-  };
-  const file: File = files;
+  }
+  const file: File = files
 
   const handleEditorChange = (code: string | undefined) => {
-    setCode(code);
-    sendMessage(code);
-  };
+    setCode(code)
+    sendMessage(code)
+  }
 
   const handleSubmit = (e: any) => {
-    e.preventDefault();
+    e.preventDefault()
     socket.emit("submit", {
       room: roomName,
       player: playerNumber,
       message: code,
-      challengeId: 10,
-    });
-  };
+      challengeId: 1,
+    })
+  }
 
   const sendMessage = (code: string | undefined) => {
     // console.log(`Emitting message:`, code);
@@ -49,8 +49,8 @@ export default function MonacoCodeEditor() {
       room: roomName,
       player: playerNumber,
       message: code,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
 
@@ -69,20 +69,20 @@ export default function MonacoCodeEditor() {
         return
       }
       setSubmitMessage('Success: All tests passed!')
-    });
+    })
   }, [])
 
 
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.player !== playerNumber) {
-        console.log(`This is the message: ${msg.message}`);
-        setRecievedCode(msg.message);
-        console.log(`This is recieved: ${recievedCode}`);
+        console.log(`This is the message: ${msg.message}`)
+        setRecievedCode(msg.message)
+        console.log(`This is recieved: ${recievedCode}`)
       }
-    });
-  }, [playerNumber]);
-  socket.emit("join room", roomName);
+    })
+  }, [playerNumber])
+  socket.emit("join room", roomName)
 
   return (
     <>
@@ -133,5 +133,5 @@ export default function MonacoCodeEditor() {
         </div>
       </div>
     </>
-  );
+  )
 }

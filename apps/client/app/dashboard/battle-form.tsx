@@ -1,7 +1,7 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 import {
   Form,
   FormControl,
@@ -9,12 +9,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { io } from "socket.io-client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { DialogClose, DialogFooter } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { io } from "socket.io-client"
 
 const FormSchema = z.object({
   battleName: z
@@ -24,17 +24,34 @@ const FormSchema = z.object({
   difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
-});
+})
 
+type createBattleResponse = {
+  success: boolean
+  message?: string
+}
 export default function BattleForm() {
-  const socket = io("ws://localhost:8082");
+  const [isDialogOpen, setIsDialogOpen] = useState(true)
+
+  const socket = io("ws://localhost:8082")
   const formProps = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
+
+  function closeDialog() {
+    setIsDialogOpen(false)
+  }
 
   function handleBattleSubmit() {
-    const values = formProps.getValues();
-    socket.emit("createBattle", values);
+    const values = formProps.getValues()
+    console.log(values)
+    socket.emit("createBattle", values, (response: createBattleResponse) => {
+      if (false) {
+        closeDialog()
+      } else {
+        response.message
+      }
+    })
   }
 
   return (
@@ -97,5 +114,5 @@ export default function BattleForm() {
         </DialogFooter>
       </form>
     </Form>
-  );
+  )
 }
