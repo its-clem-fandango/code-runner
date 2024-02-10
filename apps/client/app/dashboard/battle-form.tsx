@@ -1,7 +1,7 @@
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+
 import {
   Form,
   FormControl,
@@ -26,32 +26,15 @@ const FormSchema = z.object({
   }),
 })
 
-type createBattleResponse = {
-  success: boolean
-  message?: string
-}
 export default function BattleForm() {
-  const [isDialogOpen, setIsDialogOpen] = useState(true)
-
   const socket = io("ws://localhost:8082")
   const formProps = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  function closeDialog() {
-    setIsDialogOpen(false)
-  }
-
   function handleBattleSubmit() {
     const values = formProps.getValues()
-    console.log(values)
-    socket.emit("createBattle", values, (response: createBattleResponse) => {
-      if (false) {
-        closeDialog()
-      } else {
-        response.message
-      }
-    })
+    socket.emit("createBattle", values)
   }
 
   return (
