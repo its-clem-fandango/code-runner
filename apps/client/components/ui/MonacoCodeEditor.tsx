@@ -39,7 +39,7 @@ export default function MonacoCodeEditor() {
       room: roomName,
       player: playerNumber,
       message: code,
-      challengeId: 1,
+      challengeId: 10,
     });
   };
 
@@ -55,11 +55,16 @@ export default function MonacoCodeEditor() {
   useEffect(() => {
 
     socket.on("testResult", (answer) => {
+      console.log(`answer right now ---->`, answer)
       if (answer.message) {
         setSubmitMessage(answer.message)
         return
       }
       if (answer.didAssertPass === false) {
+        if (answer.testResults[1] && answer.testResults[1].error) {
+          setSubmitMessage(answer.testResults[1].error)
+          return
+        }
         setSubmitMessage(answer.testResults[0].error)
         return
       }
