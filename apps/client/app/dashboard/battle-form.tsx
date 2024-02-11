@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { z } from "zod"
 
 import {
   Form,
@@ -9,32 +9,32 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { io } from "socket.io-client";
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { DialogClose, DialogFooter } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { io } from "socket.io-client"
 
 const FormSchema = z.object({
   battleName: z
     .string({ required_error: "Set a name." })
-    .min(2, "TOO SHORT MFER")
-    .max(25, "TOO LONG MFUCKER"),
+    .min(2, "Minimum 2 characters!")
+    .max(25, "Maxiumum 25 characters!"),
   difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
-});
+})
 
 export default function BattleForm() {
-  const socket = io("ws://localhost:8082");
+  const socket = io("ws://localhost:8082")
   const formProps = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  });
+  })
 
   function handleBattleSubmit() {
-    const values = formProps.getValues();
-    socket.emit("createBattle", values);
+    const values = formProps.getValues()
+    socket.emit("createBattle", values)
   }
 
   return (
@@ -97,5 +97,5 @@ export default function BattleForm() {
         </DialogFooter>
       </form>
     </Form>
-  );
+  )
 }

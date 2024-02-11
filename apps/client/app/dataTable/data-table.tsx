@@ -7,7 +7,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useRouter } from "next/navigation"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -26,13 +27,18 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter()
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-
+    getPaginationRowModel: getPaginationRowModel(),
   })
+
+  function handleJoinGame(id: number) {
+    console.log(id)
+    router.push(`/battle?id=${id}`)
+  }
 
   return (
     <div className="rounded-md border">
@@ -47,7 +53,7 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 )
@@ -67,6 +73,13 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                <TableCell>
+                  {row.original.Join && (
+                    <Button onClick={() => handleJoinGame(row.original.id)}>
+                      Join
+                    </Button>
+                  )}
+                </TableCell>
               </TableRow>
             ))
           ) : (

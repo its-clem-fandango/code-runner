@@ -15,10 +15,12 @@ export class BattleGateway implements OnGatewayConnection {
 
   handleConnection(client: any) {
     this.sendBattles(client);
+    return;
   }
   private async sendBattles(client: any) {
     const battles = await this.battleService.getBattles();
     client.emit('availableBattles', battles);
+    return;
   }
 
   @SubscribeMessage('createBattle')
@@ -32,5 +34,17 @@ export class BattleGateway implements OnGatewayConnection {
       'random@email.com',
     );
     this.server.emit('availableBattles', battles);
+    return;
+  }
+  @SubscribeMessage('joinBattle')
+  async joinBattle(@MessageBody() data: { id: number }) {
+    const battleInfo = this.battleService.getBattle(data.id);
+    if (battleInfo.playerCount >= 2) {
+      console.log('battle is full!');
+      return;
+    } else {
+      const joinedBattle = this.battleService.updateBattle(data.id);
+      console.log(joinedBattle);
+    }
   }
 }
