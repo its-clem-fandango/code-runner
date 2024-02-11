@@ -19,8 +19,8 @@ import { io } from "socket.io-client"
 const FormSchema = z.object({
   battleName: z
     .string({ required_error: "Set a name." })
-    .min(2, "TOO SHORT MFER")
-    .max(25, "TOO LONG MFUCKER"),
+    .min(2, "Minimum 2 characters!")
+    .max(25, "Maxiumum 25 characters!"),
   difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
