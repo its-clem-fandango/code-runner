@@ -75,7 +75,12 @@ export function DataTable<TData extends { Join: any; id: number }, TValue>({
                 ))}
                 <TableCell>
                   {row.original.Join && (
-                    <Button onClick={() => handleJoinGame(row.original.id)}>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleJoinGame(row.original.id)
+                      }}
+                    >
                       Join
                     </Button>
                   )}
