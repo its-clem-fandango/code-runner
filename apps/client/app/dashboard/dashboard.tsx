@@ -10,7 +10,6 @@ function Dashboard() {
   const [battleList, setBattleList] = useState<Battle[]>([])
 
   const socket = io("ws://localhost:8082")
-
   useEffect(() => {
     socket.on("availableBattles", (data) => {
       setBattleList(data)

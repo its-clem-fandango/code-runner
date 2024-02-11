@@ -27,6 +27,7 @@ export default function MonacoCodeEditor({
     name: "script.js",
     language: "javascript",
     value: "let number = 5",
+
   }
   const file: File = files
 
@@ -55,11 +56,16 @@ export default function MonacoCodeEditor({
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
+
       if (answer.message) {
         setSubmitMessage(answer.message)
         return
       }
       if (answer.didAssertPass === false) {
+        if (answer.testResults[1] && answer.testResults[1].error) {
+          setSubmitMessage(answer.testResults[1].error)
+          return
+        }
         setSubmitMessage(answer.testResults[0].error)
         return
       }
