@@ -40,7 +40,7 @@ export class BattleGateway implements OnGatewayConnection {
   async joinBattle(@MessageBody() data: { id: number }) {
     const battleInfo = this.battleService.getBattle(data.id);
     if (battleInfo.playerCount >= 2) {
-      console.log('battle is full!');
+      this.server.emit('battleError', { full: true });
       return;
     } else {
       const joinedBattle = this.battleService.updateBattle(data.id);

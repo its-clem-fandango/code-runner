@@ -18,8 +18,7 @@ function Battle() {
   useEffect(() => {
     socket.emit("joinBattle", { id: battleId })
     socket.on("battleError", (msg) => {
-      console.log("test")
-      console.log(msg)
+      if (msg.full === true) setIsFull(true)
     })
   }, [])
 
@@ -28,8 +27,8 @@ function Battle() {
       <h1>Battle {battleId}</h1>
       {isFull ? (
         <div>
-          <p>The Battle is already full</p>{" "}
-          <Button onClick={() => router.back()} />
+          <p>The Battle is already full</p>
+          <Button onClick={() => router.back()}>Go back to Dashboard</Button>
         </div>
       ) : (
         <CodeEditor />

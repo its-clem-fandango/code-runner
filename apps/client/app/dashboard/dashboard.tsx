@@ -17,11 +17,6 @@ function Dashboard() {
     })
   }, [])
 
-  function handleNewGame(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
-    console.log("Button Clicked")
-  }
-
   return (
     <div>
       <div className="flex justify-end">
