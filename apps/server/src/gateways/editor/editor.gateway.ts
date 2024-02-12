@@ -36,6 +36,7 @@ export class EditorGateway {
       player: number;
       message: string;
       challengeId: number;
+      clientId: string;
     },
   ) {
     console.log('log data', data);
@@ -46,7 +47,7 @@ export class EditorGateway {
         runUserFunction,
         challenge,
       );
-      this.server.emit('testResult', result);
+      this.server.emit('testResult', { ...result, clientId: data.clientId });
       console.log('result', result);
     } catch (error) {
       const errorMsg = {

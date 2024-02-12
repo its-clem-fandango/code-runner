@@ -47,6 +47,7 @@ export default function MonacoCodeEditor() {
       player: playerNumber,
       message: code,
       challengeId: 1,
+      clientId: socket.id,
     })
   }
 
@@ -61,16 +62,23 @@ export default function MonacoCodeEditor() {
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
-      let message = ""
-      if (answer.message) {
-        message = answer.message
-      } else if (answer.didAssertPass === false) {
-        message = answer.testResults[0].error
-      } else {
-        message = "Success: All tests passed!"
+      if (answer.clientId === socket.id) {
+        let message = ""
+        if (answer.message) {
+          message = answer.message
+        } else if (answer.didAssertPass === false) {
+          message = answer.testResults[0].error
+        } else {
+          message = "Success: All tests passed!"
+        }
+        setSubmitMessage(message)
+        setIsDialogOpen(true)
       }
-      setSubmitMessage(message)
-      setIsDialogOpen(true) // Open dialog on receiving a message
+      if (answer.clientId !== socket.id && answer.didAssertPass === true) {
+        let message = "Sorry you lost!"
+        setSubmitMessage(message)
+        setIsDialogOpen(true)
+      }
     })
   }, [])
 
@@ -81,9 +89,7 @@ export default function MonacoCodeEditor() {
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.player !== playerNumber) {
-        console.log(`This is the message: ${msg.message}`)
         setRecievedCode(msg.message)
-        console.log(`This is recieved: ${recievedCode}`)
       }
     })
   }, [playerNumber])
