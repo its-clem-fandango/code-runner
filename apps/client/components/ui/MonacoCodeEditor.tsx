@@ -1,6 +1,5 @@
 "use client"
 
-import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
 import { useState, useEffect } from "react"
 import { socket } from "@/components/ui/socket"
 import { Editor } from "@monaco-editor/react"
@@ -12,7 +11,6 @@ import {
   DialogDescription,
   DialogClose,
 } from "./dialog"
-
 
 interface File {
   name: string
@@ -37,7 +35,6 @@ export default function MonacoCodeEditor({
     name: "script.js",
     language: "javascript",
     value: "let number = 5",
-
   }
   const file: File = files
 
@@ -94,7 +91,6 @@ export default function MonacoCodeEditor({
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.clientId !== socket.id) {
-
         setRecievedCode(msg.message)
       }
     })
@@ -140,7 +136,6 @@ export default function MonacoCodeEditor({
               </DialogClose>
             </DialogContent>
           </Dialog>
-
         </div>
       </div>
     </>
