@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { io } from "socket.io-client"
@@ -13,12 +12,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { DialogClose, DialogFooter } from "@/components/ui/dialog"
+import { DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
 // Your Zod schema
 const FormSchema = z.object({
-  battleName: z.string().min(2, "TOO SHORT MFER").max(25, "TOO LONG MFUCKER"),
+  battleName: z
+    .string()
+    .min(2, "Battle names must be at least two characters")
+    .max(25, "Battle names must be under 25 characters."),
   difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
