@@ -1,9 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { io } from "socket.io-client"
 
 import {
-  Form,
+  Form, // Assuming this is correctly aliased to FormProvider
   FormControl,
   FormField,
   FormItem,
@@ -14,8 +15,8 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { DialogClose, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { io } from "socket.io-client"
 
+// Your Zod schema
 const FormSchema = z.object({
   battleName: z
     .string({ required_error: "Set a name." })
@@ -26,15 +27,34 @@ const FormSchema = z.object({
   }),
 })
 
-export default function BattleForm() {
+
+// Type for the form data
+type FormData = z.infer<typeof FormSchema>
+
+// Interface for server response
+interface ServerResponse {
+  success: boolean
+  message?: string
+}
+
+interface BattleFormProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function BattleForm({ setOpen }: BattleFormProps) {
   const socket = io("ws://localhost:8082")
-  const formProps = useForm<z.infer<typeof FormSchema>>({
+
+  const formProps = useForm<FormData>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      battleName: "",
+      difficulty: "easy",
+    },
   })
 
-  function handleBattleSubmit() {
-    const values = formProps.getValues()
-    socket.emit("createBattle", values)
+  const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
+    await socket.emit("createBattle", data)
+    setOpen(false)
   }
 
   return (
@@ -46,7 +66,6 @@ export default function BattleForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-normal">Room Name</FormLabel>
-
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -91,9 +110,7 @@ export default function BattleForm() {
           )}
         />
         <DialogFooter>
-          <DialogClose>
-            <Button type="submit">Create Battle</Button>
-          </DialogClose>
+          <Button type="submit">Create Battle</Button>
         </DialogFooter>
       </form>
     </Form>
