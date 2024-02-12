@@ -1,9 +1,18 @@
 "use client"
 
+import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
 import { useState, useEffect } from "react"
 import { socket } from "@/components/ui/socket"
 import { Editor } from "@monaco-editor/react"
 import "../../app/globals.css"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "./dialog"
+
 
 interface File {
   name: string
@@ -21,6 +30,7 @@ export default function MonacoCodeEditor({
   /* const [playerNumber, setPlayerNumber] = useState<number>(1) */
   /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
   const [submitMessage, setSubmitMessage] = useState<string>("")
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const roomName = 1
   const files = {
@@ -43,6 +53,7 @@ export default function MonacoCodeEditor({
       player: playerNumber,
       message: code,
       challengeId: 1,
+      clientId: socket.id,
     })
   }
 
@@ -56,26 +67,34 @@ export default function MonacoCodeEditor({
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
-
-      if (answer.message) {
-        setSubmitMessage(answer.message)
-        return
-      }
-      if (answer.didAssertPass === false) {
-        if (answer.testResults[1] && answer.testResults[1].error) {
-          setSubmitMessage(answer.testResults[1].error)
-          return
+      if (answer.clientId === socket.id) {
+        let message = ""
+        if (answer.message) {
+          message = answer.message
+        } else if (answer.didAssertPass === false) {
+          message = answer.testResults[0].error
+        } else {
+          message = "Success: All tests passed!"
         }
-        setSubmitMessage(answer.testResults[0].error)
-        return
+        setSubmitMessage(message)
+        setIsDialogOpen(true)
       }
-      setSubmitMessage("Success: All tests passed!")
+      if (answer.clientId !== socket.id && answer.didAssertPass === true) {
+        let message = "Sorry you lost!"
+        setSubmitMessage(message)
+        setIsDialogOpen(true)
+      }
     })
   }, [])
+
+  const closeDialog = () => {
+    setIsDialogOpen(false) // Close dialog
+  }
 
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.clientId !== socket.id) {
+
         setRecievedCode(msg.message)
       }
     })
@@ -112,7 +131,16 @@ export default function MonacoCodeEditor({
           <button onClick={handleSubmit}>Submit</button>
         </div>
         <div>
-          <h3>{submitMessage !== "" ? submitMessage : null}</h3>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent>
+              <DialogTitle>Test Result</DialogTitle>
+              <DialogDescription>{submitMessage}</DialogDescription>
+              <DialogClose asChild>
+                <button>Close</button>
+              </DialogClose>
+            </DialogContent>
+          </Dialog>
+
         </div>
       </div>
     </>

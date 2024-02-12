@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { io } from "socket.io-client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import ChallengeDescription from "@/components/ChallengeDescription"
 
 const CodeEditor = dynamic(() => import("../../components/ui/MonacoCodeEditor"))
 
@@ -49,7 +50,7 @@ function Battle() {
         </div>
       ) : (
         <>
-          <p>{playerNumber}</p>
+          <ChallengeDescription />
           <CodeEditor playerNumber={playerNumber} />
         </>
       )}
