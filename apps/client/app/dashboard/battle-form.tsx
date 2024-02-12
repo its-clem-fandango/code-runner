@@ -1,9 +1,10 @@
-import { useForm } from "react-hook-form"
+import { useState } from "react"
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-
+import { io } from "socket.io-client"
 import {
-  Form,
+  Form, // Assuming this is correctly aliased to FormProvider
   FormControl,
   FormField,
   FormItem,
@@ -14,22 +15,32 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { DialogClose, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { io } from "socket.io-client"
 
+// Your Zod schema
 const FormSchema = z.object({
-  battleName: z
-    .string({ required_error: "Set a name." })
-    .min(2, "TOO SHORT MFER")
-    .max(25, "TOO LONG MFUCKER"),
+  battleName: z.string().min(2, "TOO SHORT MFER").max(25, "TOO LONG MFUCKER"),
   difficulty: z.enum(["easy", "medium", "hard"], {
     required_error: "You need to select a difficulty.",
   }),
 })
 
-export default function BattleForm() {
+// Type for the form data
+type FormData = z.infer<typeof FormSchema>
+
+// Interface for server response
+interface ServerResponse {
+  success: boolean
+  message?: string
+}
+
+interface BattleFormProps {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function BattleForm({ setOpen }: BattleFormProps) {
   const socket = io("ws://localhost:8082")
 
-  const formProps = useForm<z.infer<typeof FormSchema>>({
+  const formProps = useForm<FormData>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       battleName: "",
@@ -37,9 +48,9 @@ export default function BattleForm() {
     },
   })
 
-  function handleBattleSubmit() {
-    const values = formProps.getValues()
-    socket.emit("createBattle", values)
+  const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
+    await socket.emit("createBattle", data)
+    setOpen(false)
   }
 
   return (
