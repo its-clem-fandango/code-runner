@@ -3,6 +3,7 @@ import {
   WebSocketServer,
   SubscribeMessage,
   MessageBody,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { AnswerService } from 'src/modules/answer/answer.service';
@@ -19,11 +20,11 @@ export class EditorGateway {
       player: number;
       message: string;
     },
+    @ConnectedSocket() client: any,
   ) {
-    console.log(data);
     this.server.emit('opponentCode', {
       room: 1,
-      player: data.player,
+      clientId: client.id,
       message: data.message,
     });
   }

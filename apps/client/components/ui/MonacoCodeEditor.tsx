@@ -13,17 +13,22 @@ import {
   DialogClose,
 } from "./dialog"
 
+
 interface File {
   name: string
   language: string
   value: string
 }
 
-export default function MonacoCodeEditor() {
+export default function MonacoCodeEditor({
+  playerNumber,
+}: {
+  playerNumber: number | null
+}) {
   const [code, setCode] = useState<string | undefined>("")
   const [recievedCode, setRecievedCode] = useState<string>("")
-  const [playerNumber, setPlayerNumber] = useState<number>(1)
-  const [answerToChallenge, setAnswerToChallenge] = useState(null)
+  /* const [playerNumber, setPlayerNumber] = useState<number>(1) */
+  /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
   const [submitMessage, setSubmitMessage] = useState<string>("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -32,6 +37,7 @@ export default function MonacoCodeEditor() {
     name: "script.js",
     language: "javascript",
     value: "let number = 5",
+
   }
   const file: File = files
 
@@ -52,7 +58,6 @@ export default function MonacoCodeEditor() {
   }
 
   const sendMessage = (code: string | undefined) => {
-    // console.log(`Emitting message:`, code);
     socket.emit("codeChanged", {
       room: roomName,
       player: playerNumber,
@@ -88,7 +93,8 @@ export default function MonacoCodeEditor() {
 
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
-      if (msg.player !== playerNumber) {
+      if (msg.clientId !== socket.id) {
+
         setRecievedCode(msg.message)
       }
     })
@@ -98,14 +104,6 @@ export default function MonacoCodeEditor() {
   return (
     <>
       <div className="container">
-        <h3 className="btn-top">script.js</h3>
-        <button
-          onClick={() =>
-            playerNumber === 1 ? setPlayerNumber(2) : setPlayerNumber(1)
-          }
-        >
-          Change Player
-        </button>
         <p>{playerNumber}</p>
         <div className="editors-container">
           <Editor
@@ -130,11 +128,8 @@ export default function MonacoCodeEditor() {
           />
         </div>
         <div>
-          {/* <h2>Editor Value:</h2> */}
-          {/* <pre>{code}</pre> */}
           <button onClick={handleSubmit}>Submit</button>
         </div>
-        <br />
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent>
@@ -145,6 +140,7 @@ export default function MonacoCodeEditor() {
               </DialogClose>
             </DialogContent>
           </Dialog>
+
         </div>
       </div>
     </>

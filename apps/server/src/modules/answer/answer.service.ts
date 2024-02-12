@@ -28,7 +28,7 @@ export class AnswerService {
 
         console.log('EVALUATE USER FUNCTION: ', userFunction);
 
-        assert.strictEqual(result, expected); // Use assert.strictEqual for error reporting intstead of ===
+        assert.deepStrictEqual(result, expected); // Use assert.strictEqual for error reporting intstead of ===
 
         // If the test case passes without throwing an assertion error, push the pass result
         testResults.push({
