@@ -41,7 +41,7 @@ export function DataTable<TData extends { Join: any; id: number }, TValue>({
   }
 
   return (
-    <div className="rounded-md border">
+    <div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -76,6 +76,7 @@ export function DataTable<TData extends { Join: any; id: number }, TValue>({
                 <TableCell>
                   {row.original.Join && (
                     <Button
+                      className="bg-[#334155]"
                       onClick={(e) => {
                         e.preventDefault()
                         handleJoinGame(row.original.id)
