@@ -2,6 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { io } from "socket.io-client"
+import { useRouter } from "next/navigation"
 
 import {
   Form, // Assuming this is correctly aliased to FormProvider
@@ -13,7 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { DialogClose, DialogFooter } from "@/components/ui/dialog"
+import { DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 
 // Your Zod schema
@@ -26,7 +27,6 @@ const FormSchema = z.object({
     required_error: "You need to select a difficulty.",
   }),
 })
-
 
 // Type for the form data
 type FormData = z.infer<typeof FormSchema>
@@ -43,6 +43,7 @@ interface BattleFormProps {
 
 export default function BattleForm({ setOpen }: BattleFormProps) {
   const socket = io("ws://localhost:8082")
+  const router = useRouter()
 
   const formProps = useForm<FormData>({
     resolver: zodResolver(FormSchema),
@@ -53,8 +54,11 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
   })
 
   const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
-    await socket.emit("createBattle", data)
-    setOpen(false)
+    await socket.emit("createBattle", data, (response: any) => {
+      setOpen(false)
+      console.log(response)
+      router.push(`/battle?id=${response}`)
+    })
   }
 
   return (
