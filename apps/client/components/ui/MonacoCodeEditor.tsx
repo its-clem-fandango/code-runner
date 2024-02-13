@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogClose,
 } from "./dialog"
+import { useRouter } from "next/navigation"
 
 interface File {
   name: string
@@ -29,6 +30,7 @@ export default function MonacoCodeEditor({
   /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
   const [submitMessage, setSubmitMessage] = useState<string>("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const router = useRouter()
 
   const roomName = 1
   const files = {
@@ -64,15 +66,8 @@ export default function MonacoCodeEditor({
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
-      if (answer.clientId === socket.id) {
-        let message = ""
-        if (answer.message) {
-          message = answer.message
-        } else if (answer.didAssertPass === false) {
-          message = answer.testResults[0].error
-        } else {
-          message = "Success: All tests passed!"
-        }
+      if (answer.clientId === socket.id && answer.didAssertPass === true) {
+        let message = "Congratulations, all tests passed!"
         setSubmitMessage(message)
         setIsDialogOpen(true)
       }
@@ -84,10 +79,6 @@ export default function MonacoCodeEditor({
     })
   }, [])
 
-  const closeDialog = () => {
-    setIsDialogOpen(false) // Close dialog
-  }
-
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.clientId !== socket.id) {
@@ -96,6 +87,10 @@ export default function MonacoCodeEditor({
     })
   }, [playerNumber])
   socket.emit("join room", roomName)
+
+  function goToDashboard() {
+    router.back()
+  }
 
   return (
     <>
@@ -129,10 +124,10 @@ export default function MonacoCodeEditor({
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent>
-              <DialogTitle>Test Result</DialogTitle>
+              <DialogTitle>You won!</DialogTitle>
               <DialogDescription>{submitMessage}</DialogDescription>
               <DialogClose asChild>
-                <button>Close</button>
+                <button onClick={goToDashboard}>Go to Dashboard</button>
               </DialogClose>
             </DialogContent>
           </Dialog>
