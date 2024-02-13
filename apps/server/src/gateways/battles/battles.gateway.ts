@@ -6,9 +6,6 @@ import {
   OnGatewayConnection,
   ConnectedSocket,
 } from "@nestjs/websockets";
-import { Server } from "socket.io";
-import { BattleService } from "src/modules/battles/battle.service";
-} from '@nestjs/websockets'
 import { Server } from 'socket.io'
 import { BattleService } from 'src/modules/battles/battle.service'
 
