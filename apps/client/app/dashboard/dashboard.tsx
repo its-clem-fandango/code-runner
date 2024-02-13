@@ -18,13 +18,15 @@ function Dashboard() {
 
   return (
     <div>
-      <div className="flex justify-end">
-        <NewBattlePopup />
-      </div>
-
-      <div>
-        {/* rendert a table with 4 columns ( battle name, username, level of challenge, jopin button) */}
-        <DataTable columns={columns} data={battleList} />
+      <div className="flex border-0 border-violet-400">
+        <div className="m-5 border-0 border-blue-400">
+          <h1 className="font-bold mb-5 text-xl">Join a Race 🏎️</h1>
+          <DataTable columns={columns} data={battleList} />
+        </div>
+        <div className="m-5 border-0 border-green-400">
+          <h1 className="font-bold mb-5 text-xl">Start a Race 🏁</h1>
+          <NewBattlePopup />
+        </div>
       </div>
     </div>
   )
