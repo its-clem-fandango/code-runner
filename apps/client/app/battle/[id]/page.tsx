@@ -1,16 +1,33 @@
 "use client"
 
 import { Toggle } from "@/components/ui/toggle"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { socket } from "@/components/ui/socket"
 
 export default function Lobby() {
-  const [ready, setReady] = useState(true)
+  const [isPlayerReady, setisPlayerReady] = useState(true)
+  const [numOfPlayers, setNumOfPlayers] = useState(null)
+  const [isGameReady, setIsGameReady] = useState(false)
   const [waitingMessage, setWaitingMessage] = useState("")
 
+  useEffect(() => {
+    socket.on("isGameReady", (data) => {
+      setIsGameReady(true)
+      setNumOfPlayers(data.numOfPlayers)
+    })
+    return () => {
+      socket.off("isGameReady")
+    }
+  }, [])
+
   function handleReadySubmit() {
-    setReady((prevReady) => !prevReady)
-    console.log("Toggled to: ", !ready)
+    setisPlayerReady((prevReady) => !prevReady)
+    console.log("Toggled to: ", !isPlayerReady)
   }
+
+  //if new player joins --> Means I need to recieve something from the backend. what?
+  //and is ready
+  //render the new-game
 
   return (
     <>
@@ -21,7 +38,7 @@ export default function Lobby() {
         size="lg"
         onClick={handleReadySubmit}
       >
-        {ready ? "Ready" : "Not Ready"}
+        {isPlayerReady ? "Ready" : "Not Ready"}
       </Toggle>
     </>
   )

@@ -54,10 +54,11 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
   })
 
   const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
-    await socket.emit("createBattle", data)
-    setOpen(false)
-    router.push("/battle/sample-lobby")
-    //pass the id
+    await socket.emit("createBattle", data, (response: any) => {
+      setOpen(false)
+      console.log(response)
+      router.push(`/battle?id=${response}`)
+    })
   }
 
   return (
