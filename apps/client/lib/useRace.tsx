@@ -46,6 +46,9 @@ export const RaceProvider = ({ children }) => {
     newSocket.on('raceUpdate', (update: typeof raceState) => {
       setRaceState((prevState) => ({ ...prevState, ...update }))
     })
+    newSocket.on('connect_error', (err) => {
+      console.error('Connection error: ', err)
+    })
     return () => newSocket.close()
   }, [])
 
