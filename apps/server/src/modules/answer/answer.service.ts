@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { codingChallengesList } from 'src/database/codingChallenges';
-import { strict as assert } from 'assert';
+import { Injectable } from "@nestjs/common";
+import { codingChallengesList } from "src/database/codingChallenges";
+import { strict as assert } from "assert";
 
 interface TestResults {
   didAssertPass: boolean;
@@ -26,7 +26,7 @@ export class AnswerService {
         const expected = testCase.expected;
         const result = userFunction(...inputValues);
 
-        console.log('EVALUATE USER FUNCTION: ', userFunction);
+        console.log("EVALUATE USER FUNCTION: ", userFunction);
 
         assert.deepStrictEqual(result, expected); // Use assert.strictEqual for error reporting intstead of ===
 
@@ -49,13 +49,13 @@ export class AnswerService {
       console.log(error);
       testResults.push({
         expected: error.expected,
-        result: 'Execution Error',
+        result: "Execution Error",
         passed: false,
         error: error.message,
       });
     }
 
-    console.log('testResults', testResults);
+    console.log("testResults", testResults);
 
     return { didAssertPass, testResults };
   }

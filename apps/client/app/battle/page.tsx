@@ -41,8 +41,8 @@ function Battle() {
   }, [])
 
   return (
-    <div>
-      <h1>Battle {battleId}</h1>
+    <div className="bg-[#FAFAFA]">
+      {/* <h1 className="text-2xl mx-14 mt-5">Battle {battleId}</h1> */}
       {isFull ? (
         <div>
           <p>The Battle is already full</p>
@@ -50,8 +50,18 @@ function Battle() {
         </div>
       ) : (
         <>
-          <ChallengeDescription />
-          <CodeEditor playerNumber={playerNumber} />
+          <div className="flex gap-5 mx-10 my-5">
+
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-green-400">
+
+              <h1 className="text-2xl font-bold p-4">Battle {battleId}</h1>
+              <ChallengeDescription />
+
+            </div>
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-blue-400">
+              <CodeEditor playerNumber={playerNumber} />
+            </div>
+          </div>
         </>
       )}
     </div>
