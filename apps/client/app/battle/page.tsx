@@ -6,7 +6,8 @@ import { io } from "socket.io-client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
-
+import { codingChallengesList } from "../../../server/src/database/codingChallenges"
+import Image from "next/image"
 const CodeEditor = dynamic(() => import("../../components/ui/MonacoCodeEditor"))
 
 function Battle() {
@@ -17,6 +18,7 @@ function Battle() {
   const router = useRouter()
   const battleId = parseInt(searchParams.get("id") as string)
   const socket = io("ws://localhost:8082")
+  const challenge = codingChallengesList.map((challenge) => challenge)
 
   useEffect(() => {
     if (setUpRef.current) return
@@ -53,8 +55,34 @@ function Battle() {
           <div className="flex gap-5 mx-10 my-5">
 
             <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-green-400">
+              <div className="flex justify-between mr-5">
+                <h1 className="text-2xl font-bold p-4">Battle {battleId}</h1>
+                {challenge[0].difficultyOfChallenge === "easy" ? (
+                  <Image
+                    src="/images/oneStarDifficulty.svg"
+                    width={40}
+                    height={30}
+                    alt="Stars"
 
-              <h1 className="text-2xl font-bold p-4">Battle {battleId}</h1>
+                  />
+                ) : challenge[0].difficultyOfChallenge === "medium" ? (
+                  <Image
+                    src="/images/twoStarDifficulty.svg"
+                    width={60}
+                    height={30}
+                    alt="Stars"
+                  />
+                ) : challenge[0].difficultyOfChallenge === "hard" ? (
+                  <Image
+                    src="/images/threeStarDifficulty.svg"
+                    width={80}
+                    height={30}
+                    alt="Stars"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
               <ChallengeDescription />
 
             </div>
