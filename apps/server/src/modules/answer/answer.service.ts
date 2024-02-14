@@ -1,7 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { codingChallengesList } from 'src/database/codingChallenges';
-import { strict as assert } from 'assert';
+import { Injectable } from "@nestjs/common";
+import { codingChallengesList } from "src/database/codingChallenges";
+import { strict as assert } from "assert";
+import * as Mocha from "mocha";
 
+interface TestResult {
+  name: string;
+  input: any[];
+  expected: any;
+  result: any;
+  error?: any;
+  passed: boolean;
+}
 interface TestResults {
   didAssertPass: boolean;
   testResults: any[];
@@ -9,53 +18,60 @@ interface TestResults {
 
 @Injectable()
 export class AnswerService {
-  // Find the challenge in the list by its ID and get its details and tests, i.e. returns object in codingChallenges.ts for corresponding id
-
   findChallenge(challengeId: number) {
     const codingChallenge = codingChallengesList.find(
       (challenge) => challenge.challengeId === challengeId,
     );
     return codingChallenge;
   }
-  runTest(userFunction, codingChallenge): TestResults {
+
+  async runTest(userFunction, codingChallenge): Promise<TestResults> {
+    const mocha = new Mocha();
     let didAssertPass = false;
-    const testResults = [];
-    try {
-      codingChallenge.tests.forEach((testCase) => {
-        const inputValues = testCase.input; //destructured from codingChallenges.ts
-        const expected = testCase.expected;
-        const result = userFunction(...inputValues);
+    const testResults: TestResult[] = [];
 
-        console.log('EVALUATE USER FUNCTION: ', userFunction);
+    mocha.suite.emit("pre-require", global, "", mocha);
 
-        assert.deepStrictEqual(result, expected); // Use assert.strictEqual for error reporting intstead of ===
+    codingChallenge.tests.forEach((testCase) => {
+      const inputValues = testCase.input;
+      const expected = testCase.expected;
 
-        // If the test case passes without throwing an assertion error, push the pass result
-        testResults.push({
-          input: inputValues,
-          expected,
-          result,
-          passed: true,
+      describe(testCase.name, function () {
+        it(testCase.description, function (done) {
+          const actual = userFunction(...inputValues);
+          try {
+            assert.deepStrictEqual(actual, expected);
+            testResults.push({
+              name: testCase.name,
+              input: inputValues,
+              expected,
+              result: actual,
+              passed: true,
+            });
+            done();
+          } catch (err) {
+            testResults.push({
+              name: testCase.name,
+              input: inputValues,
+              expected,
+              result: actual,
+              error: err,
+              passed: false,
+            });
+            done(err);
+          }
         });
       });
+    });
 
-      // If all tests are pushed as passed, then didAssertPass becomes true
-      if (testResults.every((test) => test.passed)) {
-        didAssertPass = true;
-      }
-    } catch (error) {
-      // If an error is caught, log the failing test case but don't stop the execution.
-      // The didAssertPass remains false as initialized.
-      console.log(error);
-      testResults.push({
-        expected: error.expected,
-        result: 'Execution Error',
-        passed: false,
-        error: error.message,
+    const runner = mocha.run();
+
+    await new Promise<void>((resolve, reject) => {
+      runner.on("end", () => {
+        didAssertPass = testResults.every((test) => test.passed);
+        resolve();
       });
-    }
-
-    console.log('testResults', testResults);
+    });
 
     return { didAssertPass, testResults };
   }
