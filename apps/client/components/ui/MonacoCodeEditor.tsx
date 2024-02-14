@@ -67,6 +67,10 @@ export default function MonacoCodeEditor({
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
+      if (answer.clientId === socket.id && answer.didAssertPass === false) {
+        //need to change descriptions to Tests here
+        console.log(answer)
+      }
       if (answer.clientId === socket.id && answer.didAssertPass === true) {
         let message = "Congratulations, all tests passed!"
         setSubmitMessage(message)

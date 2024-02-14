@@ -1,11 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { AnswerService } from './answer.service';
+import { Body, Controller, Post } from "@nestjs/common";
+import { AnswerService } from "./answer.service";
 
-@Controller('answer') //handles all HTTP requests related to 'answer' endpoint
+@Controller("answer") //handles all HTTP requests related to 'answer' endpoint
 export class AnswerController {
   constructor(private readonly answerService: AnswerService) {}
   @Post()
-  submitCode(
+  async submitCode(
     // Body @decorator automatically parses request body and extracts its contents into a defined object structure
     @Body()
     body: {
@@ -14,7 +14,7 @@ export class AnswerController {
       battleId: number;
       submittedAnswer: string;
     },
-  ): string {
+  ): Promise<string> {
     // Destructure the received body to get the submitted answer and challengeID
     const { submittedAnswer, challengeId } = body;
 
@@ -25,13 +25,13 @@ export class AnswerController {
     const result = this.answerService.runTest(runUserFunction, codingChallenge);
 
     // Logging the results for visibility
-    console.log('Test Results: ', result.testResults);
-    console.log('Did the test pass?', result.didAssertPass);
+    console.log("Test Results: ", (await result).testResults);
+    console.log("Did the test pass?", (await result).didAssertPass);
 
     let responseMessage = `Coding Challenge Description: ${codingChallenge.description}, \nSubmitted Answer: ${submittedAnswer}\n`;
-    responseMessage += result.didAssertPass
-      ? 'All tests passed.'
-      : 'Some tests failed. Check test results for details.';
+    responseMessage += (await result).didAssertPass
+      ? "All tests passed."
+      : "Some tests failed. Check test results for details.";
 
     return responseMessage;
   }
