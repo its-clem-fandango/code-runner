@@ -6,12 +6,63 @@ import { io } from "socket.io-client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
+import ChallengeConsole from "@/components/ChallengeConsole"
 
-const CodeEditor = dynamic(() => import("../../components/ui/MonacoCodeEditor"))
+import apicalls from "@/helper/apicalls"
+
+const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
+
+export interface ChallengeData {
+  challengeId: number
+  name: string
+  description: string
+  difficultyOfChallenge: string
+  tests: any[]
+}
+export interface ConsoleData {
+  clientId: string
+  didAssertPass: boolean
+  testResults: Array<TestResults>
+}
+export interface RaceData {
+  id: number
+  BattleName: string
+  Difficulty: string
+  Join: string
+  Username: string
+  clientId: string
+  playerCount: number
+  ChallengeId: number
+}
+export interface TestResults {
+  name: string
+  input: unknown
+  expected: unknown
+  result: unknown
+  passed: boolean
+  error?: TestError
+}
+export interface TestError {
+  generatedMessage: boolean
+  code: string
+  acutal: string
+  expected: string
+  operator: string
+}
+export interface SyntaxError {
+  message: string
+}
 
 function Battle() {
   const [isFull, setIsFull] = useState<boolean>(false)
+  const [raceData, setRaceData] = useState<RaceData | null>(null)
+  const [challengeData, setChallengeData] = useState<ChallengeData | null>(null)
+  const [consoleData, setConsoleData] = useState<ConsoleData | null>(null)
+  const [syntaxError, setSyntaxError] = useState<string | null>(null)
+  const [showDescription, setShowDescription] = useState<boolean>(true)
+  const [showConsole, setShowConsole] = useState<boolean>(false)
   const [playerNumber, setPlayerNumber] = useState<number | null>(null)
+  const [challengeId, setChallengeId] = useState<number | null>(null)
   const setUpRef = useRef(false)
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -25,13 +76,22 @@ function Battle() {
     function handleBattleError(msg: { full: boolean }) {
       if (msg.full === true) setIsFull(true)
     }
-    function handleJoinedBattle(msg: {
+    async function handleJoinedBattle(msg: {
       id: number
-      playerCount: number
+      BattleName: string
+      Difficulty: string
+      Join: string
+      Username: string
       clientId: string
+      playerCount: number
+      ChallengeId: number
     }) {
-      console.log(socket.id)
+      console.log(msg)
       if (msg.clientId === socket.id) setPlayerNumber(msg.playerCount)
+      setRaceData(msg)
+      setChallengeId(msg.ChallengeId)
+      setChallengeData(await apicalls.getChallangeData(msg.ChallengeId))
+      console.log(challengeData)
     }
 
     socket.on("battleError", handleBattleError)
@@ -39,10 +99,18 @@ function Battle() {
 
     setUpRef.current = true
   }, [])
+  function handleTestResults(testResults: ConsoleData) {
+    setConsoleData(testResults)
+  }
+  function handleSyntaxError(testResults: SyntaxError | null) {
+    if (testResults?.message) {
+      setSyntaxError(testResults.message)
+    } else setSyntaxError(null)
+  }
 
   return (
     <div>
-      <h1>Battle {battleId}</h1>
+      <h1>{raceData ? raceData.BattleName : null}</h1>
       {isFull ? (
         <div>
           <p>The Battle is already full</p>
@@ -50,8 +118,37 @@ function Battle() {
         </div>
       ) : (
         <>
-          <ChallengeDescription />
-          <CodeEditor playerNumber={playerNumber} />
+          <Button
+            onClick={() => {
+              setShowConsole(false)
+              setShowDescription(true)
+            }}
+          >
+            Description
+          </Button>
+          <Button
+            onClick={() => {
+              setShowDescription(false)
+              setShowConsole(true)
+            }}
+          >
+            Console
+          </Button>
+          {showDescription ? (
+            <ChallengeDescription data={challengeData} />
+          ) : null}
+          {showConsole ? (
+            <ChallengeConsole
+              consoleData={consoleData}
+              syntaxError={syntaxError}
+            />
+          ) : null}
+          <CodeEditor
+            playerNumber={playerNumber}
+            challengeId={challengeId}
+            handleResults={handleTestResults}
+            handleSyntaxError={handleSyntaxError}
+          />
         </>
       )}
     </div>

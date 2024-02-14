@@ -27,17 +27,34 @@ export const codingChallengesList = [
       'Create a function that takes an integer as an argument and returns "Even" for even numbers or "Odd" for odd numbers.',
     difficultyOfChallenge: "easy",
     tests: [
-      { name: "test1", input: [3], expected: "Odd" },
-      { name: "test2", input: [4], expected: "Even" },
+      {
+        name: "test1",
+        description: "Should return odd",
+        input: [3],
+        expected: "Odd",
+      },
+      {
+        name: "test2",
+        description: "Should return even",
+        input: [4],
+        expected: "Even",
+      },
     ],
   },
   {
-    challengeId: 3, // Add a unique challengeId for the second challenge
+    challengeId: 3,
     name: "Vowel Count",
     description:
       "Return the number (count) of vowels in the given string. We will consider a, e, i, o, u as vowels for this Kata (but not y). The input string will only consist of lower case letters and/or spaces.",
     difficultyOfChallenge: "medium",
-    tests: [{ name: "test1", input: ["abracadabra"], expected: 5 }],
+    tests: [
+      {
+        name: "test1",
+        description: "Should return 5",
+        input: ["abracadabra"],
+        expected: 5,
+      },
+    ],
   },
   {
     challengeId: 4,
@@ -46,8 +63,18 @@ export const codingChallengesList = [
       "Your function takes two arguments,fathersAge -> current father's age (years) and daughtersAge -> current age of his daughter (years). Сalculate how many years ago the father was twice as old as his daughter (or in how many years he will be twice as old).",
     difficultyOfChallenge: "medium",
     tests: [
-      { name: "test1", input: [40, 20], expected: 0 },
-      { name: "test2", input: [40, 24], expected: 8 },
+      {
+        name: "test1",
+        description: "Should return 0",
+        input: [40, 20],
+        expected: 0,
+      },
+      {
+        name: "test2",
+        description: "Should return 8",
+        input: [40, 24],
+        expected: 8,
+      },
     ],
   },
   {
@@ -59,11 +86,13 @@ export const codingChallengesList = [
     tests: [
       {
         name: "test1",
+        description: "Should return 'sihT si na !elpmaxe'",
         input: ["This is an example!"],
         expected: "sihT si na !elpmaxe",
       },
       {
         name: "test2",
+        description: "Should return 'elbuod  secaps'",
         input: ["double  spaces"],
         expected: "elbuod  secaps",
       },
@@ -78,17 +107,19 @@ export const codingChallengesList = [
     tests: [
       {
         name: 'If the left elevator is closer to the call, should return "left"',
+        description: "Should return left",
         input: [0, 1, 0],
         expected: "left",
       },
       {
         name: 'If the right elevator is closer to the call, should return "right"',
+        description: "Should return right",
         input: [0, 1, 1],
         expected: "right",
       },
     ],
   },
-  {
+  /* {
     challengeId: 7,
     name: "The suffixer",
     description:
@@ -98,7 +129,7 @@ export const codingChallengesList = [
       { name: "test1", input: ["spot"], expected: "spotify" },
       { name: "test2", input: ["shop"], expected: "shopify" },
     ],
-  },
+  }, */
   {
     challengeId: 8,
     name: "How many smaller than me?",
@@ -106,8 +137,18 @@ export const codingChallengesList = [
       "Write a function that given, an array arr, returns an array containing at each index i the amount of numbers that are smaller than arr[i] to the right.",
     difficultyOfChallenge: "hard",
     tests: [
-      { name: "test1", input: [[5, 4, 3, 2, 1]], expected: [4, 3, 2, 1, 0] },
-      { name: "test2", input: [[1, 2, 0]], expected: [1, 1, 0] },
+      {
+        name: "test1",
+        description: "Should return [4, 3, 2, 1, 0]",
+        input: [[5, 4, 3, 2, 1]],
+        expected: [4, 3, 2, 1, 0],
+      },
+      {
+        name: "test2",
+        description: "Should return [1, 1, 0]",
+        input: [[1, 2, 0]],
+        expected: [1, 1, 0],
+      },
     ],
   },
   {
@@ -117,8 +158,18 @@ export const codingChallengesList = [
       "Write a function fibonacci(element) that takes an integer element and returns the element-th number of the Fibonacci sequence where: fibonacci(0) is 0, fibonacci(1) is 1 and so on",
     difficultyOfChallenge: "medium",
     tests: [
-      { name: "test1", input: [0], expected: 0 },
-      { name: "test2", input: [10], expected: 55 },
+      {
+        name: "test1",
+        description: "Should return 0",
+        input: [0],
+        expected: 0,
+      },
+      {
+        name: "test2",
+        description: "Should return 55",
+        input: [10],
+        expected: 55,
+      },
     ],
   },
 ];

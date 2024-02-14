@@ -55,6 +55,7 @@ export class EditorGateway {
       const errorMsg = {
         message: `${error}`,
       };
+      console.log(errorMsg);
       this.server.emit("testResult", errorMsg);
     }
   }
