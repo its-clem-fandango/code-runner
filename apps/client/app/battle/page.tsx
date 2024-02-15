@@ -6,8 +6,7 @@ import { io } from "socket.io-client"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
-import ChallengeConsole from "@/components/ChallengeConsole"
-
+import Image from "next/image"
 import apicalls from "@/helper/apicalls"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
@@ -109,8 +108,7 @@ function Battle() {
   }
 
   return (
-    <div>
-      <h1>{raceData ? raceData.BattleName : null}</h1>
+    <div className="bg-[#FAFAFA]">
       {isFull ? (
         <div>
           <p>The Battle is already full</p>
@@ -118,37 +116,48 @@ function Battle() {
         </div>
       ) : (
         <>
-          <Button
-            onClick={() => {
-              setShowConsole(false)
-              setShowDescription(true)
-            }}
-          >
-            Description
-          </Button>
-          <Button
-            onClick={() => {
-              setShowDescription(false)
-              setShowConsole(true)
-            }}
-          >
-            Console
-          </Button>
-          {showDescription ? (
-            <ChallengeDescription data={challengeData} />
-          ) : null}
-          {showConsole ? (
-            <ChallengeConsole
-              consoleData={consoleData}
-              syntaxError={syntaxError}
-            />
-          ) : null}
-          <CodeEditor
-            playerNumber={playerNumber}
-            challengeId={challengeId}
-            handleResults={handleTestResults}
-            handleSyntaxError={handleSyntaxError}
-          />
+          <div className="flex gap-5 mx-10 my-5">
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-green-400">
+              <div className="flex justify-between mr-5">
+                <h1 className="text-2xl font-bold p-4">
+                  {raceData ? raceData.BattleName : null}
+                </h1>
+                {challengeData?.difficultyOfChallenge === "easy" ? (
+                  <Image
+                    src="/images/oneStarDifficulty.svg"
+                    width={40}
+                    height={30}
+                    alt="Stars"
+                  />
+                ) : challengeData?.difficultyOfChallenge === "medium" ? (
+                  <Image
+                    src="/images/twoStarDifficulty.svg"
+                    width={60}
+                    height={30}
+                    alt="Stars"
+                  />
+                ) : challengeData?.difficultyOfChallenge === "hard" ? (
+                  <Image
+                    src="/images/threeStarDifficulty.svg"
+                    width={80}
+                    height={30}
+                    alt="Stars"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+              <ChallengeDescription data={challengeData} />
+            </div>
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-blue-400">
+              <CodeEditor
+                playerNumber={playerNumber}
+                challengeId={challengeId}
+                handleResults={handleTestResults}
+                handleSyntaxError={handleSyntaxError}
+              />
+            </div>
+          </div>
         </>
       )}
     </div>

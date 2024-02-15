@@ -20,13 +20,8 @@ export default function ButtonPopUp() {
           className="flex flex-col items-center justify-center h-[150px] w-[340px] bg-black rounded-lg text-white leading-7 "
           onClick={() => setOpen(true)}
         >
-          {/* <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <span class="text-black text-3xl">+</span>
-          </div> */}
-          <div className="mt-4">
-            <p className="flex justify-center text-2xl text-black bg-white rounded-full w-10 h-10 mt-2 mb-2">
-              <span>+</span>
-            </p>
+          <div className="bg-white w-[30px] h-[30px] rounded-full mb-2">
+            <p className="text-black text-xl">+</p>
           </div>
 
           <p className="text-xl font-manrope">Create a new Race</p>

@@ -108,26 +108,26 @@ export default function MonacoCodeEditor({
   return (
     <>
       <div className="container">
-        <div className="editors-container">
+        <div className="editors-container flex flex-col gap-5">
           <Editor
-            height="60vh"
-            width="40vw"
-            theme="vs-dark"
+            height="300px"
+            width="500px"
+            theme="light"
             path={file.name}
             defaultLanguage={file.language}
             onChange={(value: string | undefined) => handleEditorChange(value)}
           />
 
           <Editor
-            height="60vh"
-            width="40vw"
-            theme="vs-dark"
+            height="300px"
+            width="500px"
+            theme="light"
             defaultLanguage={file.language}
             value={recievedCode}
             options={{
               readOnly: true,
             }}
-            className="read-only-editor editor"
+            className="read-only-editor editor "
           />
         </div>
         <div>
