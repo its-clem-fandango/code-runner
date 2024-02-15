@@ -14,6 +14,7 @@ import {
 } from "./ui/dialog"
 import { useRouter } from "next/navigation"
 import { ConsoleData } from "@/app/battle/page"
+import Image from "next/image"
 
 interface File {
   name: string
@@ -38,6 +39,7 @@ export default function MonacoCodeEditor({
   /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
   const [submitMessage, setSubmitMessage] = useState<string>("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [isClosed, setIsClosed] = useState(false)
   const router = useRouter()
 
   const roomName = 1
@@ -92,6 +94,12 @@ export default function MonacoCodeEditor({
     })
   }, [])
 
+  const handleButtonClick = (e) => {
+    e.preventDefault()
+    setIsClosed((prevIsClosed) => !prevIsClosed)
+    // Change Blur
+  }
+
   useEffect(() => {
     socket.on("opponentCode", (msg) => {
       if (msg.clientId !== socket.id) {
@@ -107,32 +115,89 @@ export default function MonacoCodeEditor({
 
   return (
     <>
-      <div className="container">
-        <div className="editors-container flex flex-col gap-5">
-          <Editor
-            height="300px"
-            width="500px"
-            theme="light"
-            path={file.name}
-            defaultLanguage={file.language}
-            onChange={(value: string | undefined) => handleEditorChange(value)}
-          />
+      <div className="bg-[#FAFAFA]">
+        <div className="flex flex-col gap-10  ">
+          <div className=" bg-white rounded-lg shadow">
+            <h1 className="bg-[#E7E7E7]  rounded-t-lg text-xl font-bold px-4 py-2">
+              Your Solution
+            </h1>
+            <Editor
+              height="300px"
+              width="100%"
+              theme="light"
+              path={file.name}
+              defaultLanguage={file.language}
+              onChange={(value: string | undefined) =>
+                handleEditorChange(value)
+              }
+              className="my-2"
+            />
+            <div className="flex justify-end  ">
+              <div
+                onClick={handleSubmit}
+                className=" flex w-[82px] h-[40px] bg-[#0F172A] rounded-lg px-4 gap-2 mb-4 mr-4 cursor-pointer "
+              >
+                <Image
+                  src="/images/triangleIcon.svg"
+                  width={9.33}
+                  height={12}
+                  alt="icon"
+                />
 
-          <Editor
-            height="300px"
-            width="500px"
-            theme="light"
-            defaultLanguage={file.language}
-            value={recievedCode}
-            options={{
-              readOnly: true,
-            }}
-            className="read-only-editor editor "
-          />
+                <button className=" text-white">Run</button>
+              </div>
+            </div>
+          </div>
+          <div className="  bg-white rounded-lg shadow  h-[351px]">
+            <div className="  rounded-t-lg ">
+              <div className="flex justify-center py-4 gap-11 ">
+                <div>🏎️</div>
+                <div className="font-bold">Your Rival</div>
+              </div>
+              <div className="flex justify-between">
+                <div className="ml-4 text-[#64748B]">
+                  If you don’t want to see your rivals code, you can disabled
+                  it.
+                </div>
+                <div className="mr-5">
+                  <div>
+                    <button onClick={handleButtonClick}>
+                      {isClosed ? (
+                        <Image
+                          src="/images/eyeOpenIcon.svg"
+                          width={20}
+                          height={20}
+                          alt="eye open icon"
+                        />
+                      ) : (
+                        <Image
+                          src="/images/eyeClosedIcon.svg"
+                          width={20}
+                          height={20}
+                          alt="eye open icon"
+                        />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={isClosed ? "filter blur-sm" : ""}>
+              <Editor
+                height="100%"
+                width="100%"
+                theme="light"
+                defaultLanguage={file.language}
+                value={recievedCode}
+                options={{
+                  readOnly: true,
+                }}
+                className="read-only-editor mt-2 "
+              />
+            </div>
+          </div>
         </div>
-        <div>
-          <button onClick={handleSubmit}>Submit</button>
-        </div>
+
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent>
