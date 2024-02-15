@@ -15,19 +15,19 @@ function ChallengeDescription({ data }: { data: ChallengeData | null }) {
 
   return (
     <div>
-      <div>
-        <div className="flex justify-between mr-5">
-          <h1 className="font-bold text-xl border p-4 tracking-wide">
+      <div className="w-[45vw] border border-purple-400">
+        <div className="flex justify-between mr-5 ">
+          <h1 className="font-bold text-xl border w-[45vw] p-4 tracking-wide">
             {data?.name}
           </h1>
         </div>
 
-        <ScrollArea className="h-[200px] w-[650px] border p-4 tracking-wide">
+        <ScrollArea className="h-[200px] w-[45vw] border p-4 tracking-wide">
           <ReactMarkdown>{description}</ReactMarkdown>
         </ScrollArea>
-        <div className="bg-grey-200 border">
-          <Tabs defaultValue="account" className="w-[600px] p-4 ">
-            <TabsList className=" w-[620px] flex justify-start bg-[#F6F6F6]">
+        <div className="bg-grey-200 border w-[45vw]">
+          <Tabs defaultValue="account" className="w-[40vw] p-4 ">
+            <TabsList className=" w-[41vw] flex justify-start bg-[#F6F6F6]">
               <TabsTrigger value="account">Example</TabsTrigger>
               <TabsTrigger value="password">Outcome</TabsTrigger>
             </TabsList>
