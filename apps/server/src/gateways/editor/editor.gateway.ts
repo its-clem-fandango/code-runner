@@ -4,15 +4,15 @@ import {
   SubscribeMessage,
   MessageBody,
   ConnectedSocket,
-} from '@nestjs/websockets';
-import { Server } from 'socket.io';
-import { AnswerService } from 'src/modules/answer/answer.service';
+} from "@nestjs/websockets";
+import { Server } from "socket.io";
+import { AnswerService } from "src/modules/answer/answer.service";
 @WebSocketGateway(8081, { cors: true })
 export class EditorGateway {
   constructor(private readonly answerService: AnswerService) {}
 
   @WebSocketServer() server: Server;
-  @SubscribeMessage('codeChanged')
+  @SubscribeMessage("codeChanged")
   sendToOpponent(
     @MessageBody()
     data: {
@@ -22,14 +22,14 @@ export class EditorGateway {
     },
     @ConnectedSocket() client: any,
   ) {
-    this.server.emit('opponentCode', {
+    this.server.emit("opponentCode", {
       room: 1,
       clientId: client.id,
       message: data.message,
     });
   }
 
-  @SubscribeMessage('submit')
+  @SubscribeMessage("submit")
   async checkCode(
     @MessageBody()
     data: {
@@ -40,21 +40,23 @@ export class EditorGateway {
       clientId: string;
     },
   ) {
-    console.log('log data', data);
+    console.log("log data", data);
     const challenge = await this.answerService.findChallenge(data.challengeId);
+
     try {
       const runUserFunction = eval(`(${data.message})`);
       const result = await this.answerService.runTest(
         runUserFunction,
         challenge,
       );
-      this.server.emit('testResult', { ...result, clientId: data.clientId });
-      console.log('result', result);
+      this.server.emit("testResult", { ...result, clientId: data.clientId });
     } catch (error) {
+      console.log(error);
       const errorMsg = {
         message: `${error}`,
       };
-      this.server.emit('testResult', errorMsg);
+      console.log(errorMsg);
+      this.server.emit("testResult", errorMsg);
     }
   }
 }

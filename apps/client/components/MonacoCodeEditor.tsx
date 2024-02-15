@@ -4,15 +4,16 @@ import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
 import { useState, useEffect } from "react"
 import { socket } from "@/components/ui/socket"
 import { Editor } from "@monaco-editor/react"
-import "../../app/globals.css"
+import "../app/globals.css"
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogClose,
-} from "./dialog"
+} from "./ui/dialog"
 import { useRouter } from "next/navigation"
+import { ConsoleData } from "@/app/battle/page"
 
 interface File {
   name: string
@@ -22,8 +23,14 @@ interface File {
 
 export default function MonacoCodeEditor({
   playerNumber,
+  challengeId,
+  handleResults,
+  handleSyntaxError,
 }: {
   playerNumber: number | null
+  challengeId: number | null
+  handleResults: (result: ConsoleData) => void
+  handleSyntaxError: (result: SyntaxError) => void
 }) {
   const [code, setCode] = useState<string | undefined>("")
   const [recievedCode, setRecievedCode] = useState<string>("")
@@ -52,7 +59,7 @@ export default function MonacoCodeEditor({
       room: roomName,
       player: playerNumber,
       message: code,
-      challengeId: 1,
+      challengeId: challengeId,
       clientId: socket.id,
     })
   }
@@ -67,6 +74,11 @@ export default function MonacoCodeEditor({
 
   useEffect(() => {
     socket.on("testResult", (answer) => {
+      if (answer.clientId === socket.id && answer.didAssertPass === false) {
+        handleResults(answer)
+        handleSyntaxError(answer)
+        console.log(answer)
+      }
       if (answer.clientId === socket.id && answer.didAssertPass === true) {
         let message = "Congratulations, all tests passed!"
         setSubmitMessage(message)
@@ -96,7 +108,6 @@ export default function MonacoCodeEditor({
   return (
     <>
       <div className="container">
-        <p>{playerNumber}</p>
         <div className="editors-container flex flex-col gap-5">
           <Editor
             height="300px"

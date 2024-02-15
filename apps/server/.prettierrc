@@ -1,4 +1,8 @@
 {
-  "singleQuote": false,
-  "trailingComma": "all"
+  "prettier/prettier": [
+    {
+      "singleQuote": true,
+      "trailingComma": "all"
+    }
+  ]
 }
