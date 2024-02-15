@@ -9,67 +9,21 @@ import { RaceProvider, useRace } from "@/lib/useRace"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 
-export interface ChallengeData {
-  challengeId: number
-  name: string
-  description: string
-  difficultyOfChallenge: string
-  example: string
-  tests: any[]
-}
-export interface ConsoleData {
-  clientId: string
-  didAssertPass: boolean
-  testResults: Array<TestResults>
-}
-export interface RaceData {
-  id: number
-  BattleName: string
-  Difficulty: string
-  Join: string
-  Username: string
-  clientId: string
-  playerCount: number
-  ChallengeId: number
-}
-export interface TestResults {
-  name: string
-  input: unknown
-  expected: unknown
-  result: unknown
-  passed: boolean
-  error?: TestError
-}
-export interface TestError {
-  generatedMessage: boolean
-  code: string
-  acutal: string
-  expected: string
-  operator: string
-}
-export interface SyntaxError {
-  message: string
-}
-
 function BattlePage() {
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
 
   return (
     <RaceProvider>
-      <div>
-        <h1>Battle {battleId}</h1>
-        <Battle battleId={battleId} />
-      </div>
+      <Battle battleId={battleId} />
     </RaceProvider>
   )
 }
 
 function Battle({ battleId }: { battleId: number }) {
   const router = useRouter()
-  const { race, sendRaceAction } = useRace()
-  console.log({ race })
   const first = useRef(true)
+  const { race, sendRaceAction } = useRace()
 
   useEffect(() => {
     if (!first.current) return
@@ -84,18 +38,25 @@ function Battle({ battleId }: { battleId: number }) {
 
   if (race?.isFull) {
     return (
-      <div>
+      <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]" >
         <p>The Battle is already full</p>
-        <Button onClick={() => router.back()}>Go back to Dashboard</Button>
+        <Button onClick={() => router.push('/')}>Go back to Dashboard</Button>
       </div>
     )
   }
 
   return (
-    <>
-      <ChallengeDescription />
-      <CodeEditor playerNumber={race.playerNumber} />
-    </>
+    <div className="bg-[#FAFAFA] h-[100vh]">
+      <div className="flex gap-5 mx-10 my-5" >
+        <ChallengeDescription />
+        <div className="w-[50%] h-[90vh] bg-white rounded-lg ">
+          <CodeEditor
+            playerNumber={race.playerCount}
+            challengeId={race.challengeId}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -11,7 +11,7 @@ import {
   DialogClose,
 } from "./ui/dialog"
 import { useRouter } from "next/navigation"
-import { ConsoleData } from "@/app/battle/page"
+import { useRace } from "@/lib/useRace"
 import Image from "next/image"
 
 interface File {
@@ -23,14 +23,11 @@ interface File {
 export default function MonacoCodeEditor({
   playerNumber,
   challengeId,
-  handleResults,
-  handleSyntaxError,
 }: {
   playerNumber: number | null
   challengeId: number | null
-  handleResults: (result: ConsoleData) => void
-  handleSyntaxError: (result: SyntaxError) => void
 }) {
+
   const [code, setCode] = useState<string | undefined>("")
   const [recievedCode, setRecievedCode] = useState<string>("")
 
@@ -38,6 +35,12 @@ export default function MonacoCodeEditor({
   const [submitMessage2, setSubmitMessage2] = useState<string>("")
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const {
+    handleResult,
+    handleSyntaxError,
+  } = useRace()
+
   const router = useRouter()
 
   const [isClosed, setIsClosed] = useState(false)
@@ -77,7 +80,7 @@ export default function MonacoCodeEditor({
   useEffect(() => {
     socket.on("testResult", (answer) => {
       if (answer.clientId === socket.id && answer.didAssertPass === false) {
-        handleResults(answer)
+        handleResult(answer)
         handleSyntaxError(answer)
         console.log(answer)
       }
@@ -124,7 +127,7 @@ export default function MonacoCodeEditor({
   return (
     <>
       <div className="bg-[#FAFAFA]">
-        <div className="flex flex-col gap-10  ">
+        <div className="flex flex-col gap-2">
           <div className=" bg-white rounded-lg shadow">
             <h1 className="bg-[#E7E7E7]  rounded-t-lg text-xl font-bold px-4 py-2">
               Your Solution
@@ -156,8 +159,8 @@ export default function MonacoCodeEditor({
               </div>
             </div>
           </div>
-          <div className="  bg-white rounded-lg shadow  h-[351px]">
-            <div className="  rounded-t-lg ">
+          <div className="bg-white rounded-lg shadow flex flex-col  h-[351px]">
+            <div className="rounded-t-lg ">
               <div className="flex justify-center py-4 gap-11 ">
                 <div>🏎️</div>
                 <div className="font-bold">Your Rival</div>
@@ -190,7 +193,7 @@ export default function MonacoCodeEditor({
                 </div>
               </div>
             </div>
-            <div className={isClosed ? "filter blur-sm" : ""}>
+            <div className={`${isClosed ? "filter blur-sm" : ""} flex-1 `}>
               <Editor
                 height="100%"
                 width="100%"
@@ -204,7 +207,7 @@ export default function MonacoCodeEditor({
               />
             </div>
           </div>
-        </div>
+        </div >
 
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -221,7 +224,7 @@ export default function MonacoCodeEditor({
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </div >
     </>
   )
 }

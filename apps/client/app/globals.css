@@ -96,8 +96,9 @@
 }
 
 .read-only-editor {
-  pointer-events: none;
   user-select: none;
+  pointer-events: none;
+  overflow: auto;
 }
 
 .editor {
