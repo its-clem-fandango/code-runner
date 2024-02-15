@@ -16,6 +16,7 @@ export interface ChallengeData {
   name: string
   description: string
   difficultyOfChallenge: string
+  example: string
   tests: any[]
 }
 export interface ConsoleData {
@@ -147,7 +148,11 @@ function Battle() {
                   ""
                 )}
               </div>
-              <ChallengeDescription data={challengeData} />
+              <ChallengeDescription
+                data={challengeData}
+                consoleData={consoleData}
+                syntaxError={syntaxError}
+              />
             </div>
             <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-blue-400">
               <CodeEditor

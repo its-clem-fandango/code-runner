@@ -4,9 +4,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
 
 import { useState, useEffect } from "react"
-import { ChallengeData } from "@/app/battle/page"
+import { ChallengeData, ConsoleData } from "@/app/battle/page"
+import ChallengeConsole from "./ChallengeConsole"
 
-function ChallengeDescription({ data }: { data: ChallengeData | null }) {
+function ChallengeDescription({
+  data,
+  consoleData,
+  syntaxError,
+}: {
+  data: ChallengeData | null
+  consoleData: ConsoleData | null
+  syntaxError: string | null
+}) {
   const [description, setDescription] = useState<string>("")
 
   useEffect(() => {
@@ -26,19 +35,20 @@ function ChallengeDescription({ data }: { data: ChallengeData | null }) {
           <ReactMarkdown>{description}</ReactMarkdown>
         </ScrollArea>
         <div className="bg-grey-200 border">
-          <Tabs defaultValue="account" className="w-[600px] p-4 ">
+          <Tabs defaultValue="example" className="w-[600px] p-4 ">
             <TabsList className=" w-[620px] flex justify-start bg-[#F6F6F6]">
-              <TabsTrigger value="account">Example</TabsTrigger>
-              <TabsTrigger value="password">Outcome</TabsTrigger>
+              <TabsTrigger value="example">Example</TabsTrigger>
+              <TabsTrigger value="console">Outcome</TabsTrigger>
             </TabsList>
-            <TabsContent value="account" className=" py-2">
+            <TabsContent value="example" className=" py-2">
               {/* <h1 className="text-xl font-bold py-2">Example</h1> */}
-              <p>
-                {`['hello', 'world', 'this', 'is', 'great']  =>  'hello world this is great'`}
-              </p>
+              <p>{data?.example ? data.example : null}</p>
             </TabsContent>
-            <TabsContent value="password" className=" py-2">
-              Change your password here.
+            <TabsContent value="console" className=" py-2">
+              <ChallengeConsole
+                consoleData={consoleData}
+                syntaxError={syntaxError}
+              />
             </TabsContent>
           </Tabs>
         </div>
