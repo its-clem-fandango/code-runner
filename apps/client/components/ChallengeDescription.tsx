@@ -4,9 +4,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
 
 import { useState, useEffect } from "react"
-import { ChallengeData } from "@/app/battle/page"
+import { ChallengeData, ConsoleData } from "@/app/battle/page"
+import ChallengeConsole from "./ChallengeConsole"
 
-function ChallengeDescription({ data }: { data: ChallengeData | null }) {
+function ChallengeDescription({
+  data,
+  consoleData,
+  syntaxError,
+}: {
+  data: ChallengeData | null
+  consoleData: ConsoleData | null
+  syntaxError: string | null
+}) {
   const [description, setDescription] = useState<string>("")
 
   useEffect(() => {
@@ -31,14 +40,15 @@ function ChallengeDescription({ data }: { data: ChallengeData | null }) {
               <TabsTrigger value="account">Example</TabsTrigger>
               <TabsTrigger value="password">Outcome</TabsTrigger>
             </TabsList>
-            <TabsContent value="account" className=" py-2">
+            <TabsContent value="example" className=" py-2">
               {/* <h1 className="text-xl font-bold py-2">Example</h1> */}
-              <p>
-                {`['hello', 'world', 'this', 'is', 'great']  =>  'hello world this is great'`}
-              </p>
+              <p>{data?.example ? data.example : null}</p>
             </TabsContent>
-            <TabsContent value="password" className=" py-2">
-              Change your password here.
+            <TabsContent value="console" className=" py-2">
+              <ChallengeConsole
+                consoleData={consoleData}
+                syntaxError={syntaxError}
+              />
             </TabsContent>
           </Tabs>
         </div>
