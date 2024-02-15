@@ -37,11 +37,13 @@ export default function MonacoCodeEditor({
   const [recievedCode, setRecievedCode] = useState<string>("")
   /* const [playerNumber, setPlayerNumber] = useState<number>(1) */
   /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
-  const [submitMessage, setSubmitMessage] = useState<string>("")
+  const [submitMessage1, setSubmitMessage1] = useState<string>("")
+  const [submitMessage2, setSubmitMessage2] = useState<string>("")
+
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isClosed, setIsClosed] = useState(false)
   const router = useRouter()
-
+  const victoryMsg = "You won!"
   const roomName = 1
   const files = {
     name: "script.js",
@@ -82,13 +84,21 @@ export default function MonacoCodeEditor({
         console.log(answer)
       }
       if (answer.clientId === socket.id && answer.didAssertPass === true) {
-        let message = "Congratulations, all tests passed!"
-        setSubmitMessage(message)
+        let message2 = "Congratulations, all tests passed! You came first!"
+        let message1 = victoryMsg
+
+        setSubmitMessage1(message1)
+        setSubmitMessage2(message2)
+
         setIsDialogOpen(true)
       }
       if (answer.clientId !== socket.id && answer.didAssertPass === true) {
-        let message = "Sorry you lost!"
-        setSubmitMessage(message)
+        let message1 = "Sorry, you lost!"
+        let message2 = "Try harder next time!"
+
+        setSubmitMessage1(message1)
+        setSubmitMessage2(message2)
+
         setIsDialogOpen(true)
       }
     })
@@ -200,11 +210,15 @@ export default function MonacoCodeEditor({
 
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent>
-              <DialogTitle>You won!</DialogTitle>
-              <DialogDescription>{submitMessage}</DialogDescription>
+            <DialogContent className="flex flex-col items-center">
+              <Image src={submitMessage1 === victoryMsg ? "/images/carWon.svg" : "/images/carLostSVG.svg"}
+                width={286}
+                height={390}
+                alt="car" />
+              <DialogTitle>{submitMessage1}</DialogTitle>
+              <DialogDescription>{submitMessage2}</DialogDescription>
               <DialogClose asChild>
-                <button onClick={goToDashboard}>Go to Dashboard</button>
+                <button onClick={goToDashboard} className="bg-[#17B26A] text-white rounded-md p-3">Go to Dashboard</button>
               </DialogClose>
             </DialogContent>
           </Dialog>
