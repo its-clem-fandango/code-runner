@@ -38,18 +38,16 @@ export const useRace = () => useContext(RaceContext)
 export const RaceProvider = ({ children }: { children: ReactNode }) => {
   const [race, setRace] = useState<Race | null>(null)
   const socketRef = useRef<Socket | null>(null)
-  const first = useRef(true)
   const [sendRaceAction, setSendRaceAction] = useState<
     undefined | (() => void)
   >()
 
   useEffect(() => {
-    if (!first.current) return
+    if (socketRef.current?.connected) return
     console.log("create socket")
-    const socket = io("http://localhost:8082")
-    socketRef.current = socket
+    let socket = io("ws://localhost:8082")
 
-    console.log({ socket })
+    socketRef.current = socket
 
     socket.on("connect", () => {
       console.log("connected!")
@@ -58,6 +56,8 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
         socket?.emit(actionType, payload)
       })
     })
+
+    console.log("socket", socket)
 
     socket.on("error", (err) => {
       console.error("Socket error: ", err)
@@ -111,11 +111,11 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socket.on("joinedBattle", handleJoinedBattle)
 
-    first.current = false
     return () => {
+      console.log('mounting off socket')
       socket.close()
     }
-  }, [setRace])
+  }, [])
 
   return (
     <RaceContext.Provider value={{ race, sendRaceAction }}>

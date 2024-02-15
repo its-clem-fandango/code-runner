@@ -1,10 +1,8 @@
 "use client"
 
-import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
 import { useState, useEffect } from "react"
 import { socket } from "@/components/ui/socket"
 import { Editor } from "@monaco-editor/react"
-import "../app/globals.css"
 import {
   Dialog,
   DialogContent,
@@ -35,14 +33,14 @@ export default function MonacoCodeEditor({
 }) {
   const [code, setCode] = useState<string | undefined>("")
   const [recievedCode, setRecievedCode] = useState<string>("")
-  /* const [playerNumber, setPlayerNumber] = useState<number>(1) */
-  /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
+
   const [submitMessage1, setSubmitMessage1] = useState<string>("")
   const [submitMessage2, setSubmitMessage2] = useState<string>("")
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isClosed, setIsClosed] = useState(false)
   const router = useRouter()
+
+  const [isClosed, setIsClosed] = useState(false)
   const victoryMsg = "You won!"
   const roomName = 1
   const files = {
@@ -104,7 +102,7 @@ export default function MonacoCodeEditor({
     })
   }, [])
 
-  const handleButtonClick = (e) => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setIsClosed((prevIsClosed) => !prevIsClosed)
     // Change Blur
@@ -120,7 +118,7 @@ export default function MonacoCodeEditor({
   socket.emit("join room", roomName)
 
   function goToDashboard() {
-    router.back()
+    router.push('/')
   }
 
   return (
