@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useRef, useState } from "react"
 import { createContext, useContext } from "react"
 import { io } from "socket.io-client"
 import { Socket } from "socket.io-client"
+import { Race } from "./useRacesCollection"
 
 interface Challenge {
   challengeId: number
@@ -12,17 +13,6 @@ interface Challenge {
   difficultyOfChallenge: string
   example: string
   tests: any[]
-}
-interface Race {
-  id: number
-  battleName: string
-  isFull: boolean
-  username: string
-  join: string
-  difficulty: string
-  clientId: string
-  playerCount: number
-  challengeId: number
 }
 export interface ConsoleData {
   clientId: string
@@ -128,27 +118,27 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     async function handleJoinedBattle(msg: {
       id: number
-      BattleName: string
-      Difficulty: string
-      Join: string
-      Username: string
+      battleName: string
+      difficulty: string
+      join: string
+      username: string
       clientId: string
       playerCount: number
-      ChallengeId: number
+      challengeId: number
     }) {
       if (msg.clientId === socket.id) {
         setRace((prevRace) => {
           if (prevRace === null) {
             return {
               id: msg.id,
-              battleName: msg.BattleName,
+              battleName: msg.battleName,
               isFull: msg.playerCount > 2,
-              username: msg.Username,
-              join: msg.Join,
-              difficulty: msg.Difficulty,
+              username: msg.username,
+              join: msg.join,
+              difficulty: msg.difficulty,
               clientId: msg.clientId,
               playerCount: msg.playerCount,
-              challengeId: msg.ChallengeId,
+              challengeId: msg.challengeId,
             }
           }
 
@@ -160,7 +150,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
           }
         })
 
-        setChallengeData(await apicalls.getChallangeData(msg.ChallengeId))
+        setChallengeData(await apicalls.getChallangeData(msg.challengeId))
       }
     }
 

@@ -12,7 +12,6 @@ const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 function BattlePage() {
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
-
   return (
     <RaceProvider>
       <Battle battleId={battleId} />

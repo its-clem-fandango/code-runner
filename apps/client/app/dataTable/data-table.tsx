@@ -23,7 +23,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function DataTable<TData extends { Join: any; id: number }, TValue>({
+export function DataTable<TData extends { join: any; id: number }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -52,9 +52,9 @@ export function DataTable<TData extends { Join: any; id: number }, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                   </TableHead>
                 )
               })}
@@ -74,7 +74,7 @@ export function DataTable<TData extends { Join: any; id: number }, TValue>({
                   </TableCell>
                 ))}
                 <TableCell>
-                  {row.original.Join && (
+                  {row.original.join && (
                     <Button
                       className="bg-[#334155]"
                       onClick={(e) => {

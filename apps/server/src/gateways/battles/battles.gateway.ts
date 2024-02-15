@@ -36,7 +36,7 @@ export class BattleGateway implements OnGatewayConnection {
       "random-challenge",
     );
     this.server.emit("availableBattles", battles);
-    return battles[battles.length - 1].id;
+    this.server.emit("battleCreated", battles[battles.length - 1].id);
   }
 
   @SubscribeMessage("joinBattle")
