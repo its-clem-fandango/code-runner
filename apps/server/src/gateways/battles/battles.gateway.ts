@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import {
   MessageBody,
   SubscribeMessage,
@@ -11,7 +12,7 @@ import { BattleService } from "src/modules/battles/battle.service";
 
 @WebSocketGateway(8082, { cors: true })
 export class BattleGateway implements OnGatewayConnection {
-  constructor(private readonly battleService: BattleService) {}
+  constructor(private readonly battleService: BattleService) { }
   @WebSocketServer() server: Server;
 
   handleConnection(client: any) {
