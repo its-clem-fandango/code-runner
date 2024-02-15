@@ -66,7 +66,7 @@ export class AnswerService {
 
     const runner = mocha.run();
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve) => {
       runner.on("end", () => {
         didAssertPass = testResults.every((test) => test.passed);
         resolve();
