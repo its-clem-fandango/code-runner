@@ -116,8 +116,8 @@ export default function MonacoCodeEditor({
   return (
     <>
       <div className="bg-[#FAFAFA]">
-        <div className="flex flex-col gap-10 border border-purple-400 ">
-          <div className="border border-yellow-400 bg-white rounded-lg">
+        <div className="flex flex-col gap-10  ">
+          <div className=" bg-white rounded-lg shadow">
             <h1 className="bg-[#E7E7E7]  rounded-t-lg text-xl font-bold px-4 py-2">
               Your Solution
             </h1>
@@ -133,7 +133,10 @@ export default function MonacoCodeEditor({
               className="my-2"
             />
             <div className="flex justify-end  ">
-              <div className=" flex w-[82px] h-[40px] bg-[#0F172A] rounded-lg px-4 gap-2 mb-4 mr-4">
+              <div
+                onClick={handleSubmit}
+                className=" flex w-[82px] h-[40px] bg-[#0F172A] rounded-lg px-4 gap-2 mb-4 mr-4 cursor-pointer "
+              >
                 <Image
                   src="/images/triangleIcon.svg"
                   width={9.33}
@@ -141,15 +144,13 @@ export default function MonacoCodeEditor({
                   alt="icon"
                 />
 
-                <button className=" text-white" onClick={handleSubmit}>
-                  Run
-                </button>
+                <button className=" text-white">Run</button>
               </div>
             </div>
           </div>
-          <div className="border border-orange-400 bg-white rounded-lg">
-            <div className="  rounded-t-lg border border-green-400">
-              <div className="flex justify-center py-4 gap-11 border border-yellow-400">
+          <div className="  bg-white rounded-lg shadow  h-[351px]">
+            <div className="  rounded-t-lg ">
+              <div className="flex justify-center py-4 gap-11 ">
                 <div>🏎️</div>
                 <div className="font-bold">Your Rival</div>
               </div>
@@ -183,7 +184,7 @@ export default function MonacoCodeEditor({
             </div>
             <div className={isClosed ? "filter blur-sm" : ""}>
               <Editor
-                height="300px"
+                height="100%"
                 width="100%"
                 theme="light"
                 defaultLanguage={file.language}

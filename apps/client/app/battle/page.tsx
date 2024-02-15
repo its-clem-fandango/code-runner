@@ -108,7 +108,7 @@ function Battle() {
   }
 
   return (
-    <div className="bg-[#FAFAFA]">
+    <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]">
       {isFull ? (
         <div>
           <p>The Battle is already full</p>
@@ -117,7 +117,7 @@ function Battle() {
       ) : (
         <>
           <div className="flex gap-5 mx-10 my-5">
-            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-green-400">
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg shadow">
               <div className="flex justify-between mr-5">
                 <h1 className="text-2xl font-bold p-4">
                   {raceData ? raceData.BattleName : null}
@@ -149,7 +149,7 @@ function Battle() {
               </div>
               <ChallengeDescription data={challengeData} />
             </div>
-            <div className="w-[50%] h-[90vh] bg-white rounded-lg border border-blue-400">
+            <div className="w-[50%] h-[90vh] bg-white rounded-lg ">
               <CodeEditor
                 playerNumber={playerNumber}
                 challengeId={challengeId}
