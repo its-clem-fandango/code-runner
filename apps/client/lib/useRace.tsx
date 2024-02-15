@@ -89,20 +89,18 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (socketRef.current?.connected) return
-    console.log("create socket")
-    let socket = io("ws://localhost:8082")
+
+    let socket = io("ws://localhost:8081")
 
     socketRef.current = socket
 
     socket.on("connect", () => {
-      console.log("connected!")
+
       setSendRaceAction(() => (actionType: string, payload: any) => {
-        console.log("sendRaceAction", actionType, payload, socket)
+
         socket?.emit(actionType, payload)
       })
     })
-
-    console.log("socket", socket)
 
     socket.on("error", (err) => {
       console.error("Socket error: ", err)
@@ -164,7 +162,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     socket.on("joinedBattle", handleJoinedBattle)
 
     return () => {
-      console.log('mounting off socket')
       socket.close()
     }
   }, [])

@@ -62,6 +62,12 @@ export const RacesCollectionProvider: React.FC<{ children: React.ReactNode }> = 
       router.push(`/battle?id=${data}`)
     })
 
+    return () => {
+      if (socketRef.current?.connected) {
+        socketRef.current?.disconnect()
+      }
+    }
+
   }, [])
 
   return (
