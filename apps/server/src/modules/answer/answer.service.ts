@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from "@nestjs/common";
 import { codingChallengesList } from "src/database/codingChallenges";
 import { strict as assert } from "assert";
@@ -68,7 +69,7 @@ export class AnswerService {
 
     await new Promise<void>((resolve) => {
       runner.on("end", () => {
-        didAssertPass = testResults.every((test) => test.passed);
+        didAssertPass = testResults.every((test) => test.passed) && testResults.length === codingChallenge.tests.length;
         resolve();
       });
     });

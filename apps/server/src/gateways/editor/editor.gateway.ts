@@ -54,22 +54,22 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
       clientId: string;
     },
   ) {
-    console.log("log data", data);
     const challenge = this.answerService.findChallenge(data.challengeId);
-
+    console.log("message", data.message);
     try {
       const runUserFunction = eval(`(${data.message})`);
+
       const result = await this.answerService.runTest(
         runUserFunction,
         challenge,
       );
       this.server.emit("testResult", { ...result, clientId: data.clientId });
     } catch (error) {
-      console.log(error);
       const errorMsg = {
-        message: `${error}`,
+        error: `${error}`,
+        clientId: data.clientId,
+        didAssertPass: false,
       };
-      console.log(errorMsg);
       this.server.emit("testResult", errorMsg);
     }
   }

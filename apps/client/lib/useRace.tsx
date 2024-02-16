@@ -13,7 +13,6 @@ export interface OngoingRace extends Race {
   syntaxError?: SyntaxError
   victory?: boolean
   receivedCode?: string
-  code?: string
 }
 interface Challenge {
   challengeId: number
@@ -38,13 +37,12 @@ export interface TestResults {
 }
 export interface TestError {
   generatedMessage: boolean
-  code: string
   actual: string
   expected: string
   operator: string
 }
 export interface SyntaxError {
-  message: string
+  error: string
 }
 
 type RaceAction = "submit" | "codeChanged" | "joinBattle"
@@ -72,7 +70,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
   const [sendRaceAction, setSendRaceAction] = useState<undefined | (() => void)
   >()
 
-  function handleResult(testResults: ConsoleData) {
+  function handleResult(testResults?: ConsoleData) {
     setRace(prev => {
       if (!prev) return null
       return {
@@ -83,7 +81,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     })
   }
   function handleSyntaxError(testResults: SyntaxError | null) {
-    if (testResults?.message) {
+    if (testResults?.error) {
       setRace(prev => {
         if (!prev) return null
         return {
@@ -110,7 +108,9 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socket.on("connect", () => {
       setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
+  
         if (typeof payload === 'object' && !Array.isArray(payload)) {
+          console.log("sending action", actionType, payload)
           socket?.emit(actionType, {
             ...payload,
             clientId: socket.id,
@@ -168,10 +168,11 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socket.on("joinedBattle", handleJoinedBattle)
 
-    socket.on("testResult", (answer) => {
+    socket.on("testResult", (answer: SyntaxError & ConsoleData) => {
+      console.log(answer)
       if (answer.clientId === socket.id && answer.didAssertPass === false) {
-        handleResult(answer)
         handleSyntaxError(answer)
+        handleResult(answer)
       }
 
       if (answer.clientId === socket.id && answer.didAssertPass === true) {
@@ -191,6 +192,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
             victory: false,
           }
         })
+
       }
     })
 
@@ -210,7 +212,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       socketRef.current?.disconnect()
     }
   })
-  console.log(race)
+
   return (
     <RaceContext.Provider value={{ race, sendRaceAction }}>
       {children}

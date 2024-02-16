@@ -43,6 +43,7 @@ export default function MonacoCodeEditor({
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isClosed, setIsClosed] = useState(false)
+  const [code, setCode] = useState<string>("")
 
 
   useEffect(() => {
@@ -64,23 +65,28 @@ export default function MonacoCodeEditor({
   }
   const file: File = files
 
-  const handleSubmit = (e: any) => {  
+  const handleSubmit = (e: any) => { 
     e.preventDefault()
+    console.log("submitting", {
+      challengeId
+    })
     sendRaceAction && sendRaceAction("submit", {
       room: roomName,
       player: playerNumber,
-      message: race?
-      challengeId: challengeId,
+      challengeId,
+      message: code,
     })
   }
 
-
   const handleCodeChange = (code: string | undefined) => {
+    /* notifies opponent */
     sendRaceAction && sendRaceAction("codeChanged", {
       room: roomName,
       player: playerNumber,
       message: code,
     })
+
+    setCode(code || "")
   }
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -106,8 +112,9 @@ export default function MonacoCodeEditor({
               theme="light"
               path={file.name}
               defaultLanguage={file.language}
-              onChange={(value: string | undefined) =>
-                handleCodeChange(value)
+              onChange={(value: string | undefined) =>{
+                console.log("value", value) 
+                handleCodeChange(value)}
               }
               className="my-2"
             />

@@ -25,7 +25,7 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log("Client disconnected", client.id);
   }
   private async sendBattles(client: any) {
-    const battles = await this.battleService.getBattles();
+    const battles = this.battleService.getBattles();
     client.emit("availableBattles", battles);
   }
 
@@ -33,7 +33,7 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async createBattle(
     @MessageBody() data: { battleName: string; difficulty: string },
   ) {
-    const battles = await this.battleService.createBattle(
+    const battles = this.battleService.createBattle(
       data.battleName,
       "Test",
       data.difficulty,
