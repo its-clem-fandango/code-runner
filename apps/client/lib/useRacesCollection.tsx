@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useRef, useState } from "react"
 import { Socket, io } from "socket.io-client"
+import { useFirst } from "./useFirst"
 
 export interface Race {
   id: number
@@ -16,10 +17,13 @@ export interface Race {
 
 type RacesCollectionAction = "createBattle"
 
-type SendRacesCollectionAction = (action: RacesCollectionAction, payload: any) => void
+type SendRacesCollectionAction = (
+  action: RacesCollectionAction,
+  payload: any,
+) => void
 
 interface RacesCollectionContextType {
-  races: Race[],
+  races: Race[]
   sendRacesCollectionAction?: SendRacesCollectionAction
 }
 
@@ -27,26 +31,28 @@ const defaultValue: RacesCollectionContextType = {
   races: [],
 }
 
-const RacesCollectionContext = createContext<RacesCollectionContextType>(defaultValue)
+const RacesCollectionContext =
+  createContext<RacesCollectionContextType>(defaultValue)
 
 export const useRacesCollection = () => useContext(RacesCollectionContext)
 
-export const RacesCollectionProvider: React.FC<{ children: React.ReactNode }> = ({
-  children
-}) => {
-
+export const RacesCollectionProvider: React.FC<{
+  children: React.ReactNode
+}> = ({ children }) => {
   const [races, setRaces] = useState<Race[]>([])
   const socketRef = useRef<Socket | null>(null)
-  const [sendRacesCollectionAction, setSendRacesCollectionAction] = useState<SendRacesCollectionAction | undefined>(undefined)
+  const [sendRacesCollectionAction, setSendRacesCollectionAction] = useState<
+    SendRacesCollectionAction | undefined
+  >(undefined)
 
   const router = useRouter()
 
-  useEffect(() => {
+  useFirst(() => {
     if (socketRef.current?.connected) return
+    console.log("connecting to ws")
 
     let socket = io("ws://localhost:8082")
     socketRef.current = socket
-
 
     socket.on("availableBattles", (data) => {
       setRaces(data)
@@ -67,8 +73,7 @@ export const RacesCollectionProvider: React.FC<{ children: React.ReactNode }> = 
         socketRef.current?.disconnect()
       }
     }
-
-  }, [])
+  })
 
   return (
     <RacesCollectionContext.Provider

@@ -4,12 +4,22 @@ import {
   SubscribeMessage,
   MessageBody,
   ConnectedSocket,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
 } from "@nestjs/websockets";
 import { Server } from "socket.io";
 import { AnswerService } from "src/modules/answer/answer.service";
 @WebSocketGateway(8081, { cors: true })
-export class EditorGateway {
+export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly answerService: AnswerService) {}
+
+  handleConnection(client: any, ...args: any[]) {
+    console.log("[EditorGateway] Client connected", client.id);
+  }
+
+  handleDisconnect(client: any) {
+    console.log("[EditorGateway] Client disconnected", client.id);
+  }
 
   @WebSocketServer() server: Server;
   @SubscribeMessage("codeChanged")

@@ -6,23 +6,27 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   ConnectedSocket,
+  OnGatewayDisconnect,
 } from "@nestjs/websockets";
 import { Server } from "socket.io";
 import { BattleService } from "src/modules/battles/battle.service";
 
 @WebSocketGateway(8082, { cors: true })
-export class BattleGateway implements OnGatewayConnection {
-  constructor(private readonly battleService: BattleService) { }
+export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  constructor(private readonly battleService: BattleService) {}
   @WebSocketServer() server: Server;
 
   handleConnection(client: any) {
+    console.log("Client connected", client.id);
     this.sendBattles(client);
-    return;
+  }
+
+  handleDisconnect(client: any) {
+    console.log("Client disconnected", client.id);
   }
   private async sendBattles(client: any) {
     const battles = await this.battleService.getBattles();
     client.emit("availableBattles", battles);
-    return;
   }
 
   @SubscribeMessage("createBattle")

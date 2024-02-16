@@ -9,6 +9,7 @@ import { RaceProvider, useRace } from "@/lib/useRace"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 
+// TODO: put this in layout and remove component?
 function BattlePage() {
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
@@ -37,16 +38,16 @@ function Battle({ battleId }: { battleId: number }) {
 
   if (race?.isFull) {
     return (
-      <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]" >
+      <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]">
         <p>The Battle is already full</p>
-        <Button onClick={() => router.push('/')}>Go back to Dashboard</Button>
+        <Button onClick={() => router.push("/")}>Go back to Dashboard</Button>
       </div>
     )
   }
 
   return (
     <div className="bg-[#FAFAFA] h-[100vh]">
-      <div className="flex gap-5 mx-10 my-5" >
+      <div className="flex gap-5 mx-10 my-5">
         <ChallengeDescription />
         <div className="w-[50%] h-[90vh] bg-white rounded-lg ">
           <CodeEditor

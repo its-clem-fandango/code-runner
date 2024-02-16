@@ -6,7 +6,6 @@ import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
 
 function Dashboard() {
-
   const { races } = useRacesCollection()
 
   return (
