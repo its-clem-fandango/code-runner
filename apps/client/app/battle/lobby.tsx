@@ -1,16 +1,12 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Toggle } from "@/components/ui/toggle"
 import { useRace } from "@/lib/useRace" // Ensure this import is correct
 
-export default function Lobby({ battleId }) {
+export default function Lobby({ battleId }: {battleId: number}) {
   const { sendRaceAction } = useRace()
   const first = useRef(true) // Tracks if the join action has been performed
   const { race } = useRace()
-
-  console.log("PLAYER COUNT: ", race?.playerCount)
-
 
   useEffect(() => {
     // Ensure the join action is only performed once upon component mount

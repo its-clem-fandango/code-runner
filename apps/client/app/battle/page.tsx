@@ -28,8 +28,8 @@ function Battle({ battleId }: { battleId: number }) {
   const router = useRouter()
   const first = useRef(true)
   
-  const { race, sendRaceAction } = useRace()
-
+  const { race } = useRace()
+  console.log("race", race)
   const showBattle = race?.isFull && race?.playerCount >= 2
 
   console.log('is full: ', race?.isFull)
@@ -38,7 +38,7 @@ function Battle({ battleId }: { battleId: number }) {
   if (!showBattle) {
     return <Lobby battleId={battleId}/>
   }
-  if (race?.isFull) {
+  if (race?.playerCount > 2) {
     return (
       <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]">
         <p>The Battle is already full</p>
