@@ -11,11 +11,3 @@ export function useFirst(fn: EffectCallback) {
   }, [])
 }
 
-// render Component
-// d = exec effect
-// render Component
-// d()
-// d = exec effect
-// render Component
-// d()
-// d = effect

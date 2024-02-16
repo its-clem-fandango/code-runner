@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation"
-import { createContext, useContext, useEffect, useRef, useState } from "react"
+import { createContext, useContext, useRef, useState } from "react"
 import { Socket, io } from "socket.io-client"
 import { useFirst } from "./useFirst"
 
@@ -18,7 +18,9 @@ export interface Race {
 type RacesCollectionAction = "createBattle"
 
 type SendRacesCollectionAction = (
+  // eslint-disable-next-line no-unused-vars
   action: RacesCollectionAction,
+  // eslint-disable-next-line no-unused-vars
   payload: any,
 ) => void
 

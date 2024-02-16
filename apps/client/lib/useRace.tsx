@@ -1,11 +1,20 @@
 "use client"
 import apicalls from "@/helper/apicalls"
-import { ReactNode, useEffect, useRef, useState } from "react"
+import { ReactNode, useRef, useState } from "react"
 import { createContext, useContext } from "react"
 import { io } from "socket.io-client"
 import { Socket } from "socket.io-client"
 import { Race } from "./useRacesCollection"
+import { useFirst } from "./useFirst"
 
+export interface OngoingRace extends Race {
+  challenge: Challenge,
+  consoleData?: ConsoleData,
+  syntaxError?: SyntaxError
+  victory?: boolean
+  receivedCode?: string
+  code?: string
+}
 interface Challenge {
   challengeId: number
   name: string
@@ -30,7 +39,7 @@ export interface TestResults {
 export interface TestError {
   generatedMessage: boolean
   code: string
-  acutal: string
+  actual: string
   expected: string
   operator: string
 }
@@ -38,31 +47,19 @@ export interface SyntaxError {
   message: string
 }
 
+type RaceAction = "submit" | "codeChanged" | "joinBattle"
+
 // eslint-disable-next-line no-unused-vars
-type SendRaceAction = (action: string, payload: any) => void
+type SendRaceAction = (action: RaceAction, payload: any) => void
 
 interface RaceContextType {
-  race: Race | null
-  challengeData: Challenge | null
+  race: OngoingRace | null
   sendRaceAction?: SendRaceAction
-  consoleData: ConsoleData | null
-  handleResult: (testResults: ConsoleData) => void
-  syntaxError: SyntaxError | null
-  handleSyntaxError: (testResults: SyntaxError | null) => void
 }
 
 const defaultContextValue: RaceContextType = {
   race: null,
-  challengeData: null,
-  consoleData: null,
-  syntaxError: null,
   sendRaceAction: undefined,
-  handleResult: () => {
-    console.log('handleResult not implemented')
-  },
-  handleSyntaxError: () => {
-    console.log('handleResult not implemented')
-  },
 }
 
 const RaceContext = createContext<RaceContextType>(defaultContextValue)
@@ -70,35 +67,58 @@ const RaceContext = createContext<RaceContextType>(defaultContextValue)
 export const useRace = () => useContext(RaceContext)
 
 export const RaceProvider = ({ children }: { children: ReactNode }) => {
-  const [race, setRace] = useState<Race | null>(null)
-  const [challengeData, setChallengeData] = useState<Challenge | null>(null)
-  const [consoleData, setConsoleData] = useState<ConsoleData | null>(null)
-  const [syntaxError, setSyntaxError] = useState<SyntaxError | null>(null)
+  const [race, setRace] = useState<OngoingRace | null>(null)
   const socketRef = useRef<Socket | null>(null)
   const [sendRaceAction, setSendRaceAction] = useState<undefined | (() => void)
   >()
 
   function handleResult(testResults: ConsoleData) {
-    setConsoleData(testResults)
+    setRace(prev => {
+      if (!prev) return null
+      return {
+        ...prev,
+        consoleData: testResults,
+      }
+
+    })
   }
   function handleSyntaxError(testResults: SyntaxError | null) {
     if (testResults?.message) {
-      setSyntaxError(testResults)
-    } else setSyntaxError(null)
+      setRace(prev => {
+        if (!prev) return null
+        return {
+          ...prev,
+          syntaxError: testResults,
+        }
+      })
+
+    } else setRace(prev => {
+      if (!prev) return null
+      return {
+        ...prev,
+        syntaxError: undefined,
+      }
+    })
   }
 
-  useEffect(() => {
+  useFirst(() => {
     if (socketRef.current?.connected) return
-
+    console.log("connecting to socket")
     let socket = io("ws://localhost:8081")
 
     socketRef.current = socket
 
     socket.on("connect", () => {
+      setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
+        if (typeof payload === 'object' && !Array.isArray(payload)) {
+          socket?.emit(actionType, {
+            ...payload,
+            clientId: socket.id,
+          })
+        } else {
+          socket?.emit(actionType, payload)
+        }
 
-      setSendRaceAction(() => (actionType: string, payload: any) => {
-
-        socket?.emit(actionType, payload)
       })
     })
 
@@ -106,7 +126,8 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       console.error("Socket error: ", err)
     })
 
-    socket.on("raceUpdate", (update: Race) => {
+    socket.on("raceUpdate", (update: OngoingRace) => {
+      console.log("raceUpdate")
       setRace((prevState) => ({ ...prevState, ...update }))
     })
 
@@ -114,42 +135,28 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       console.error("Connection error: ", err)
     })
 
-    async function handleJoinedBattle(msg: {
-      id: number
-      battleName: string
-      difficulty: string
-      join: string
-      username: string
-      clientId: string
-      playerCount: number
-      challengeId: number
-    }) {
-      if (msg.clientId === socket.id) {
-        setRace((prevRace) => {
-          if (prevRace === null) {
-            return {
-              id: msg.id,
-              battleName: msg.battleName,
-              isFull: msg.playerCount > 2,
-              username: msg.username,
-              join: msg.join,
-              difficulty: msg.difficulty,
-              clientId: msg.clientId,
-              playerCount: msg.playerCount,
-              challengeId: msg.challengeId,
+    function handleJoinedBattle(msg: Race) {
+      apicalls.getChallangeData(msg.challengeId)
+        .then(challenge => {
+          setRace((prevRace) => {
+            if (prevRace === null) {
+              return {
+                ...msg,
+                challenge,
+              }
             }
-          }
 
-          return {
-            ...prevRace,
-            id: msg.id,
-            playerNumber: msg.playerCount,
-            isFull: msg.playerCount > 2,
-          }
+            return {
+              ...prevRace,
+              id: msg.id,
+              playerNumber: msg.playerCount,
+              isFull: msg.playerCount > 2,
+            }
+          })
         })
-
-        setChallengeData(await apicalls.getChallangeData(msg.challengeId))
-      }
+        .catch(err => {
+          console.error("Error getting challenge data: ", err)
+        })
     }
 
     socket.on("battleError", () =>
@@ -161,13 +168,51 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socket.on("joinedBattle", handleJoinedBattle)
 
-    return () => {
-      socket.close()
-    }
-  }, [])
+    socket.on("testResult", (answer) => {
+      if (answer.clientId === socket.id && answer.didAssertPass === false) {
+        handleResult(answer)
+        handleSyntaxError(answer)
+      }
 
+      if (answer.clientId === socket.id && answer.didAssertPass === true) {
+        setRace(prev => {
+          if (!prev) return null
+          return {
+            ...prev,
+            victory: true,
+          }
+        })
+      }
+      if (answer.clientId !== socket.id && answer.didAssertPass === true) {
+        setRace(prev => {
+          if (!prev) return null
+          return {
+            ...prev,
+            victory: false,
+          }
+        })
+      }
+    })
+
+    socket.on("opponentCode", (msg) => {
+      if (msg.clientId !== socket.id) {
+        setRace(prev => {
+          if (!prev) return null
+          return {
+            ...prev,
+            receivedCode: msg.message,
+          }
+        })
+      }
+    })
+
+    if (socketRef.current?.connected) {
+      socketRef.current?.disconnect()
+    }
+  })
+  console.log(race)
   return (
-    <RaceContext.Provider value={{ race, challengeData, consoleData, syntaxError, sendRaceAction, handleResult, handleSyntaxError }}>
+    <RaceContext.Provider value={{ race, sendRaceAction }}>
       {children}
     </RaceContext.Provider>
   )

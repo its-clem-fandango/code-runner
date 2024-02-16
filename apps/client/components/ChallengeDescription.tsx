@@ -8,11 +8,11 @@ import { useRace } from "@/lib/useRace"
 
 function ChallengeDescription() {
   const [description, setDescription] = useState<string>("")
-  const { challengeData, consoleData, syntaxError, race } = useRace()
+  const { race } = useRace()
 
   useEffect(() => {
-    if (challengeData) setDescription(challengeData.description)
-  }, [challengeData])
+    if (race?.challenge) setDescription(race?.challenge.description)
+  }, [race?.challenge])
 
   return (
     <div className="w-[50%] h-[90vh] bg-white rounded-lg shadow" >
@@ -21,21 +21,21 @@ function ChallengeDescription() {
         <h1 className="text-2xl font-bold p-4">
           {race ? race.battleName : null}
         </h1>
-        {challengeData?.difficultyOfChallenge === "easy" ? (
+        {race?.challenge?.difficultyOfChallenge === "easy" ? (
           <Image
             src="/images/oneStarDifficulty.svg"
             width={40}
             height={30}
             alt="Stars"
           />
-        ) : challengeData?.difficultyOfChallenge === "medium" ? (
+        ) : race?.challenge?.difficultyOfChallenge === "medium" ? (
           <Image
             src="/images/twoStarDifficulty.svg"
             width={60}
             height={30}
             alt="Stars"
           />
-        ) : challengeData?.difficultyOfChallenge === "hard" ? (
+        ) : race?.challenge?.difficultyOfChallenge === "hard" ? (
           <Image
             src="/images/threeStarDifficulty.svg"
             width={80}
@@ -51,7 +51,7 @@ function ChallengeDescription() {
         <div className="w-[45vw]" >
           <div className="flex justify-between mr-5">
             <h1 className="font-bold text-xl border p-4 tracking-wide">
-              {challengeData?.name}
+              {race?.challenge?.name}
             </h1>
           </div>
 
@@ -66,12 +66,12 @@ function ChallengeDescription() {
               </TabsList>
               <TabsContent value="example" className=" py-2">
                 {/* <h1 className="text-xl font-bold py-2">Example</h1> */}
-                <p>{challengeData?.example ? challengeData.example : null}</p>
+                <p>{race?.challenge?.example ? race?.challenge.example : null}</p>
               </TabsContent>
               <TabsContent value="console" className=" py-2">
                 <ChallengeConsole
-                  consoleData={consoleData}
-                  syntaxError={syntaxError?.message || null}
+                  consoleData={race?.consoleData}
+                  syntaxError={race?.syntaxError?.message || null}
                 />
               </TabsContent>
             </Tabs>

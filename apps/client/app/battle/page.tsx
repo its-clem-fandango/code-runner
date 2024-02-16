@@ -35,7 +35,7 @@ function Battle({ battleId }: { battleId: number }) {
   if (race === null) {
     return <p>Loading...</p>
   }
-
+  console.log(race)
   if (race?.isFull) {
     return (
       <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]">
