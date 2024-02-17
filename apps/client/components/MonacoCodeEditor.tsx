@@ -1,10 +1,7 @@
 "use client"
 
-import React, { ReactHTMLElement, MouseEvent, ChangeEvent } from "react"
 import { useState, useEffect } from "react"
-import { socket } from "@/components/ui/socket"
 import { Editor } from "@monaco-editor/react"
-import "../app/globals.css"
 import {
   Dialog,
   DialogContent,
@@ -13,7 +10,7 @@ import {
   DialogClose,
 } from "./ui/dialog"
 import { useRouter } from "next/navigation"
-import { ConsoleData } from "@/app/battle/page"
+import { useRace } from "@/lib/useRace"
 import Image from "next/image"
 
 interface File {
@@ -25,24 +22,40 @@ interface File {
 export default function MonacoCodeEditor({
   playerNumber,
   challengeId,
-  handleResults,
-  handleSyntaxError,
 }: {
   playerNumber: number | null
   challengeId: number | null
-  handleResults: (result: ConsoleData) => void
-  handleSyntaxError: (result: SyntaxError) => void
 }) {
-  const [code, setCode] = useState<string | undefined>("")
-  const [recievedCode, setRecievedCode] = useState<string>("")
-  /* const [playerNumber, setPlayerNumber] = useState<number>(1) */
-  /* const [answerToChallenge, setAnswerToChallenge] = useState(null) */
-  const [submitMessage1, setSubmitMessage1] = useState<string>("")
-  const [submitMessage2, setSubmitMessage2] = useState<string>("")
+
+  const {
+    sendRaceAction,
+    race,
+  } = useRace()
+  const router = useRouter()
+
+  const [endGameMessage, setEndGameMessage] = useState<{
+    title: string,
+    message: string
+  }>({
+    title: "",
+    message: "",
+  })
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isClosed, setIsClosed] = useState(false)
-  const router = useRouter()
+  const [code, setCode] = useState<string>("")
+
+
+  useEffect(() => {
+    if (race?.victory !== undefined) { 
+      setEndGameMessage({
+        title: race.victory ? victoryMsg : "You lost!",
+        message: race.victory ? "Congratulations, all tests passed! You came first!" : "Sorry, try harder"
+      }),
+      setIsDialogOpen(true)
+    }
+  }, [race?.victory])
+
   const victoryMsg = "You won!"
   const roomName = 1
   const files = {
@@ -52,81 +65,43 @@ export default function MonacoCodeEditor({
   }
   const file: File = files
 
-  const handleEditorChange = (code: string | undefined) => {
-    setCode(code)
-    sendMessage(code)
-  }
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: any) => { 
     e.preventDefault()
-    socket.emit("submit", {
-      room: roomName,
-      player: playerNumber,
-      message: code,
-      challengeId: challengeId,
-      clientId: socket.id,
+    console.log("submitting", {
+      challengeId
     })
-  }
-
-  const sendMessage = (code: string | undefined) => {
-    socket.emit("codeChanged", {
+    sendRaceAction && sendRaceAction("submit", {
       room: roomName,
       player: playerNumber,
+      challengeId,
       message: code,
     })
   }
 
-  useEffect(() => {
-    socket.on("testResult", (answer) => {
-      if (answer.clientId === socket.id && answer.didAssertPass === false) {
-        handleResults(answer)
-        handleSyntaxError(answer)
-        console.log(answer)
-      }
-      if (answer.clientId === socket.id && answer.didAssertPass === true) {
-        let message2 = "Congratulations, all tests passed! You came first!"
-        let message1 = victoryMsg
-
-        setSubmitMessage1(message1)
-        setSubmitMessage2(message2)
-
-        setIsDialogOpen(true)
-      }
-      if (answer.clientId !== socket.id && answer.didAssertPass === true) {
-        let message1 = "Sorry, you lost!"
-        let message2 = "Try harder next time!"
-
-        setSubmitMessage1(message1)
-        setSubmitMessage2(message2)
-
-        setIsDialogOpen(true)
-      }
+  const handleCodeChange = (code: string | undefined) => {
+    /* notifies opponent */
+    sendRaceAction && sendRaceAction("codeChanged", {
+      room: roomName,
+      player: playerNumber,
+      message: code,
     })
-  }, [])
 
-  const handleButtonClick = (e) => {
+    setCode(code || "")
+  }
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault()
     setIsClosed((prevIsClosed) => !prevIsClosed)
-    // Change Blur
   }
 
-  useEffect(() => {
-    socket.on("opponentCode", (msg) => {
-      if (msg.clientId !== socket.id) {
-        setRecievedCode(msg.message)
-      }
-    })
-  }, [playerNumber])
-  socket.emit("join room", roomName)
-
   function goToDashboard() {
-    router.back()
+    router.push('/')
   }
 
   return (
     <>
       <div className="bg-[#FAFAFA]">
-        <div className="flex flex-col gap-10  ">
+        <div className="flex flex-col gap-2">
           <div className=" bg-white rounded-lg shadow">
             <h1 className="bg-[#E7E7E7]  rounded-t-lg text-xl font-bold px-4 py-2">
               Your Solution
@@ -137,8 +112,9 @@ export default function MonacoCodeEditor({
               theme="light"
               path={file.name}
               defaultLanguage={file.language}
-              onChange={(value: string | undefined) =>
-                handleEditorChange(value)
+              onChange={(value: string | undefined) =>{
+                console.log("value", value) 
+                handleCodeChange(value)}
               }
               className="my-2"
             />
@@ -158,8 +134,8 @@ export default function MonacoCodeEditor({
               </div>
             </div>
           </div>
-          <div className="  bg-white rounded-lg shadow  h-[351px]">
-            <div className="  rounded-t-lg ">
+          <div className="bg-white rounded-lg shadow flex flex-col  h-[351px]">
+            <div className="rounded-t-lg ">
               <div className="flex justify-center py-4 gap-11 ">
                 <div>🏎️</div>
                 <div className="font-bold">Your Rival</div>
@@ -192,13 +168,13 @@ export default function MonacoCodeEditor({
                 </div>
               </div>
             </div>
-            <div className={isClosed ? "filter blur-sm" : ""}>
+            <div className={`${isClosed ? "filter blur-sm" : ""} flex-1 `}>
               <Editor
                 height="100%"
                 width="100%"
                 theme="light"
                 defaultLanguage={file.language}
-                value={recievedCode}
+                value={race?.receivedCode || "// Waiting for opponent code"}
                 options={{
                   readOnly: true,
                 }}
@@ -206,24 +182,24 @@ export default function MonacoCodeEditor({
               />
             </div>
           </div>
-        </div>
+        </div >
 
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="flex flex-col items-center">
-              <Image src={submitMessage1 === victoryMsg ? "/images/carWon.svg" : "/images/carLostSVG.svg"}
+              <Image src={race?.victory ? "/images/carWon.svg" : "/images/carLostSVG.svg"}
                 width={286}
                 height={390}
                 alt="car" />
-              <DialogTitle>{submitMessage1}</DialogTitle>
-              <DialogDescription>{submitMessage2}</DialogDescription>
+              <DialogTitle>{endGameMessage.title}</DialogTitle>
+              <DialogDescription>{endGameMessage.message}</DialogDescription>
               <DialogClose asChild>
                 <button onClick={goToDashboard} className="bg-[#17B26A] text-white rounded-md p-3">Go to Dashboard</button>
               </DialogClose>
             </DialogContent>
           </Dialog>
         </div>
-      </div>
+      </div >
     </>
   )
 }

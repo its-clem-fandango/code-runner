@@ -2,50 +2,42 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import Image from "next/image"
-
+import { Race } from "@/lib/useRacesCollection"
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Battle = {
-  id: number
-  BattleName: string
-  Username: string
-  Difficulty: string
-  playerCount: number
-  Join: string
-}
 
-export const columns: ColumnDef<Battle>[] = [
+export const columns: ColumnDef<Race>[] = [
   {
-    accessorKey: "BattleName",
+    accessorKey: "battleName",
     header: () => <div className="text-left">Battle Name</div>,
-    cell: ({ row }) => <div>{row.original.BattleName}</div>,
+    cell: ({ row }) => <div>{row.original.battleName}</div>,
   },
   {
-    accessorKey: "Username",
+    accessorKey: "username",
     header: () => <div className="text-left">Username</div>,
-    cell: ({ row }) => <div>{row.original.Username}</div>,
+    cell: ({ row }) => <div>{row.original.username}</div>,
   },
   {
-    accessorKey: "Difficulty",
+    accessorKey: "difficulty",
     header: () => <div className="text-left">Difficulty</div>,
     cell: ({ row }) => {
       return (
         <div className="text-left ">
-          {row.original.Difficulty === "easy" ? (
+          {row.original.difficulty === "easy" ? (
             <Image
               src="/images/oneStarDifficulty.svg"
               width={40}
               height={30}
               alt="Stars"
             />
-          ) : row.original.Difficulty === "medium" ? (
+          ) : row.original.difficulty === "medium" ? (
             <Image
               src="/images/twoStarDifficulty.svg"
               width={60}
               height={30}
               alt="Stars"
             />
-          ) : row.original.Difficulty === "hard" ? (
+          ) : row.original.difficulty === "hard" ? (
             <Image
               src="/images/threeStarDifficulty.svg"
               width={80}

@@ -1,8 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { io } from "socket.io-client"
-import { useRouter } from "next/navigation"
 
 import {
   Form, // Assuming this is correctly aliased to FormProvider
@@ -16,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { useRacesCollection } from "@/lib/useRacesCollection"
 
 // Your Zod schema
 const FormSchema = z.object({
@@ -42,8 +41,7 @@ interface BattleFormProps {
 }
 
 export default function BattleForm({ setOpen }: BattleFormProps) {
-  const socket = io("ws://localhost:8082")
-  const router = useRouter()
+  const { sendRacesCollectionAction } = useRacesCollection()
 
   const formProps = useForm<FormData>({
     resolver: zodResolver(FormSchema),
@@ -54,11 +52,7 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
   })
 
   const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
-    await socket.emit("createBattle", data, (response: any) => {
-      setOpen(false)
-      console.log(response)
-      router.push(`/battle?id=${response}`)
-    })
+    sendRacesCollectionAction?.("createBattle", data)
   }
 
   return (
