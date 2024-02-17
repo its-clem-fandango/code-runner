@@ -1,11 +1,12 @@
 "use client"
 import dynamic from "next/dynamic"
 import { useSearchParams } from "next/navigation"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
 import { RaceProvider, useRace } from "@/lib/useRace"
+import Lobby from "./lobby"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 
@@ -13,30 +14,31 @@ const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 function BattlePage() {
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
+  const { race } = useRace()
+
   return (
     <RaceProvider>
-      <Battle battleId={battleId} />
+        <Battle battleId={battleId}/>
     </RaceProvider>
   )
 }
 
+
 function Battle({ battleId }: { battleId: number }) {
   const router = useRouter()
   const first = useRef(true)
-  const { race, sendRaceAction } = useRace()
+  
+  const { race } = useRace()
+  console.log("race", race)
+  const showBattle = race?.isFull && race?.playerCount >= 2
 
-  useEffect(() => {
-    if (!first.current) return
-    if (sendRaceAction === undefined) return
-    sendRaceAction("joinBattle", { id: battleId })
-    first.current = false
-  }, [sendRaceAction])
-
-  if (race === null) {
-    return <p>Loading...</p>
+  console.log('is full: ', race?.isFull)
+  console.log('HOW MANY PLAYERS: ', race?.playerCount)
+  
+  if (!showBattle) {
+    return <Lobby battleId={battleId}/>
   }
-
-  if (race?.isFull) {
+  if (race?.playerCount > 2) {
     return (
       <div className="bg-[#FAFAFA] overflow-y-hidden h-[100vh]">
         <p>The Battle is already full</p>

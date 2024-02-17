@@ -101,7 +101,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
   useFirst(() => {
     if (socketRef.current?.connected) return
-    console.log("connecting to socket")
     let socket = io("ws://localhost:8081")
 
     socketRef.current = socket
@@ -143,14 +142,16 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
               return {
                 ...msg,
                 challenge,
+                playerCount: msg.playerCount,
+                isFull: msg.playerCount >= 2,
               }
             }
 
             return {
               ...prevRace,
               id: msg.id,
-              playerNumber: msg.playerCount,
-              isFull: msg.playerCount > 2,
+              playerCount: msg.playerCount,
+              isFull: msg.playerCount >= 2,
             }
           })
         })
