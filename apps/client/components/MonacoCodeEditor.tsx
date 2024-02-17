@@ -113,7 +113,6 @@ export default function MonacoCodeEditor({
               path={file.name}
               defaultLanguage={file.language}
               onChange={(value: string | undefined) =>{
-                console.log("value", value) 
                 handleCodeChange(value)}
               }
               className="my-2"
