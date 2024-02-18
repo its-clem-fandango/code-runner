@@ -1,4 +1,4 @@
-import { ConsoleData, TestResults } from "@/app/battle/page"
+import { ConsoleData, TestResults } from "@/lib/useRace"
 import { useEffect, useState } from "react"
 
 function ChallengeConsole({

@@ -109,12 +109,12 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
   
         if (typeof payload === 'object' && !Array.isArray(payload)) {
-          console.log("sending action", actionType, payload)
           socket?.emit(actionType, {
             ...payload,
             clientId: socket.id,
           })
         } else {
+
           socket?.emit(actionType, payload)
         }
 
@@ -126,7 +126,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     })
 
     socket.on("raceUpdate", (update: OngoingRace) => {
-      console.log("raceUpdate")
       setRace((prevState) => ({ ...prevState, ...update }))
     })
 
@@ -170,7 +169,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     socket.on("joinedBattle", handleJoinedBattle)
 
     socket.on("testResult", (answer: SyntaxError & ConsoleData) => {
-      console.log(answer)
       if (answer.clientId === socket.id && answer.didAssertPass === false) {
         handleSyntaxError(answer)
         handleResult(answer)
@@ -209,8 +207,10 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       }
     })
 
-    if (socketRef.current?.connected) {
-      socketRef.current?.disconnect()
+    return () => {
+      if (socketRef.current?.connected) {
+        socketRef.current?.disconnect()
+      }
     }
   })
 
