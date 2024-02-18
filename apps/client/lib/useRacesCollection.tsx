@@ -53,7 +53,7 @@ export const RacesCollectionProvider: React.FC<{
     if (socketRef.current?.connected) return
     console.log("connecting to ws")
 
-    let socket = io("ws://localhost:8082")
+    let socket = io("http://localhost:8080/race-collection")
     socketRef.current = socket
 
     socket.on("availableBattles", (data) => {
