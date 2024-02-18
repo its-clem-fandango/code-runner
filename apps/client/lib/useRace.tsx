@@ -101,7 +101,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
   useFirst(() => {
     if (socketRef.current?.connected) return
-    let socket = io("http://localhost:8080/race")
+    let socket = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/race`)
 
     socketRef.current = socket
 
