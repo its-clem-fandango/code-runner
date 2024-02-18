@@ -55,6 +55,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     },
   ) {
     const challenge = this.answerService.findChallenge(data.challengeId);
+    console.log("message", data.message);
     try {
       const runUserFunction = eval(`(${data.message})`);
 

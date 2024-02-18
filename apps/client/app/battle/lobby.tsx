@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 export default function Lobby({ battleId }: {battleId: number}) {
   const { sendRaceAction } = useRace()
   const first = useRef(true) // Tracks if the join action has been performed
+  const { race } = useRace()
   const router = useRouter()
 
   useEffect(() => {

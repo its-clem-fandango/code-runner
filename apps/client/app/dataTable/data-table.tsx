@@ -36,6 +36,7 @@ export function DataTable<TData extends { join: any; id: number }, TValue>({
   })
 
   function handleJoinGame(id: number) {
+    console.log(id)
     router.push(`/battle?id=${id}`)
   }
 

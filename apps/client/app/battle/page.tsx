@@ -1,6 +1,7 @@
 "use client"
 import dynamic from "next/dynamic"
 import { useSearchParams } from "next/navigation"
+import { useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
@@ -13,6 +14,7 @@ const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 function BattlePage() {
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
+  const { race } = useRace()
 
   return (
     <RaceProvider>
@@ -24,10 +26,15 @@ function BattlePage() {
 
 function Battle({ battleId }: { battleId: number }) {
   const router = useRouter()
+  const first = useRef(true)
   
   const { race } = useRace()
+  console.log("race", race)
   const showBattle = race?.isFull && race?.playerCount >= 2
 
+  console.log('is full: ', race?.isFull)
+  console.log('HOW MANY PLAYERS: ', race?.playerCount)
+  
   if (!showBattle) {
     return <Lobby battleId={battleId}/>
   }

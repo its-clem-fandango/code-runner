@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import {
   MessageBody,
   SubscribeMessage,
@@ -7,7 +8,7 @@ import {
   ConnectedSocket,
   OnGatewayDisconnect,
 } from "@nestjs/websockets";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { BattleService } from "src/modules/battles/battle.service";
 
 @WebSocketGateway(8082, { cors: true })
@@ -31,7 +32,6 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage("createBattle")
   async createBattle(
     @MessageBody() data: { battleName: string; difficulty: string },
-    @ConnectedSocket() client: Socket,
   ) {
     const battles = this.battleService.createBattle(
       data.battleName,
@@ -40,6 +40,6 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
       "random-challenge",
     );
     this.server.emit("availableBattles", battles);
-    client.emit("battleCreated", battles[battles.length - 1].id);
+    this.server.emit("battleCreated", battles[battles.length - 1].id);
   }
 }
