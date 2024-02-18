@@ -5,13 +5,13 @@ function ChallengeConsole({
   consoleData,
   syntaxError,
 }: {
-  consoleData: ConsoleData | null
-  syntaxError: string | null
+  consoleData?: ConsoleData
+  syntaxError?: string
 }) {
   const [testResults, setTestResults] = useState<Array<TestResults> | null>(
     null,
   )
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | undefined>()
   useEffect(() => {
     if (consoleData) setTestResults(consoleData?.testResults)
     if (syntaxError) setError(syntaxError)

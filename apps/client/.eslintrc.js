@@ -6,7 +6,10 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  plugins: ["@typescript-eslint"],
   rules: {
     semi: ["error", "never"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
   },
 };

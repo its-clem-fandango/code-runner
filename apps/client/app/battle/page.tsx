@@ -6,30 +6,31 @@ import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
 import { RaceProvider, useRace } from "@/lib/useRace"
 import Lobby from "./lobby"
+import { Suspense } from "react"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 
 // TODO: put this in layout and remove component?
 function BattlePage() {
-  const searchParams = useSearchParams()
-  const battleId = parseInt(searchParams.get("id") as string)
-
   return (
     <RaceProvider>
-        <Battle battleId={battleId}/>
+      <Suspense>
+        <Battle />
+      </Suspense>
     </RaceProvider>
   )
 }
 
-
-function Battle({ battleId }: { battleId: number }) {
+function Battle() {
   const router = useRouter()
-  
+  const searchParams = useSearchParams()
+  const battleId = parseInt(searchParams.get("id") as string)
+
   const { race } = useRace()
   const showBattle = race?.isFull && race?.playerCount >= 2
 
   if (!showBattle) {
-    return <Lobby battleId={battleId}/>
+    return <Lobby battleId={battleId} />
   }
   if (race?.playerCount > 2) {
     return (
