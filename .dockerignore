@@ -1,0 +1,118 @@
+# flyctl launch added from .gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Dependencies
+**/node_modules
+**/.pnp
+**/.pnp.js
+
+# Local env files
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+
+# Testing
+**/coverage
+
+# Turbo
+**/.turbo
+
+# Vercel
+**/.vercel
+
+# Build Outputs
+**/.next
+**/out
+**/build
+**/dist
+
+
+# Debug
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Misc
+**/.DS_Store
+**/*.pem
+
+# flyctl launch added from apps/client/.gitignore
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+apps/client/node_modules
+apps/client/.pnp
+apps/client/**/.pnp.js
+apps/client/**/.yarn/install-state.gz
+
+# testing
+apps/client/coverage
+
+# next.js
+apps/client/.next
+apps/client/out
+
+# production
+apps/client/build
+
+# misc
+apps/client/**/.DS_Store
+apps/client/**/*.pem
+
+# debug
+apps/client/**/npm-debug.log*
+apps/client/**/yarn-debug.log*
+apps/client/**/yarn-error.log*
+
+# local env files
+apps/client/**/.env*.local
+
+# vercel
+apps/client/**/.vercel
+
+# typescript
+apps/client/**/*.tsbuildinfo
+apps/client/**/next-env.d.ts
+
+# flyctl launch added from apps/server/.gitignore
+# compiled output
+apps/server/dist
+apps/server/node_modules
+
+# Logs
+apps/server/**/logs
+apps/server/**/*.log
+apps/server/**/npm-debug.log*
+apps/server/**/pnpm-debug.log*
+apps/server/**/yarn-debug.log*
+apps/server/**/yarn-error.log*
+apps/server/**/lerna-debug.log*
+
+# OS
+apps/server/**/.DS_Store
+
+# Tests
+apps/server/coverage
+apps/server/.nyc_output
+
+# IDEs and editors
+apps/server/.idea
+apps/server/**/.project
+apps/server/**/.classpath
+apps/server/**/.c9
+apps/server/**/*.launch
+apps/server/**/.settings
+apps/server/**/*.sublime-workspace
+
+# IDE - VSCode
+apps/server/**/.vscode/*
+!apps/server/**/.vscode/settings.json
+!apps/server/**/.vscode/tasks.json
+!apps/server/**/.vscode/launch.json
+!apps/server/**/.vscode/extensions.json
+
+# flyctl launch added from node_modules/tailwindcss/stubs/.gitignore
+!node_modules/tailwindcss/stubs/**/*
+fly.toml
