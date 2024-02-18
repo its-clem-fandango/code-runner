@@ -27,13 +27,50 @@ export class AnswerService {
   }
 
   async runTest(userFunction, codingChallenge): Promise<TestResults> {
+    
     const mocha = new Mocha();
     let didAssertPass = false;
     const testResults: TestResult[] = [];
+    const consoleLogs = []
+    const oldLog = console.log  
+    const realProcess = process
+    
+    process = {
+      //these functions are needed for Mocha to work.
+      removeListener: realProcess.removeListener,
+      listenerCount: realProcess.listenerCount,
+      on: realProcess.on,
+      nextTick: process.nextTick
+    } as NodeJS.Process
+    
+    console.log = function(...args) {
+      const updatedArguments = args.map(arg => {
+        if (arg === process) {
+          return 'process is not available for you to log! ;)';
+        } else if (typeof arg === 'object' && arg !== null && arg.constructor === Object && arg !== process) {
+          const keys = Object.keys(arg);
+          const updatedObject = {};
+          for (const key of keys) {
+            if (arg[key] === process) {
+              updatedObject[key] = 'process is not available for you to log! ;)';
+            } else {
+              updatedObject[key] = arg[key];
+
+            }
+          }
+          return updatedObject;
+        } else {
+          return arg;
+        }
+      });
+      //this is to maybe return console.logs to the frontend
+      consoleLogs.push(updatedArguments);
+      oldLog(...updatedArguments);
+    };
 
     mocha.suite.emit("pre-require", global, "", mocha);
-
     codingChallenge.tests.forEach((testCase) => {
+      
       const inputValues = testCase.input;
       const expected = testCase.expected;
 
