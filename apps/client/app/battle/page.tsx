@@ -43,7 +43,7 @@ function Battle() {
 
   return (
     <div className="bg-[#FAFAFA] h-[100vh]">
-      <div className="flex gap-5 mx-10 my-5">
+      <div className="flex gap-5 mx-10 py-5">
         <ChallengeDescription />
         <div className="w-[50%] h-[90vh] bg-white rounded-lg ">
           <CodeEditor

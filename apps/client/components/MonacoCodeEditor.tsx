@@ -26,15 +26,11 @@ export default function MonacoCodeEditor({
   playerNumber: number | null
   challengeId: number | null
 }) {
-
-  const {
-    sendRaceAction,
-    race,
-  } = useRace()
+  const { sendRaceAction, race } = useRace()
   const router = useRouter()
 
   const [endGameMessage, setEndGameMessage] = useState<{
-    title: string,
+    title: string
     message: string
   }>({
     title: "",
@@ -45,14 +41,15 @@ export default function MonacoCodeEditor({
   const [isClosed, setIsClosed] = useState(false)
   const [code, setCode] = useState<string>("")
 
-
   useEffect(() => {
-    if (race?.victory !== undefined) { 
+    if (race?.victory !== undefined) {
       setEndGameMessage({
         title: race.victory ? victoryMsg : "You lost!",
-        message: race.victory ? "Congratulations, all tests passed! You came first!" : "Sorry, try harder"
+        message: race.victory
+          ? "Congratulations, all tests passed! You came first!"
+          : "Sorry, try harder",
       }),
-      setIsDialogOpen(true)
+        setIsDialogOpen(true)
     }
   }, [race?.victory])
 
@@ -65,43 +62,47 @@ export default function MonacoCodeEditor({
   }
   const file: File = files
 
-  const handleSubmit = (e: any) => { 
+  const handleSubmit = (e: any) => {
     e.preventDefault()
     console.log("submitting", {
-      challengeId
-    })
-    sendRaceAction && sendRaceAction("submit", {
-      room: roomName,
-      player: playerNumber,
       challengeId,
-      message: code,
     })
+    sendRaceAction &&
+      sendRaceAction("submit", {
+        room: roomName,
+        player: playerNumber,
+        challengeId,
+        message: code,
+      })
   }
 
   const handleCodeChange = (code: string | undefined) => {
     /* notifies opponent */
-    sendRaceAction && sendRaceAction("codeChanged", {
-      room: roomName,
-      player: playerNumber,
-      message: code,
-    })
+    sendRaceAction &&
+      sendRaceAction("codeChanged", {
+        room: roomName,
+        player: playerNumber,
+        message: code,
+      })
 
     setCode(code || "")
   }
 
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     e.preventDefault()
     setIsClosed((prevIsClosed) => !prevIsClosed)
   }
 
   function goToDashboard() {
-    router.push('/')
+    router.push("/")
   }
 
   return (
     <>
-      <div className="bg-[#FAFAFA]">
-        <div className="flex flex-col gap-2">
+      <div className="bg-[#FAFAFA] h-full">
+        <div className="flex flex-col gap-2 h-full">
           <div className=" bg-white rounded-lg shadow">
             <h1 className="bg-[#E7E7E7]  rounded-t-lg text-xl font-bold px-4 py-2">
               Your Solution
@@ -112,9 +113,9 @@ export default function MonacoCodeEditor({
               theme="light"
               path={file.name}
               defaultLanguage={file.language}
-              onChange={(value: string | undefined) =>{
-                handleCodeChange(value)}
-              }
+              onChange={(value: string | undefined) => {
+                handleCodeChange(value)
+              }}
               className="my-2"
             />
             <div className="flex justify-end  ">
@@ -133,7 +134,7 @@ export default function MonacoCodeEditor({
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg shadow flex flex-col  h-[351px]">
+          <div className="bg-white rounded-lg shadow flex flex-col flex-1">
             <div className="rounded-t-lg ">
               <div className="flex justify-center py-4 gap-11 ">
                 <div>🏎️</div>
@@ -167,7 +168,9 @@ export default function MonacoCodeEditor({
                 </div>
               </div>
             </div>
-            <div className={`${isClosed ? "filter blur-sm" : ""} flex-1 `}>
+            <div
+              className={`${isClosed ? "filter blur-sm" : ""} flex-1 rounded-b-lg overflow-clip`}
+            >
               <Editor
                 height="100%"
                 width="100%"
@@ -181,24 +184,35 @@ export default function MonacoCodeEditor({
               />
             </div>
           </div>
-        </div >
+        </div>
 
         <div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogContent className="flex flex-col items-center">
-              <Image src={race?.victory ? "/images/carWon.svg" : "/images/carLostSVG.svg"}
+              <Image
+                src={
+                  race?.victory
+                    ? "/images/carWon.svg"
+                    : "/images/carLostSVG.svg"
+                }
                 width={286}
                 height={390}
-                alt="car" />
+                alt="car"
+              />
               <DialogTitle>{endGameMessage.title}</DialogTitle>
               <DialogDescription>{endGameMessage.message}</DialogDescription>
               <DialogClose asChild>
-                <button onClick={goToDashboard} className="bg-[#17B26A] text-white rounded-md p-3">Go to Dashboard</button>
+                <button
+                  onClick={goToDashboard}
+                  className="bg-[#17B26A] text-white rounded-md p-3"
+                >
+                  Go to Dashboard
+                </button>
               </DialogClose>
             </DialogContent>
           </Dialog>
         </div>
-      </div >
+      </div>
     </>
   )
 }

@@ -7,7 +7,6 @@ const fontSans = FontSans({
   variable: "--font-sans",
 })
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
