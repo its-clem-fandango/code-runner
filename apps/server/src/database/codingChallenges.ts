@@ -3,9 +3,17 @@ export const codingChallengesList = [
     challengeId: 1,
     name: "Simple Addition",
     description:
-      "**Write a function named sum** that takes two numbers as arguments and returns their sum. The function should be able to handle both positive and negative integers, as well as floating-point numbers. Your implementation should focus on accuracy and efficiency, taking into account the different types of numeric inputs it might receive.",
+      "**Write a function named `sum`** that takes two numbers as arguments and returns their sum. The function should be able to handle both positive and negative integers, as well as floating-point numbers. Your implementation should focus on accuracy and efficiency, taking into account the different types of numeric inputs it might receive.",
     difficultyOfChallenge: "easy",
-    example: "When given the inputs 3 and 5 it should return 8",
+    example: `
+When given the inputs \`3\` and \`5\` it should return \`8\`
+
+\`\`\`javascript
+sum(3, 5) // returns 8
+sum(13, -7) // returns 6
+sum(0.1, 0.2) // returns 0.3
+\`\`\`
+    `,
     tests: [
       {
         name: "2+2",
@@ -46,7 +54,7 @@ export const codingChallengesList = [
     challengeId: 3,
     name: "Vowel Count",
     description:
-      "Return the number (count) of vowels in the given string. We will consider a, e, i, o, u as vowels for this Kata (but not y). The input string will only consist of lower case letters and/or spaces.",
+      "Write a function called `countVowels` that returns the number (count) of vowels in the given string. We will consider a, e, i, o, u as vowels for this Kata (but not y). The input string will only consist of lower case letters and/or spaces.",
     difficultyOfChallenge: "medium",
     tests: [
       {

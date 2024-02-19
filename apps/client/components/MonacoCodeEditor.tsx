@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation"
 import { useRace } from "@/lib/useRace"
 import Image from "next/image"
+import { PlayIcon } from "@radix-ui/react-icons"
 
 interface File {
   name: string
@@ -121,16 +122,14 @@ export default function MonacoCodeEditor({
             <div className="flex justify-end  ">
               <div
                 onClick={handleSubmit}
-                className=" flex w-[82px] h-[40px] bg-[#0F172A] rounded-lg px-4 gap-2 mb-4 mr-4 cursor-pointer "
+                className=" flex items-center
+                w-[82px] h-[40px] bg-[#0F172A] rounded-lg px-4 gap-2 mb-4 mr-4 cursor-pointer group"
               >
-                <Image
-                  src="/images/triangleIcon.svg"
-                  width={9.33}
-                  height={12}
-                  alt="icon"
-                />
+                <PlayIcon className="text-white stroke-border group-hover:stroke-green-500 transition-colors group-active:translate-y-[1px]" />
 
-                <button className=" text-white">Run</button>
+                <button className="text-white group-hover:text-green-500 transition-colors group-active:translate-y-[1px]">
+                  Run
+                </button>
               </div>
             </div>
           </div>
