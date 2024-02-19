@@ -41,9 +41,16 @@ function ChallengeDescription() {
   const [description, setDescription] = useState<string>("")
   const { race } = useRace()
 
+  const [tabsValue, setTabsValue] = useState<"example" | "console">("example")
+
   useEffect(() => {
     if (race?.challenge) setDescription(race?.challenge.description)
   }, [race?.challenge])
+
+  useEffect(() => {
+    if (race?.consoleData === undefined) return
+    setTabsValue("console")
+  }, [race?.consoleData])
 
   return (
     <div className="w-[50%] h-[90vh] bg-white rounded-lg shadow">
@@ -92,7 +99,13 @@ function ChallengeDescription() {
             </ReactMarkdown>
           </ScrollArea>
           <div className="bg-grey-200 w-full">
-            <Tabs defaultValue="example" className="w-full p-4">
+            <Tabs
+              value={tabsValue}
+              onValueChange={(value) => {
+                setTabsValue(value as "example" | "console")
+              }}
+              className="w-full p-4"
+            >
               <TabsList className=" w-full flex justify-start bg-[#F6F6F6]">
                 <TabsTrigger value="example">Example</TabsTrigger>
                 <TabsTrigger value="console">Outcome</TabsTrigger>
