@@ -10,7 +10,7 @@ import {
 import { Server, Socket } from "socket.io";
 import { BattleService } from "src/modules/battles/battle.service";
 
-@WebSocketGateway(8082, { cors: true })
+@WebSocketGateway({ namespace: "race-collection", cors: true })
 export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly battleService: BattleService) {}
   @WebSocketServer() server: Server;

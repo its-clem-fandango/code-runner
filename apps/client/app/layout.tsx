@@ -1,16 +1,12 @@
-import type { Metadata } from "next"
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "../../client/lib/utils"
 import "./globals.css"
 
-export const fontSans = FontSans({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
-export const metadata: Metadata = {
-  title: "Code Racer",
-  description: "",
-}
+
 
 export default function RootLayout({
   children,
@@ -22,7 +18,7 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background antialiased",
-          // fontSans.variable,
+          fontSans.variable,
         )}
       >
         {children}

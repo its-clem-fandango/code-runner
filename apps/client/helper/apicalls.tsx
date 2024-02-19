@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080/"
+const API_URL = process.env.NEXT_PUBLIC_SERVER_URL
 async function getChallangeData(id: number) {
   const options = {
     method: "GET",
@@ -6,7 +6,7 @@ async function getChallangeData(id: number) {
       "Content-Type": "application/json",
     },
   }
-  const response = await fetch(`${API_URL}codingchallenges/${id}`, options)
+  const response = await fetch(`${API_URL}/codingchallenges/${id}`, options)
   const data = await response.json()
   return data
 }

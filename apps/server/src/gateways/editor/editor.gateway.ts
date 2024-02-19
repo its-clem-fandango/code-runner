@@ -10,14 +10,14 @@ import {
 import { Server } from "socket.io";
 import { AnswerService } from "src/modules/answer/answer.service";
 import { BattleService } from "src/modules/battles/battle.service";
-@WebSocketGateway(8081, { cors: true })
+@WebSocketGateway({ namespace: "race", cors: true })
 export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly answerService: AnswerService,
     private readonly battleService: BattleService,
   ) {}
 
-  handleConnection(client: any, ...args: any[]) {
+  handleConnection(client: any) {
     console.log("[EditorGateway] Client connected", client.id);
   }
 

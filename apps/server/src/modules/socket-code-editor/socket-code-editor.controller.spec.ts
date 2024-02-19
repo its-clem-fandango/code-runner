@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { SocketCodeEditorController } from './socket-code-editor.controller';
+import { Test, TestingModule } from "@nestjs/testing";
+import { SocketCodeEditorController } from "./socket-code-editor.controller";
 
-describe('SocketCodeEditorController', () => {
+describe("SocketCodeEditorController", () => {
   let controller: SocketCodeEditorController;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('SocketCodeEditorController', () => {
     );
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });

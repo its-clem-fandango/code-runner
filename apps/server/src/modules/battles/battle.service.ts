@@ -7,7 +7,7 @@ export class BattleService {
   constructor(
     @Inject(CodingChallengesService)
     private codingChallengesService: CodingChallengesService,
-  ) { }
+  ) {}
 
   getBattles() {
     return battles;

@@ -31,15 +31,11 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>
 
 // Interface for server response
-interface ServerResponse {
-  success: boolean
-  message?: string
-}
-
 interface BattleFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function BattleForm({ setOpen }: BattleFormProps) {
   const { sendRacesCollectionAction } = useRacesCollection()
 
