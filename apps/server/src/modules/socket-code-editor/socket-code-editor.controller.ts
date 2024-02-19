@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller } from "@nestjs/common";
 
-@Controller('socket-code-editor')
+@Controller("socket-code-editor")
 export class SocketCodeEditorController {}

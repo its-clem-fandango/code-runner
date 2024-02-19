@@ -17,7 +17,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly battleService: BattleService,
   ) {}
 
-  handleConnection(client: any, ...args: any[]) {
+  handleConnection(client: any) {
     console.log("[EditorGateway] Client connected", client.id);
   }
 

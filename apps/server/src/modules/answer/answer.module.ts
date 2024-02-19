@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { AnswerService } from './answer.service';
-import { AnswerController } from './answer.controller';
+import { Module } from "@nestjs/common";
+import { AnswerService } from "./answer.service";
+import { AnswerController } from "./answer.controller";
 
 @Module({
   providers: [AnswerService],
