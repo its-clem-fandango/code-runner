@@ -29,6 +29,10 @@ export class AuthController {
     res.cookie("accessToken", tokenResponse.access_token, {
       httpOnly: true, //makes cookie inaccessible to JS in browser
       secure: true, //ensures cooie is sent only over HTTPS
+      sameSite: "strict",
+      //domain: "localhost:3000",
+      path: "/",
+      maxAge: 6900000,
     });
 
     //REPLACE WITH /dashboard ENDPOINT
