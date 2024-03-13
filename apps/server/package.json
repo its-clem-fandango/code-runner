@@ -27,6 +27,7 @@
     "@nestjs/platform-socket.io": "^10.3.2",
     "@nestjs/websockets": "^10.3.2",
     "chai": "^5.1.0",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "mocha": "^10.3.0",
     "mongoose": "^8.2.1",
