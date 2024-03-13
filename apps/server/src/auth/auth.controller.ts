@@ -1,10 +1,13 @@
 import { Controller, Get, Query, Req, Res } from "@nestjs/common";
 import * as https from "https";
 import * as dotenv from "dotenv";
+import { UsersService } from "src/users/users.service";
 dotenv.config();
 
 @Controller("auth")
 export class AuthController {
+  constructor(private usersService: UsersService) {} //Inject UserService
+
   @Get("github")
   githubLogin(@Req() req, @Res() res) {
     const clientID = process.env.GITHUB_CLIENT_ID;
@@ -23,7 +26,24 @@ export class AuthController {
       clientID,
       clientSecret,
     );
-    const user = await this.fetchGithubUserProfile(tokenResponse.access_token);
+    const githubUser = await this.fetchGithubUserProfile(
+      tokenResponse.access_token,
+    );
+
+    //Use usersService to find or create a user
+    const user = await this.usersService.findOrCreateUser({
+      login: githubUser.login,
+      id: githubUser.id,
+      email: githubUser.email,
+    });
+
+    // After successfully finding or creating a user
+    const session = await this.usersService.createSession(user._id.toString());
+    res.cookie("sessionId", session._id.toString(), {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Strict",
+    });
 
     //Set access token as a cookie named accessToken (note: response is access_token)
     res.cookie("accessToken", tokenResponse.access_token, {
