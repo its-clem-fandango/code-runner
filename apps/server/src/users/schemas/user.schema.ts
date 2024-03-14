@@ -8,7 +8,7 @@ import { Document } from "mongoose";
 
 export interface User extends Document {
   username: string;
-  createdat: Date;
+  createdAt: Date;
 }
 
 export const UserSchema = new mongoose.Schema({

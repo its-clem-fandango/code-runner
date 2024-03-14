@@ -12,17 +12,16 @@ export class UsersService {
   ) {}
 
   async findOrCreateUser(githubData): Promise<User> {
-    let user = await this.userModel
-      .findOne({ githubId: githubData.id }) //returns a document
-      .exec();
-    if (!user) {
-      user = new this.userModel({
-        username: githubData.login,
-        githubId: githubData.id,
-        email: githubData.email,
-      });
-      await user.save();
-    }
+    const username = githubData.login;
+    const user = await this.userModel.findOneAndUpdate(
+      { username },
+      { username },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+
     return user;
   }
 
