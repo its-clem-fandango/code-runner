@@ -42,7 +42,9 @@ export class AuthController {
     res.cookie("sessionId", session._id.toString(), {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict",
+      sameSite: "strict",
+      maxAge: 6666666,
+      path: "/",
     });
 
     //Set access token as a cookie named accessToken (note: response is access_token)

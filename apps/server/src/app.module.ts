@@ -12,6 +12,7 @@ import { AuthMiddleware } from "./auth/auth.middleware";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./users/schemas/user.schema";
 import { SessionSchema } from "./users/schemas/session.schema";
+import { SessionController } from './auth/session.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { SessionSchema } from "./users/schemas/session.schema";
     BattleModule,
     CodingChallengesModule,
   ],
-  controllers: [AppController, AuthController, UsersController],
+  controllers: [AppController, AuthController, UsersController, SessionController],
   providers: [AppService, UsersService],
 })
 export class AppModule implements NestModule {
