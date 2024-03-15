@@ -38,6 +38,8 @@ export class AuthController {
     });
 
     // After successfully finding or creating a user
+
+    // Instead of making a session make a JWT w/ a secret & validate function
     const session = await this.usersService.createSession(user._id.toString());
     res.cookie("sessionId", session._id.toString(), {
       httpOnly: true,
@@ -45,16 +47,6 @@ export class AuthController {
       sameSite: "strict",
       maxAge: 6666666,
       path: "/",
-    });
-
-    //Set access token as a cookie named accessToken (note: response is access_token)
-    res.cookie("accessToken", tokenResponse.access_token, {
-      httpOnly: true, //makes cookie inaccessible to JS in browser
-      secure: true, //ensures cooie is sent only over HTTPS
-      sameSite: "strict",
-      //domain: "localhost:3000",
-      path: "/",
-      maxAge: 6900000,
     });
 
     //REPLACE WITH /dashboard ENDPOINT
