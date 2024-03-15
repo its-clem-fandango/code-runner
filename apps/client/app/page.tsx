@@ -3,10 +3,17 @@
 import Dashboard from "./dashboard/dashboard"
 import { RacesCollectionProvider } from "@/lib/useRacesCollection"
 import { AuthProvider } from "@/lib/useAuth"
-export default function Home() {
-  return (
+import { User } from "@/lib/useAuth"
+
+
+interface HomeProps {
+  authenticatedUser: User | null;
+}
+
+
+export default function Home({ authenticatedUser }: HomeProps) {  return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <AuthProvider>
+      <AuthProvider authenticatedUser={authenticatedUser}>
       <RacesCollectionProvider>
         <Dashboard />
       </RacesCollectionProvider>
