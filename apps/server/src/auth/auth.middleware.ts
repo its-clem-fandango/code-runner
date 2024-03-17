@@ -1,9 +1,17 @@
 import { Injectable, NestMiddleware } from "@nestjs/common";
-import { NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
-//checks for presence of accesstoken and validates it
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
+  async use(req: Request, res: Response, next: NextFunction) {
+    console.log("AuthMiddleware accessed for path:", req.path);
+    next();
+  }
+}
+
+//checks for presence of accesstoken and validates it
+//@Injectable()
+/* export class AuthMiddleware implements NestMiddleware {
   async use(req: any, res: any, next: NextFunction) {
     const accessToken = req.cookies["accessToken"];
     const excludedAuthPaths = ["/auth/github", "/"];
@@ -37,3 +45,4 @@ export class AuthMiddleware implements NestMiddleware {
     }
   }
 }
+ */
