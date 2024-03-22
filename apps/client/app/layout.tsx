@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html>
+    <html >
       <body
         className={cn(
           "min-h-screen bg-background antialiased",
