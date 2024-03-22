@@ -9,7 +9,7 @@ import { Race } from "@/lib/useRacesCollection"
 export const columns: ColumnDef<Race>[] = [
   {
     accessorKey: "battleName",
-    header: () => <div className="text-left">Battle Name</div>,
+    header: () => <div className="text-left">Race Name</div>,
     cell: ({ row }) => <div>{row.original.battleName}</div>,
   },
   {
