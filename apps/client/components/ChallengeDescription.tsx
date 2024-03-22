@@ -70,7 +70,7 @@ function ChallengeDescription() {
               </TabsContent>
               <TabsContent value="console" className=" py-2">
                 <ChallengeConsole
-                  consoleData={race?.consoleData}
+                  consoleData={race?.consoleData ?? null }
                   syntaxError={race?.syntaxError?.error || null}
                 />
               </TabsContent>
