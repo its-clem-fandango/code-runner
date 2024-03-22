@@ -10,6 +10,14 @@ import { Suspense } from "react"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
 
+function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BattlePage />
+    </Suspense>
+  )
+}
+
 // TODO: put this in layout and remove component?
 function BattlePage() {
   return (
@@ -56,4 +64,4 @@ function Battle({ battleId }: { battleId: number } = { battleId: -1 }) {
   )
 }
 
-export default BattlePage
+export default Page
