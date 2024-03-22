@@ -50,7 +50,7 @@ export default function MonacoCodeEditor({
     if (race?.victory !== undefined) { 
       setEndGameMessage({
         title: race.victory ? victoryMsg : "You lost!",
-        message: race.victory ? "Congratulations, all tests passed! You came first!" : "Sorry, try harder"
+        message: race.victory ? "Congratulations, all tests passed! You came in first!" : "Sorry, better luck next time."
       }),
       setIsDialogOpen(true)
     }

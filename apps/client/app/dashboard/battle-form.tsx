@@ -63,7 +63,7 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
           name="battleName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-normal">Room Name</FormLabel>
+              <FormLabel className="font-normal">Race Name</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -108,7 +108,7 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
           )}
         />
         <DialogFooter>
-          <Button type="submit">Create Battle</Button>
+          <Button type="submit">Start Race</Button>
         </DialogFooter>
       </form>
     </Form>
