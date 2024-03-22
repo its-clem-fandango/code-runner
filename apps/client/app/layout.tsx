@@ -2,7 +2,7 @@ import { Inter as FontSans } from "next/font/google"
 import { cn } from "../../client/lib/utils"
 import "./globals.css"
 
-const fontSans = FontSans({
+export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
