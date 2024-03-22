@@ -7,6 +7,11 @@ const fontSans = FontSans({
   variable: "--font-sans",
 })
 
+export const metadata: Metadata = {
+  title: "Code Racer",
+  description: "",
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
