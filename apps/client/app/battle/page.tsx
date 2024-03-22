@@ -29,7 +29,7 @@ function BattlePage() {
   )
 }
 
-function Battle({ battleId }: { battleId: number } = { battleId: -1 }) {
+function Battle({ battleId }: { battleId: number }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const battleId = parseInt(searchParams.get("id") as string)
