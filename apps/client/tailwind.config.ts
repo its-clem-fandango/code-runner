@@ -20,7 +20,7 @@ const config = {
     },
     extend: {
       fontFamily: {
-        // sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["var(--font-sans)", ...fontFamily.sans],
         inter: ["Inter", "sans-serif"],
         manrope: ["Manrope", "sans-serif"],
       },
