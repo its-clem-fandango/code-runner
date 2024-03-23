@@ -4,11 +4,10 @@ import { columns } from "@/app/dataTable/columns"
 import { DataTable } from "@/app/dataTable/data-table"
 import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
-import { useAuth } from "@/lib/useAuth"
+import { useAuth, User } from "@/lib/useAuth"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { GetServerSideProps } from "next"
-import { User } from "@/lib/useAuth"
 
 type DashboardProps = {
   // Define any props your page will receive here
