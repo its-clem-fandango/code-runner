@@ -16,7 +16,7 @@ type DashboardProps = {
 }
 
 function Dashboard() {
-  const router = useRouter()
+  // const router = useRouter()
   const { user, isLoggedIn } = useAuth()
   const { races } = useRacesCollection()
 
