@@ -33,6 +33,8 @@ const defaultValue: RacesCollectionContextType = {
   races: [],
 }
 
+//DELETE ME
+
 const RacesCollectionContext =
   createContext<RacesCollectionContextType>(defaultValue)
 
