@@ -48,12 +48,11 @@ export const RacesCollectionProvider: React.FC<{
   >(undefined)
 
   const router = useRouter()
-
   useFirst(() => {
     if (socketRef.current?.connected) return
     console.log("connecting to ws")
 
-    let socket = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/race-collection`)
+    let socket = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}/race-collection`)
     socketRef.current = socket
 
     socket.on("availableBattles", (data) => {
