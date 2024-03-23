@@ -6,9 +6,8 @@ import { RacesCollectionProvider } from "@/lib/useRacesCollection"
 import CodeRacerLogo from "@/public/code-racer-logo.png"
 import { Rowdies } from "next/font/google"
 import Image from "next/image"
-import { AuthProvider, useAuth, User } from "@/lib/useAuth"
+import { AuthProvider, useAuth } from "@/lib/useAuth"
 import Login from "./login/page"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import UserAvatar from "./login/UserAvatar"
 
 const rowdies = Rowdies({
