@@ -6,8 +6,9 @@ import { RacesCollectionProvider } from "@/lib/useRacesCollection"
 import CodeRacerLogo from "@/public/code-racer-logo.png"
 import { Rowdies } from "next/font/google"
 import Image from "next/image"
-import { AuthProvider } from "@/lib/useAuth"
+import { AuthProvider, useAuth, User } from "@/lib/useAuth"
 import Login from "./login/page"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 
 const rowdies = Rowdies({
   weight: ["400"],
@@ -15,6 +16,17 @@ const rowdies = Rowdies({
 })
 
 export default function Home() {
+  return (
+    <AuthProvider>
+      <HomeContent />
+    </AuthProvider>
+  )
+}
+function HomeContent() {
+  const { user, isLoggedIn } = useAuth()
+  console.log("GITHUB USER OBJECT: ", user)
+  console.log("IS LOGGED IN: ", isLoggedIn)
+
   return (
     <>
       <div className="h-20 bg-slate-900 py-4 px-24 flex items-center justify-between text-white gap-4">
@@ -31,16 +43,19 @@ export default function Home() {
             Code Racer
           </span>
         </div>
-        <div>
+        {isLoggedIn ? (
+          <Avatar>
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        ) : (
           <Login />
-        </div>
+        )}
       </div>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <AuthProvider>
-          <RacesCollectionProvider>
-            <Dashboard />
-          </RacesCollectionProvider>
-        </AuthProvider>
+        <RacesCollectionProvider>
+          <Dashboard />
+        </RacesCollectionProvider>
       </main>
     </>
   )
