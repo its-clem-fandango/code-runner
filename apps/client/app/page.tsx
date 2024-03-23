@@ -9,6 +9,7 @@ import Image from "next/image"
 import { AuthProvider, useAuth, User } from "@/lib/useAuth"
 import Login from "./login/page"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
+import UserAvatar from "./login/UserAvatar"
 
 const rowdies = Rowdies({
   weight: ["400"],
@@ -43,14 +44,7 @@ function HomeContent() {
             Code Racer
           </span>
         </div>
-        {isLoggedIn ? (
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        ) : (
-          <Login />
-        )}
+        {isLoggedIn ? <UserAvatar /> : <Login />}
       </div>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <RacesCollectionProvider>
