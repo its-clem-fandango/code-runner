@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
 import { RaceProvider, useRace } from "@/lib/useRace"
-import Lobby from "./lobby"
+import Lobby from "./Lobby"
 import { Suspense } from "react"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
