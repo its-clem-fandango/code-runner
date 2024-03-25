@@ -37,7 +37,7 @@ export class AuthController {
       login: githubUser.login,
       id: githubUser.id,
       email: githubUser.email,
-      avatarURL: githubUser.avatar_url,
+      avatar_url: githubUser.avatar_url,
     });
 
     // After successfully finding or creating a user
