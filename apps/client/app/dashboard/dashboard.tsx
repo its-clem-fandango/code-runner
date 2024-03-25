@@ -9,13 +9,15 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { GetServerSideProps } from "next"
 import { User } from "@/lib/useAuth"
+import apicalls from "@/helper/apicalls"
 
 type DashboardProps = {
   // Define any props your page will receive here
   // For example, user data if you fetch it server-side
+  authenticatedUser?: User
 }
 
-function Dashboard() {
+function Dashboard({ authenticatedUser }: DashboardProps) {
   // const router = useRouter()
   const { user, isLoggedIn } = useAuth()
   const { races } = useRacesCollection()
@@ -64,34 +66,18 @@ export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
   // Retrieve the session Id from cookies attached to incoming request
   const token = context.req.cookies.sessionId
 
-  try {
-    // Send a request to backend's session validation endpooint with the sessionId so server can use  sessionId to look up session and determine if its valid
-    const validationResponse = await fetch(
-      "http://localhost:8080/session/validateSession",
-      {
-        method: "Get",
-        headers: {
-          Cookie: `sessionId=${token}`, //Forwards session cookie
-        },
+  if (!token) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
       },
-    )
-
-    if (!validationResponse.ok) {
-      // Session is not valid; redirect to login
-      console.error("Session validation failed")
-
-      return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
-        },
-      }
     }
+  }
 
-    // Does this endpoint return user details or exist?
-    const authenticatedUser: User = await validationResponse.json()
-    console.log("User from dashboard returns successfully: ", authenticatedUser)
-
+  try {
+    const authenticatedUser = await apicalls.validateSession(token)
+    // If session is valid, return/pass fetched user data to the page
     return { props: { authenticatedUser } }
   } catch (error) {
     console.error("Error validating session: ", error)

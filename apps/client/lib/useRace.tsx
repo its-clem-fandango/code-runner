@@ -8,8 +8,8 @@ import { Race } from "./useRacesCollection"
 import { useFirst } from "./useFirst"
 
 export interface OngoingRace extends Race {
-  challenge: Challenge,
-  consoleData?: ConsoleData,
+  challenge: Challenge
+  consoleData?: ConsoleData
   syntaxError?: SyntaxError
   victory?: boolean
   receivedCode?: string
@@ -67,36 +67,36 @@ export const useRace = () => useContext(RaceContext)
 export const RaceProvider = ({ children }: { children: ReactNode }) => {
   const [race, setRace] = useState<OngoingRace | null>(null)
   const socketRef = useRef<Socket | null>(null)
-  const [sendRaceAction, setSendRaceAction] = useState<undefined | (() => void)
+  const [sendRaceAction, setSendRaceAction] = useState<
+    undefined | (() => void)
   >()
 
   function handleResult(testResults?: ConsoleData) {
-    setRace(prev => {
+    setRace((prev) => {
       if (!prev) return null
       return {
         ...prev,
         consoleData: testResults,
       }
-
     })
   }
   function handleSyntaxError(testResults: SyntaxError | null) {
     if (testResults?.error) {
-      setRace(prev => {
+      setRace((prev) => {
         if (!prev) return null
         return {
           ...prev,
           syntaxError: testResults,
         }
       })
-
-    } else setRace(prev => {
-      if (!prev) return null
-      return {
-        ...prev,
-        syntaxError: undefined,
-      }
-    })
+    } else
+      setRace((prev) => {
+        if (!prev) return null
+        return {
+          ...prev,
+          syntaxError: undefined,
+        }
+      })
   }
 
   useFirst(() => {
@@ -107,17 +107,14 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socket.on("connect", () => {
       setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
-  
-        if (typeof payload === 'object' && !Array.isArray(payload)) {
+        if (typeof payload === "object" && !Array.isArray(payload)) {
           socket?.emit(actionType, {
             ...payload,
             clientId: socket.id,
           })
         } else {
-
           socket?.emit(actionType, payload)
         }
-
       })
     })
 
@@ -134,8 +131,9 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     })
 
     function handleJoinedBattle(msg: Race) {
-      apicalls.getChallangeData(msg.challengeId)
-        .then(challenge => {
+      apicalls
+        .getChallengeData(msg.challengeId)
+        .then((challenge) => {
           setRace((prevRace) => {
             if (prevRace === null) {
               return {
@@ -154,7 +152,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
             }
           })
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Error getting challenge data: ", err)
         })
     }
@@ -175,7 +173,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       }
 
       if (answer.clientId === socket.id && answer.didAssertPass === true) {
-        setRace(prev => {
+        setRace((prev) => {
           if (!prev) return null
           return {
             ...prev,
@@ -184,20 +182,19 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
         })
       }
       if (answer.clientId !== socket.id && answer.didAssertPass === true) {
-        setRace(prev => {
+        setRace((prev) => {
           if (!prev) return null
           return {
             ...prev,
             victory: false,
           }
         })
-
       }
     })
 
     socket.on("opponentCode", (msg) => {
       if (msg.clientId !== socket.id) {
-        setRace(prev => {
+        setRace((prev) => {
           if (!prev) return null
           return {
             ...prev,

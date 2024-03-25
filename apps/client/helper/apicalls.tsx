@@ -1,5 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_SERVER_URL
-async function getChallangeData(id: number) {
+
+async function getChallengeData(id: number) {
   const options = {
     method: "GET",
     headers: {
@@ -11,4 +12,24 @@ async function getChallangeData(id: number) {
   return data
 }
 
-export default { getChallangeData }
+async function validateSession(sessionId: string) {
+  // Send a request to backend's session validation endpooint with the sessionId so server can use  sessionId to look up session and determine if its valid
+
+  const options = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `sessionId=${sessionId}`,
+    },
+  }
+
+  const response = await fetch(`${API_URL}/session/validateSession`, options)
+  if (!response.ok) {
+    throw new Error("Session validation failed")
+  }
+  const userDetails = await response.json()
+  console.log("User from dashboard returns successfully: ", userDetails)
+  return userDetails
+}
+
+export default { getChallengeData, validateSession }

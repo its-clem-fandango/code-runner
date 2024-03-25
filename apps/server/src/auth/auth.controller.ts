@@ -30,11 +30,14 @@ export class AuthController {
       tokenResponse.access_token,
     );
 
+    console.log("****GITHUB USER OBJECT******", githubUser);
+
     //Use usersService to find or create a user
     const user = await this.usersService.findOrCreateUser({
       login: githubUser.login,
       id: githubUser.id,
       email: githubUser.email,
+      avatarURL: githubUser.avatar_url,
     });
 
     // After successfully finding or creating a user
