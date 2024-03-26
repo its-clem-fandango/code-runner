@@ -12,8 +12,8 @@ export class UsersController {
     if (!sessionId) {
       throw new UnauthorizedException("Session ID not found");
     }
-
     const user = await this.usersService.findUserBySessionId(sessionId);
+
     if (!user) {
       throw new UnauthorizedException(
         "User not found for the given session ID",
