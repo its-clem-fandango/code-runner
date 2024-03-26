@@ -6,6 +6,7 @@ import { RacesCollectionProvider } from "@/lib/useRacesCollection"
 import CodeRacerLogo from "@/public/code-racer-logo.png"
 import { Rowdies } from "next/font/google"
 import Image from "next/image"
+import { AuthProvider } from "@/lib/useAuth"
 
 const rowdies = Rowdies({
   weight: ["400"],
@@ -29,9 +30,11 @@ export default function Home() {
         </span>
       </div>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <RacesCollectionProvider>
-          <Dashboard />
-        </RacesCollectionProvider>
+        <AuthProvider>
+          <RacesCollectionProvider>
+            <Dashboard />
+          </RacesCollectionProvider>
+        </AuthProvider>
       </main>
     </>
   )

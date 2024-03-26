@@ -33,6 +33,8 @@ const defaultValue: RacesCollectionContextType = {
   races: [],
 }
 
+//DELETE ME
+
 const RacesCollectionContext =
   createContext<RacesCollectionContextType>(defaultValue)
 
@@ -48,7 +50,6 @@ export const RacesCollectionProvider: React.FC<{
   >(undefined)
 
   const router = useRouter()
-
   useFirst(() => {
     if (socketRef.current?.connected) return
     console.log("connecting to ws")

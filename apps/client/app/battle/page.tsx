@@ -5,10 +5,22 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import ChallengeDescription from "@/components/ChallengeDescription"
 import { RaceProvider, useRace } from "@/lib/useRace"
+<<<<<<< HEAD
 import Lobby from "./Lobby"
+=======
+>>>>>>> 45847a8375cb9a97c5dee176a5d107831f9fab3e
 import { Suspense } from "react"
+import Lobby from "./Lobby"
 
 const CodeEditor = dynamic(() => import("../../components/MonacoCodeEditor"))
+
+function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BattlePage />
+    </Suspense>
+  )
+}
 
 // TODO: put this in layout and remove component?
 function BattlePage() {
@@ -56,4 +68,4 @@ function Battle() {
   )
 }
 
-export default BattlePage
+export default Page

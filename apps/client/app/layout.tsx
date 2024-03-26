@@ -1,4 +1,5 @@
 import { Inter as FontSans } from "next/font/google"
+import { Metadata } from "next"
 import { cn } from "../../client/lib/utils"
 import "./globals.css"
 
@@ -6,6 +7,12 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
+
+export const metadata: Metadata = {
+  title: "Code Racer",
+  description:
+    "Code Racer is a coding challenge platform that helps you learn Javascript and problem solving while under pressure. Race against fellow coders in a quest to solve coding challenges the fastest. Start your engines and code your way to the finish line—may the quickest coder win!",
+}
 
 export default function RootLayout({
   children,
