@@ -9,7 +9,7 @@ import { Document } from "mongoose";
 export interface User extends Document {
   username: string;
   createdAt: Date;
-  avatar_url: string;
+  avatarURL?: string;
 }
 
 export const UserSchema = new mongoose.Schema({
@@ -17,5 +17,5 @@ export const UserSchema = new mongoose.Schema({
   email: { type: String, required: false, unique: true },
   password: { type: String, required: false },
   createdAt: { type: Date, default: Date.now },
-  avatar_url: { type: String, required: false },
+  avatarURL: { type: String, required: false },
 });

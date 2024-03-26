@@ -30,11 +30,14 @@ export class AuthController {
       tokenResponse.access_token,
     );
 
+    console.log("****GITHUB USER OBJECT******", githubUser);
+
     //Use usersService to find or create a user
     const user = await this.usersService.findOrCreateUser({
       login: githubUser.login,
       id: githubUser.id,
       email: githubUser.email,
+      avatar_url: githubUser.avatar_url,
     });
 
     // After successfully finding or creating a user
@@ -50,62 +53,32 @@ export class AuthController {
     });
 
     //REPLACE WITH /dashboard ENDPOINT
-    console.log(`TOKEN RESPONSE: ${JSON.stringify(tokenResponse)}`);
-    console.log(`USER: ${JSON.stringify(user)}`);
     res.redirect("http://localhost:3000/");
   }
 
   // This method exchanges an authorization code for an access token from GitHub.
-  private async exchangeCodeForToken(
-    code: string, // The code received from github
-    clientID: string, // our client ID
-    clientSecret: string, // our secret
+  async exchangeCodeForToken(
+    code: string,
+    clientID: string,
+    clientSecret: string,
   ): Promise<any> {
-    // Returns a promise that resolves with the token info
-    // This function returns a promise that resolves with the data received from GitHub after exchanging the authorization code.
-    return new Promise<any>((resolve, reject) => {
-      // The postData is a URL-encoded string containing the necessary parameters for the token exchange.
-      const postData = new URLSearchParams({
-        client_id: clientID,
-        client_secret: clientSecret,
-        code: code,
-      }).toString();
-
-      // Options for the HTTPS request, including the GitHub API endpoint, method, and headers.
-      const options = {
-        hostname: "github.com",
-        path: "/login/oauth/access_token",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Accept: "application/json", // Requests that GitHub responds with JSON
-        },
-      };
-
-      // Making the HTTPS POST request to GitHub's token endpoint.
-      const req = https.request(options, (res) => {
-        let data = "";
-        // Accumulating the data chunks as they come in.
-        res.on("data", (chunk) => (data += chunk));
-        // Once all data has been received, parse it from JSON and resolve the promise with it.
-        res.on("end", () => {
-          try {
-            const parsedData = JSON.parse(data); // Parse the JSON string into an object.
-            resolve(parsedData); // Resolve the promise with the parsed object.
-          } catch (error) {
-            reject(error); // If parsing fails, reject the promise with the error.
-          }
-        });
-      });
-
-      // Attach an error handler for the request.
-      req.on("error", (error) => {
-        reject(error); // Reject the promise if an error occurs during the request.
-      });
-
-      req.write(postData); // Send the request body (postData) with the request.
-      req.end(); // Signal that the request body has been completely sent.
+    const url = "https://github.com/login/oauth/access_token";
+    const params = new URLSearchParams({
+      client_id: clientID,
+      client_secret: clientSecret,
+      code,
     });
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      body: params,
+    });
+    const data = await response.json();
+    return data;
   }
 
   // Trade access token for user profile
