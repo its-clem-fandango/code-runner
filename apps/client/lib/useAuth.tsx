@@ -44,7 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 
   useEffect(() => {
     //Note: cookie is set with HttpOnly flag, so console.logs won't/JS work be able to access it for security reasons
-    console.log("+++USER STATE UPDATED +++", user)
     const validateSession = async () => {
       try {
         const response = await fetch(
@@ -78,6 +77,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 // Custom hook to use authentication context
 export const useAuth = () => {
   const context = useContext(AuthContext)
-  console.log("Current user in useAuth:", context.user)
   return context
 }
