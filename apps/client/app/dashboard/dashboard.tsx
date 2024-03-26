@@ -4,9 +4,8 @@ import { columns } from "@/app/dataTable/columns"
 import { DataTable } from "@/app/dataTable/data-table"
 import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
-import { useAuth } from "@/lib/useAuth"
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+/* import { useAuth } from "@/lib/useAuth"
+import { useRouter } from "next/navigation" */
 import { GetServerSideProps } from "next"
 import { User } from "@/lib/useAuth"
 import apicalls from "@/helper/apicalls"
@@ -19,24 +18,9 @@ type DashboardProps = {
 
 function Dashboard({ authenticatedUser }: DashboardProps) {
   // const router = useRouter()
-  const { user, isLoggedIn } = useAuth()
+  // const { user, isLoggedIn } = useAuth()
   const { races } = useRacesCollection()
 
-  console.log("Dashboard: Checking user state", user)
-
-  useEffect(() => {
-    console.log("Dashboard: useEffect, user:", user)
-    if (isLoggedIn === false) {
-      console.log("Dashboard: User not logged in, redirecting to /login")
-      // router.push("/login")
-    }
-  }, [isLoggedIn])
-
-  /*   if (!user) {
-    console.log("Dashboard: Rendering null due to no user")
-    return null
-  } */
-  console.log(races)
   return (
     <div>
       <div className="flex border-0 border-violet-400 flex-col-reverse lg:flex-row">

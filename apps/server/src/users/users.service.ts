@@ -22,8 +22,6 @@ export class UsersService {
         upsert: true,
       },
     );
-    console.log("USER OBJECT WITH AVATAR URL: ", user.toObject());
-    console.log("AVATAR URL: ", githubData.avatar_url);
     return user;
   }
 

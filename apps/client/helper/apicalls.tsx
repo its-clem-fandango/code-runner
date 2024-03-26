@@ -28,7 +28,6 @@ async function validateSession(sessionId: string) {
     throw new Error("Session validation failed")
   }
   const userDetails = await response.json()
-  console.log("User from dashboard returns successfully: ", userDetails)
   return userDetails
 }
 
