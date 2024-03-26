@@ -43,7 +43,7 @@ function HomeContent() {
             Code Racer
           </span>
         </div>
-        {isLoggedIn ? <UserAvatar /> : <Login />}
+        {isLoggedIn ? <UserAvatar user={user} /> : <Login />}
       </div>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <RacesCollectionProvider>
