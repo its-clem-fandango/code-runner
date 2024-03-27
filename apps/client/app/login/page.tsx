@@ -5,7 +5,7 @@ export default function Login() {
   const redirect = process.env.NEXT_PUBLIC_REDIRECT_URI
   return (
     <div>
-      <Button className="bg-white text-slate-900">
+      <Button className="bg-white text-slate-900" variant="secondary">
         <GitHubLogoIcon className="mr-2 h-4 w-4" />
         <a href={redirect}>Login with Github</a>
       </Button>
