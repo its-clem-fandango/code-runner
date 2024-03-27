@@ -12,7 +12,7 @@ export default function UserAvatar() {
 
   const fetchAvatarURL = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/profile/avatar`
+      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/user/profile/avatar`
       const response = await fetch(url, {
         method: "GET",
         credentials: "include", // Include cookies for session ID

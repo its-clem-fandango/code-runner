@@ -24,8 +24,6 @@ export default function Home() {
 }
 function HomeContent() {
   const { user, isLoggedIn } = useAuth()
-
-  // DELETE ME: this for vercel cache
   console.log("GITHUB USER OBJECT: ", user)
   console.log("IS LOGGED IN: ", isLoggedIn)
 
