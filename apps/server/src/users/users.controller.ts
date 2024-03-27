@@ -1,4 +1,10 @@
-import { Controller, Get, Req, UnauthorizedException } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Req,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Request } from "express";
 
@@ -6,7 +12,7 @@ import { Request } from "express";
 export class UsersController {
   constructor(private usersService: UsersService) {} //Inject UserService
 
-  @Get("profile")
+  @Get("profile/avatar")
   async getUserProfile(@Req() request: Request) {
     const sessionId = request.cookies["sessionId"];
     if (!sessionId) {
@@ -19,6 +25,11 @@ export class UsersController {
         "User not found for the given session ID",
       );
     }
-    return user;
+
+    const avatarURL = user.avatarURL;
+    if (!avatarURL) {
+      throw new UnprocessableEntityException("Avatar URL not found");
+    }
+    return { avatarURL };
   }
 }
