@@ -7,6 +7,7 @@ import { BattleModule } from "./modules/battles/battle.module";
 import { CodingChallengesModule } from "./modules/coding-challenges/coding-challenges.module";
 import { AuthController } from "./auth/auth.controller";
 import { UsersService } from "./users/users.service";
+import { UsersController } from "./users/users.controller";
 import { AuthMiddleware } from "./auth/auth.middleware";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./users/schemas/user.schema";
@@ -25,7 +26,12 @@ import { SessionController } from "./auth/session.controller";
     BattleModule,
     CodingChallengesModule,
   ],
-  controllers: [AppController, AuthController, SessionController],
+  controllers: [
+    AppController,
+    AuthController,
+    UsersController,
+    SessionController,
+  ],
   providers: [AppService, UsersService],
 })
 export class AppModule implements NestModule {
