@@ -11,14 +11,14 @@ export class AuthController {
   @Get("github")
   githubLogin(@Req() req, @Res() res) {
     const clientID = process.env.GITHUB_CLIENT_ID;
-    //const callbackURI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+    const callbackURI = process.env.NEXT_PUBLIC_REDIRECT_URI;
     res.redirect(
-      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:8080/auth/github/callback`,
+      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${callbackURI}`,
     );
   }
 
   @Get("github/callback")
-  async githubCallback(@Query("code") code: string, @Res() res) {
+  async githubCallback(@Query("code") code: string, @Req() req, @Res() res) {
     const clientID = process.env.GITHUB_CLIENT_ID;
     const clientSecret = process.env.GITHUB_CLIENT_SECRET;
     const tokenResponse = await this.exchangeCodeForToken(
@@ -52,8 +52,8 @@ export class AuthController {
       path: "/",
     });
 
-    //REPLACE WITH /dashboard ENDPOINT
-    res.redirect("http://localhost:3000/");
+    //Dashboard
+    res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
   }
 
   // This method exchanges an authorization code for an access token from GitHub.
