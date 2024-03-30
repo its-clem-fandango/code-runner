@@ -11,14 +11,14 @@ import {
 } from "@/components/ui/dialog"
 
 export default function ButtonPopUp() {
-  const [open, setOpen] = useState(false) // Manage dialog visibility here
+  const [openRacePopup, setOpenRacePopup] = useState(false) // Manage dialog visibility here
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openRacePopup} onOpenChange={setOpenRacePopup}>
       <DialogTrigger asChild>
         <Button
-          className="flex flex-col items-center justify-center h-[150px] w-[340px] bg-black rounded-lg text-white leading-7 "
-          onClick={() => setOpen(true)}
+          className="flex flex-col items-center justify-center h-[150px] w-full bg-black rounded-lg text-white leading-7 "
+          onClick={() => setOpenRacePopup(true)}
         >
           <div className="bg-white w-[30px] h-[30px] rounded-full mb-2">
             <p className="text-black text-xl">+</p>
@@ -31,13 +31,14 @@ export default function ButtonPopUp() {
         </Button>
       </DialogTrigger>
 
-      {open && (
+      {openRacePopup && (
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Create a New Race</DialogTitle>
             <DialogDescription>Customize your game.</DialogDescription>
           </DialogHeader>
-          <BattleForm setOpen={setOpen} /> {/* Pass setOpen to BattleForm */}
+          <BattleForm setOpen={setOpenRacePopup} />{" "}
+          {/* Pass setOpen to BattleForm */}
         </DialogContent>
       )}
     </Dialog>

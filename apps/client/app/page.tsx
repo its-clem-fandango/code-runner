@@ -24,32 +24,35 @@ export default function Home() {
 }
 function HomeContent() {
   const { user, isLoggedIn } = useAuth()
-  console.log("GITHUB USER OBJECT: ", user)
+  console.log("GITHUB USER OBJECT FROM SESSION CONTROLLER: ", user)
   console.log("IS LOGGED IN: ", isLoggedIn)
 
   return (
     <>
-      <div className="h-20 bg-slate-900 py-4 px-24 flex items-center justify-between text-white gap-4">
-        <div className="flex items-center gap-4">
-          <div className="bg-white rounded-full w-[40px] h-[40px] flex items-center justify-center">
-            <Image
-              src={CodeRacerLogo}
-              width={24}
-              height={24}
-              alt="CodeRacer's logo"
-            />
+      <div className="bg-slate-900 py-4">
+        <div className="wrapper flex items-center justify-between text-white gap-4">
+          <div className="flex items-center gap-4">
+            <div className="bg-white rounded-full w-[40px] h-[40px] flex items-center justify-center gap-4 ">
+              <Image
+                src={CodeRacerLogo}
+                width={24}
+                height={24}
+                alt="Code Racer's logo"
+              />
+            </div>
+            <span className={cn(rowdies.className, "uppercase text-2xl")}>
+              Code Racer
+            </span>
           </div>
-          <span className={cn(rowdies.className, "uppercase text-2xl")}>
-            Code Racer
-          </span>
+          {isLoggedIn ? <UserAvatar /> : <Login />}
         </div>
-        {isLoggedIn ? <UserAvatar /> : <Login />}
       </div>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <RacesCollectionProvider>
+      <RacesCollectionProvider>
+        <main className="wrapper min-h-screen">
+          {/* Dashboard content here */}
           <Dashboard />
-        </RacesCollectionProvider>
-      </main>
+        </main>
+      </RacesCollectionProvider>
     </>
   )
 }
