@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for code-racer-server on 2024-03-28T14:13:04+01:00
+# fly.toml app configuration file generated for code-runner-server on 2024-02-18T15:57:37+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'code-racer-server'
+app = 'code-runner-server'
 primary_region = 'mad'
 
 [build]
