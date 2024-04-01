@@ -104,3 +104,10 @@
 .editor {
   margin-right: 20px;
 }
+
+.wrapper {
+  padding: 0 28px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}

@@ -14,6 +14,7 @@ export class SessionController {
     }
 
     const user = await this.usersService.findUserBySessionId(sessionId);
+
     if (!user) {
       return res.status(401).json({ message: "Invalid session" });
     }
@@ -24,6 +25,7 @@ export class SessionController {
         id: user._id,
         username: user.username,
         createdAt: user.createdAt,
+        realName: user.realName,
       },
     });
   }
