@@ -18,7 +18,7 @@ export interface User {
   token?: string
   login?: string // username
   avatar_url?: string
-  name?: string //display name
+  realName?: string //display name
 }
 
 interface AuthContextType {
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     const validateSession = async () => {
       try {
         const response = await fetch(
-          "http://localhost:8080/session/validateSession",
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/session/validateSession`,
           {
             credentials: "include",
           },

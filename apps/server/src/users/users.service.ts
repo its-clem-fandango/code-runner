@@ -12,11 +12,15 @@ export class UsersService {
   ) {}
 
   async findOrCreateUser(githubData): Promise<User> {
-    const { login: username, avatar_url: avatarURL } = githubData;
+    const {
+      login: username,
+      avatar_url: avatarURL,
+      name: realName,
+    } = githubData;
 
     const user = await this.userModel.findOneAndUpdate(
-      { username },
-      { username, avatarURL: avatarURL },
+      { username }, // search for this username
+      { username, avatarURL, realName }, //if found, update with this data
       {
         new: true,
         upsert: true,

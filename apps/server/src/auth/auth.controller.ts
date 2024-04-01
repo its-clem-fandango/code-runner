@@ -11,14 +11,14 @@ export class AuthController {
   @Get("github")
   githubLogin(@Req() req, @Res() res) {
     const clientID = process.env.GITHUB_CLIENT_ID;
-    //const callbackURI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+    const callbackURI = process.env.NEXT_PUBLIC_REDIRECT_URI;
     res.redirect(
-      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=http://localhost:8080/auth/github/callback`,
+      `https://github.com/login/oauth/authorize?client_id=${clientID}&redirect_uri=${callbackURI}`,
     );
   }
 
   @Get("github/callback")
-  async githubCallback(@Query("code") code: string, @Res() res) {
+  async githubCallback(@Query("code") code: string, @Req() req, @Res() res) {
     const clientID = process.env.GITHUB_CLIENT_ID;
     const clientSecret = process.env.GITHUB_CLIENT_SECRET;
     const tokenResponse = await this.exchangeCodeForToken(
@@ -26,18 +26,21 @@ export class AuthController {
       clientID,
       clientSecret,
     );
+
+    // Use the access token to fetch the user's profile from GitHub
     const githubUser = await this.fetchGithubUserProfile(
       tokenResponse.access_token,
     );
 
     console.log("****GITHUB USER OBJECT******", githubUser);
 
-    //Use usersService to find or create a user
+    //Use usersService to find or create a user and pass it the githubUser object (contains the GH data)
     const user = await this.usersService.findOrCreateUser({
       login: githubUser.login,
       id: githubUser.id,
       email: githubUser.email,
       avatar_url: githubUser.avatar_url,
+      name: githubUser.name,
     });
 
     // After successfully finding or creating a user
@@ -52,8 +55,8 @@ export class AuthController {
       path: "/",
     });
 
-    //REPLACE WITH /dashboard ENDPOINT
-    res.redirect("http://localhost:3000/");
+    //Dashboard
+    res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
   }
 
   // This method exchanges an authorization code for an access token from GitHub.
@@ -81,7 +84,7 @@ export class AuthController {
     return data;
   }
 
-  // Trade access token for user profile
+  // Trade access token for user's profile in GitHub
   private async fetchGithubUserProfile(accessToken: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       // Https module request method does not return a promise, so we have to wrap the https request in a promise
