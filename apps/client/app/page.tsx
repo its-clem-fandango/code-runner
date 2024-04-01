@@ -29,7 +29,7 @@ function HomeContent() {
 
   return (
     <>
-      <div className="bg-slate-900 py-4">
+      <header className="bg-slate-900 py-4">
         <div className="wrapper flex items-center justify-between text-white gap-4">
           <div className="flex items-center gap-4">
             <div className="bg-white rounded-full w-[40px] h-[40px] flex items-center justify-center gap-4 ">
@@ -46,7 +46,7 @@ function HomeContent() {
           </div>
           {isLoggedIn ? <UserAvatar /> : <Login />}
         </div>
-      </div>
+      </header>
       <RacesCollectionProvider>
         <main className="wrapper min-h-screen">
           {/* Dashboard content here */}
