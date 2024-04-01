@@ -5,10 +5,15 @@ import * as cookieParser from "cookie-parser";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL;
+  if (!clientUrl) {
+    throw new Error("Public environment variable is not set.");
+  }
+
   app.enableCors({
-    origin: ["NEXT_PUBLIC_CLIENT_URL"],
+    origin: [clientUrl], // Use the environment variable value here.
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-    credentials: true,
+    credentials: true, // This is necessary for cookies to be sent and received with CORS requests.
   });
 
   app.use(cookieParser());
