@@ -6,7 +6,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const clientUrl = process.env.NEXT_PUBLIC_CLIENT_URL;
+  console.log("CLIENT+++++++++++++++", clientUrl);
+
   if (!clientUrl) {
+    console.log("CLIENT+++++++++++++++", clientUrl);
     throw new Error("Public environment variable is not set.");
   }
 

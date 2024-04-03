@@ -27,35 +27,41 @@ export class AnswerService {
   }
 
   async runTest(userFunction, codingChallenge): Promise<TestResults> {
-    
     const mocha = new Mocha();
     let didAssertPass = false;
     const testResults: TestResult[] = [];
-    const consoleLogs = []
-    const oldLog = console.log  
-    const realProcess = process
-    
+    const consoleLogs = [];
+    const oldLog = console.log;
+    const realProcess = process;
+
     process = {
+      ...process,
       //these functions are needed for Mocha to work.
       removeListener: realProcess.removeListener,
       listenerCount: realProcess.listenerCount,
       on: realProcess.on,
-      nextTick: process.nextTick
-    } as NodeJS.Process
-    
-    console.log = function(...args) {
-      const updatedArguments = args.map(arg => {
-        if (arg === process) {
-          return 'process is not available for you to log! ;)';
-        } else if (typeof arg === 'object' && arg !== null && arg.constructor === Object && arg !== process) {
+      nextTick: process.nextTick,
+    } as NodeJS.Process;
+
+    console.log = function (...args) {
+      const updatedArguments = args.map((arg) => {
+        /* TD Security patch */
+        if (arg === process || arg.includes("process")) {
+          return "process is not available for you to log! ;)";
+        } else if (
+          typeof arg === "object" &&
+          arg !== null &&
+          arg.constructor === Object &&
+          arg !== process
+        ) {
           const keys = Object.keys(arg);
           const updatedObject = {};
           for (const key of keys) {
             if (arg[key] === process) {
-              updatedObject[key] = 'process is not available for you to log! ;)';
+              updatedObject[key] =
+                "process is not available for you to log! ;)";
             } else {
               updatedObject[key] = arg[key];
-
             }
           }
           return updatedObject;
@@ -70,7 +76,6 @@ export class AnswerService {
 
     mocha.suite.emit("pre-require", global, "", mocha);
     codingChallenge.tests.forEach((testCase) => {
-      
       const inputValues = testCase.input;
       const expected = testCase.expected;
 
@@ -106,7 +111,9 @@ export class AnswerService {
 
     await new Promise<void>((resolve) => {
       runner.on("end", () => {
-        didAssertPass = testResults.every((test) => test.passed) && testResults.length === codingChallenge.tests.length;
+        didAssertPass =
+          testResults.every((test) => test.passed) &&
+          testResults.length === codingChallenge.tests.length;
         resolve();
       });
     });
