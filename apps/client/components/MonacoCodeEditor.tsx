@@ -66,7 +66,10 @@ export default function MonacoCodeEditor({
   const handleSubmit = (e: any) => {
     e.preventDefault()
     console.log("submitting", {
+      room: roomName,
+      player: playerNumber,
       challengeId,
+      message: code,
     })
     sendRaceAction &&
       sendRaceAction("submit", {

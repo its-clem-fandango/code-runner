@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  InternalServerErrorException,
   Req,
   UnauthorizedException,
   UnprocessableEntityException,
@@ -14,22 +15,34 @@ export class UsersController {
 
   @Get("profile/avatar")
   async getUserProfile(@Req() request: Request) {
-    const sessionId = request.cookies["sessionId"];
-    if (!sessionId) {
-      throw new UnauthorizedException("Session ID not found");
-    }
+    try {
+      const sessionId = request.cookies["sessionId"];
+      if (!sessionId) {
+        throw new UnauthorizedException("Session ID not found");
+      }
 
-    const user = await this.usersService.findUserBySessionId(sessionId);
-    if (!user) {
-      throw new UnauthorizedException(
-        "User not found for the given session ID",
+      const user = await this.usersService.findUserBySessionId(sessionId);
+      if (!user) {
+        throw new UnauthorizedException(
+          "User not found for the given session ID",
+        );
+      }
+
+      const avatarURL = user.avatarURL;
+      if (!avatarURL) {
+        throw new UnprocessableEntityException("Avatar URL not found");
+      }
+      return { avatarURL };
+    } catch (error) {
+      if (
+        error instanceof UnauthorizedException ||
+        error instanceof UnprocessableEntityException
+      ) {
+        throw error;
+      }
+      throw new InternalServerErrorException(
+        "Internal Server Error in users.controller",
       );
     }
-
-    const avatarURL = user.avatarURL;
-    if (!avatarURL) {
-      throw new UnprocessableEntityException("Avatar URL not found");
-    }
-    return { avatarURL };
   }
 }

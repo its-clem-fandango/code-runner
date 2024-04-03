@@ -12,37 +12,53 @@ export class UsersService {
   ) {}
 
   async findOrCreateUser(githubData): Promise<User> {
-    const {
-      login: username,
-      avatar_url: avatarURL,
-      name: realName,
-    } = githubData;
+    try {
+      const {
+        login: username,
+        avatar_url: avatarURL,
+        name: realName,
+      } = githubData;
 
-    const user = await this.userModel.findOneAndUpdate(
-      { username }, // search for this username
-      { username, avatarURL, realName }, //if found, update with this data
-      {
-        new: true,
-        upsert: true,
-      },
-    );
-    return user;
+      const user = await this.userModel.findOneAndUpdate(
+        { username }, // search for this username
+        { username, avatarURL, realName }, //if found, update with this data
+        {
+          new: true,
+          upsert: true,
+        },
+      );
+      return user;
+    } catch (error) {
+      console.error(error);
+
+      throw new Error("Error finding or creating user in users.service");
+    }
   }
 
   async createSession(userId: string): Promise<Session> {
-    const session = new this.sessionModel({
-      userId,
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    });
-    await session.save();
-    return session;
+    try {
+      const session = new this.sessionModel({
+        userId,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      });
+      await session.save();
+      return session;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error creating session in users.service");
+    }
   }
 
   async findUserBySessionId(sessionId: string): Promise<User | null> {
-    const session = await this.sessionModel.findById(sessionId).exec();
-    if (!session || session.expiresAt < new Date()) {
-      return null;
+    try {
+      const session = await this.sessionModel.findById(sessionId).exec();
+      if (!session || session.expiresAt < new Date()) {
+        return null;
+      }
+      return this.userModel.findById(session.userId).exec();
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error finding user by session ID in users.service");
     }
-    return this.userModel.findById(session.userId).exec();
   }
 }
