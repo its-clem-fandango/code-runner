@@ -12,27 +12,23 @@ export class UsersService {
   ) {}
 
   async findOrCreateUser(githubData): Promise<User> {
-    try {
-      const {
-        login: username,
-        avatar_url: avatarURL,
-        name: realName,
-      } = githubData;
+    const username = githubData.login;
+    const avatarURL = githubData.avatar_url;
+    const realName = githubData.name;
 
-      const user = await this.userModel.findOneAndUpdate(
-        { username }, // search for this username
-        { username, avatarURL, realName }, //if found, update with this data
-        {
-          new: true,
-          upsert: true,
-        },
-      );
-      return user;
-    } catch (error) {
-      console.error(error);
+    console.log("USER NAME ****: ", username);
+    console.log("AVATAR  ****: ", avatarURL);
+    console.log("REAL NAME ****: ", realName);
 
-      throw new Error("Error finding or creating user in users.service");
-    }
+    const user = await this.userModel.findOneAndUpdate(
+      { username }, // search for this username
+      { username, avatarURL, realName }, //if found, update with this data
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+    return user;
   }
 
   async createSession(userId: string): Promise<Session> {
