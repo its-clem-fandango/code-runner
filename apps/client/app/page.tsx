@@ -1,5 +1,14 @@
 "use client"
 
+// FE Login --> redirects to /auth/github in AUTH.CONTROLLER
+// auth/github --> sends client Id and secret key to GH and redirects user to GH
+// github.com --> user authorizes and github redirects to callback URL
+// auth/github/callback --> receives GH access token,
+// --> then sends clientId, secretkey and token to GH to get user's profile
+// auth/github/callback --> calls users.service to find or create profile
+// then creates a session with a userID
+// This sets a cookie called sessionId and redirects the user to dashboard
+
 import { cn } from "@/lib/utils"
 import Dashboard from "./dashboard/dashboard"
 import { RacesCollectionProvider } from "@/lib/useRacesCollection"

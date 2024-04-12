@@ -6,17 +6,11 @@ import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
 import { useAuth } from "@/lib/useAuth"
 // import { useRouter } from "next/navigation" */
-import { GetServerSideProps } from "next"
+/* import { GetServerSideProps } from "next"
 import { User } from "@/lib/useAuth"
-import apicalls from "@/helper/apicalls"
+import apicalls from "@/helper/apicalls" */
 
-type DashboardProps = {
-  // Define any props your page will receive here
-  // For example, user data if you fetch it server-side
-  authenticatedUser?: User
-}
-
-function Dashboard({ authenticatedUser }: DashboardProps) {
+function Dashboard() {
   // const router = useRouter()
   const { user, isLoggedIn } = useAuth()
   const { races } = useRacesCollection()
@@ -53,7 +47,7 @@ function Dashboard({ authenticatedUser }: DashboardProps) {
 // Note: Next.js specific function for server-side rendering on this page.
 // It checks for user authentication and loads user data server-side
 
-export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
+/* export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
   context,
 ) => {
   // Retrieve the session Id from cookies attached to incoming request
@@ -81,6 +75,6 @@ export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
       },
     }
   }
-}
+} */
 
 export default Dashboard

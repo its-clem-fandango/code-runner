@@ -1,4 +1,5 @@
 import { Controller, Get, Query, Req, Res } from "@nestjs/common";
+import { Response } from "express";
 import * as https from "https";
 import * as dotenv from "dotenv";
 import { UsersService } from "src/users/users.service";
@@ -18,45 +19,60 @@ export class AuthController {
   }
 
   @Get("github/callback")
-  async githubCallback(@Query("code") code: string, @Req() req, @Res() res) {
-    const clientID = process.env.GITHUB_CLIENT_ID;
-    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
-    const tokenResponse = await this.exchangeCodeForToken(
-      code,
-      clientID,
-      clientSecret,
-    );
+  async githubCallback(
+    @Query("code") code: string,
+    @Req() req,
+    @Res() res: Response,
+  ) {
+    try {
+      const clientID = process.env.GITHUB_CLIENT_ID;
+      const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+      const tokenResponse = await this.exchangeCodeForToken(
+        code,
+        clientID,
+        clientSecret,
+      );
 
-    // Use the access token to fetch the user's profile from GitHub
-    const githubUser = await this.fetchGithubUserProfile(
-      tokenResponse.access_token,
-    );
+      // Use the access token to fetch the user's profile from GitHub
+      const githubUser = await this.fetchGithubUserProfile(
+        tokenResponse.access_token,
+      );
 
-    console.log("****GITHUB USER OBJECT******", githubUser);
+      console.log("****GITHUB USER OBJECT******", githubUser);
 
-    //Use usersService to find or create a user and pass it the githubUser object (contains the GH data)
-    const user = await this.usersService.findOrCreateUser({
-      login: githubUser.login,
-      id: githubUser.id,
-      email: githubUser.email,
-      avatar_url: githubUser.avatar_url,
-      name: githubUser.name,
-    });
+      // Use usersService to find or create a user and pass it the githubUser object
+      const user = await this.usersService.findOrCreateUser({
+        login: githubUser.login,
+        id: githubUser.id,
+        email: githubUser.email,
+        avatar_url: githubUser.avatar_url,
+        name: githubUser.name,
+      });
 
-    // After successfully finding or creating a user
+      // Create a session and set a cookie
+      const session = await this.usersService.createSession(
+        user._id.toString(),
+      );
 
-    // Instead of making a session make a JWT w/ a secret & validate function
-    const session = await this.usersService.createSession(user._id.toString());
-    res.cookie("sessionId", session._id.toString(), {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 6666666,
-      path: "/",
-    });
+      const expiresCurrentTimeZone = new Date();
+      expiresCurrentTimeZone.setUTCMonth(
+        expiresCurrentTimeZone.getUTCMonth() + 1,
+      );
+      res = res.cookie("sessionId", session._id.toString(), {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: expiresCurrentTimeZone,
+        path: "/",
+      });
 
-    //Dashboard
-    res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
+      // Redirect to dashboard
+      res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
+    } catch (error) {
+      console.error("Error during GitHub authentication:", error);
+      // res.status(500).send("Authentication failed");
+      res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
+    }
   }
 
   // This method exchanges an authorization code for an access token from GitHub.
@@ -65,23 +81,33 @@ export class AuthController {
     clientID: string,
     clientSecret: string,
   ): Promise<any> {
-    const url = "https://github.com/login/oauth/access_token";
-    const params = new URLSearchParams({
-      client_id: clientID,
-      client_secret: clientSecret,
-      code,
-    });
+    try {
+      const url = "https://github.com/login/oauth/access_token";
+      const params = new URLSearchParams({
+        client_id: clientID,
+        client_secret: clientSecret,
+        code,
+      });
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-      },
-      body: params,
-    });
-    const data = await response.json();
-    return data;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+        },
+        body: params.toString(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`GitHub token exchange failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Failed to exchange code for token:", error);
+      throw error; // Rethrow the error to be caught by the caller
+    }
   }
 
   // Trade access token for user's profile in GitHub

@@ -11,7 +11,7 @@ const fontSans = FontSans({
 export const metadata: Metadata = {
   title: "Code Racer",
   description:
-    "Code Racer is a coding challenge platform that helps you learn Javascript and problem solving while under pressure. Race against fellow coders in a quest to solve coding challenges the fastest. Start your engines and code your way to the finish line—may the quickest coder win!",
+    "Code Racer is a coding challenge platform that helps you learn Javascript and problem solving under pressure. Race against fellow coders in a quest to solve coding challenges the fastest. Start your engines and code your way to the finish line—may the quickest coder win!",
 }
 
 export default function RootLayout({
