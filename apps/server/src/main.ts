@@ -1,7 +1,8 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as cookieParser from "cookie-parser";
-import cors, { CorsOptions } from "cors";
+import * as cors from "cors";
+import { CorsOptions } from "cors";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
