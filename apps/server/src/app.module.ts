@@ -13,6 +13,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "./users/schemas/user.schema";
 import { SessionSchema } from "./users/schemas/session.schema";
 import { SessionController } from "./auth/session.controller";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { SessionController } from "./auth/session.controller";
     GatewayModule,
     BattleModule,
     CodingChallengesModule,
+    UsersModule,
   ],
   controllers: [
     AppController,

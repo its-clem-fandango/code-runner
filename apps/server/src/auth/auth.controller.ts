@@ -62,6 +62,7 @@ export class AuthController {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        domain: ".coderacer.xyz",
         expires: expiresCurrentTimeZone,
         path: "/",
       });

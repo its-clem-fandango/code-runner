@@ -45,7 +45,7 @@ export interface SyntaxError {
   error: string
 }
 
-type RaceAction = "submit" | "codeChanged" | "joinBattle"
+type RaceAction = "submit" | "codeChanged" | "joinBattle" | "updateRaceResult"
 
 // eslint-disable-next-line no-unused-vars
 type SendRaceAction = (action: RaceAction, payload: any) => void
@@ -106,16 +106,18 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     socketRef.current = socket
 
     socket.on("connect", () => {
-      setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
-        if (typeof payload === "object" && !Array.isArray(payload)) {
-          socket?.emit(actionType, {
-            ...payload,
-            clientId: socket.id,
-          })
-        } else {
-          socket?.emit(actionType, payload)
-        }
-      })
+      setSendRaceAction(
+        () => (actionType: RaceAction | "updateRaceResult", payload: any) => {
+          if (typeof payload === "object" && !Array.isArray(payload)) {
+            socket?.emit(actionType, {
+              ...payload,
+              clientId: socket.id,
+            })
+          } else {
+            socket?.emit(actionType, payload)
+          }
+        },
+      )
     })
 
     socket.on("error", (err) => {

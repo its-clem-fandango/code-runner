@@ -5,6 +5,7 @@ import { DataTable } from "@/app/dataTable/data-table"
 import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
 import { useAuth } from "@/lib/useAuth"
+import UserAnalytics from "./analytics"
 // import { useRouter } from "next/navigation" */
 /* import { GetServerSideProps } from "next"
 import { User } from "@/lib/useAuth"
@@ -37,6 +38,7 @@ function Dashboard() {
           <div className="w-[350px]">
             <h1 className="font-bold mb-5 text-xl">Start a Race 🏁</h1>
             <NewBattlePopup />
+            {isLoggedIn ? <UserAnalytics /> : null}
           </div>
         </div>
       </div>

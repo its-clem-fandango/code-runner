@@ -25,6 +25,12 @@ export class User extends Document {
 
   @Prop()
   realName?: string;
+
+  @Prop({ default: 0 })
+  wins: number;
+
+  @Prop({ default: 0 })
+  losses: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
