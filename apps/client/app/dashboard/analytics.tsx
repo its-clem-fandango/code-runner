@@ -14,11 +14,12 @@ export default function UserAnalytics() {
   const [userData, setUserdata] = useState({
     wins: 0,
     losses: 0,
+    winRate: 0,
   })
 
   const fetchUserAnalytics = async () => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/user-analytics`
+      const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/user/user-analytics`
       const response = await fetch(url, {
         method: "GET",
         credentials: "include",
@@ -28,7 +29,8 @@ export default function UserAnalytics() {
         throw new Error("Failed to fetch results")
       }
       const data = await response.json()
-      setUserdata(data.results)
+      console.log("USER ANALYTICS DATA in analytics.tsx", data)
+      setUserdata(data)
     } catch (error) {
       console.error("Failed to fetch user race results", error)
     }
@@ -43,13 +45,13 @@ export default function UserAnalytics() {
       <Card className="mt-8">
         <CardHeader>
           <CardTitle>Your Data</CardTitle>
-          <CardDescription>Wins: {69}</CardDescription>
+          <CardDescription>Wins: {userData.wins}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Progress value={50} />
+          <Progress value={userData.winRate} />
         </CardContent>
         <CardFooter>
-          <CardTitle>Win/Loss Ratio: {userData.wins}</CardTitle>
+          <CardTitle>Win/Loss Ratio: {userData.winRate + "%"}</CardTitle>
         </CardFooter>
       </Card>
     </>

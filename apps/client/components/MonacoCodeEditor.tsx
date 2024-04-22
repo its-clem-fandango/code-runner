@@ -55,15 +55,9 @@ export default function MonacoCodeEditor({
       }),
         setIsDialogOpen(true)
 
-      if (isLoggedIn) {
-        sendRaceAction &&
-          sendRaceAction("updateRaceResult", {
-            userId: user?.id,
-            result: race.victory ? "win" : "loss",
-          })
-      }
+      console.log("user?.id IN MonacoCodeEditor", user?.id)
     }
-  }, [race?.victory, isLoggedIn, sendRaceAction, user?.id])
+  }, [race?.victory, sendRaceAction])
 
   const victoryMsg = "You won!"
   const roomName = 1

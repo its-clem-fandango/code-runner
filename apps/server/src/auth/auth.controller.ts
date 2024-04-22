@@ -60,9 +60,9 @@ export class AuthController {
       );
       res = res.cookie("sessionId", session._id.toString(), {
         httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        domain: ".coderacer.xyz",
+        secure: false,
+        sameSite: "lax",
+        // domain: ".coderacer.xyz",
         expires: expiresCurrentTimeZone,
         path: "/",
       });

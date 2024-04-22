@@ -60,35 +60,42 @@ export class UsersService {
     }
   }
 
-  async getUserAnalytics(userId: string): Promise<UserAnalytics> {
-    try {
-      const user = await this.userModel.findById(userId);
-      if (!user) {
-        throw new Error("User not found");
-      }
-      const totalGames = user.wins + user.losses;
-
-      return {
-        wins: user.wins,
-        losses: user.losses,
-        winRate: totalGames > 0 ? (user.wins / totalGames) * 100 : 0,
-      };
-    } catch (error) {
-      console.error("Error getting user analytics in users.service", error);
-      throw new Error("Error getting user analytics in users.service");
+  async getUserAnalytics(sessionId: string): Promise<any> {
+    const session = await this.sessionModel.findById(sessionId).exec();
+    if (!session || session.expiresAt < new Date()) {
+      throw new Error("Session expired or not found");
     }
+
+    const user = await this.userModel.findById(session.userId).exec();
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const totalGames = user.wins + user.losses;
+    const winRate = totalGames > 0 ? (user.wins / totalGames) * 100 : 0;
+    return {
+      wins: user.wins,
+      losses: user.losses,
+      winRate: winRate,
+    };
   }
 
   async updateUserResult(
-    userId: string,
-    result: "win" | "loss",
+    username: string,
+    result: "true" | "false",
   ): Promise<User> {
     const update =
-      result === "win" ? { $inc: { wins: 1 } } : { $inc: { losses: 1 } };
+      result === "true" ? { $inc: { wins: 1 } } : { $inc: { losses: 1 } };
     try {
       const updatedUser = await this.userModel
-        .findByIdAndUpdate({ userId, update }, { new: true })
+        .findOneAndUpdate({ username: username }, update, { new: true })
         .exec();
+
+      console.log(
+        "🚀 ~ file: users.service.ts:94 ~ UsersService ~ updatedUser:",
+        updatedUser,
+      );
+
       return updatedUser;
     } catch (error) {
       console.error("Error updating user result in users.service", error);

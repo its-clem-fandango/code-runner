@@ -9,7 +9,6 @@ export class SessionController {
   @Get("validateSession")
   async validateSession(@Req() req: Request, @Res() res: Response) {
     const sessionId = req.cookies["sessionId"]; // Assuming you're using cookie-parser middleware
-    console.log("COOKIES IN session.controller: ", req.cookies);
 
     if (!sessionId) {
       return res.status(401).json({ message: "Session ID is missing" });
@@ -28,6 +27,8 @@ export class SessionController {
         username: user.username,
         createdAt: user.createdAt,
         realName: user.realName,
+        wins: user.wins,
+        losses: user.losses,
       },
     });
   }

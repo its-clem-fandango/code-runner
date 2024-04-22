@@ -6,6 +6,7 @@ import { io } from "socket.io-client"
 import { Socket } from "socket.io-client"
 import { Race } from "./useRacesCollection"
 import { useFirst } from "./useFirst"
+import { useAuth } from "./useAuth"
 
 export interface OngoingRace extends Race {
   challenge: Challenge
@@ -45,7 +46,7 @@ export interface SyntaxError {
   error: string
 }
 
-type RaceAction = "submit" | "codeChanged" | "joinBattle" | "updateRaceResult"
+type RaceAction = "submit" | "codeChanged" | "joinBattle"
 
 // eslint-disable-next-line no-unused-vars
 type SendRaceAction = (action: RaceAction, payload: any) => void
@@ -65,6 +66,7 @@ const RaceContext = createContext<RaceContextType>(defaultContextValue)
 export const useRace = () => useContext(RaceContext)
 
 export const RaceProvider = ({ children }: { children: ReactNode }) => {
+  const { user, isLoggedIn } = useAuth()
   const [race, setRace] = useState<OngoingRace | null>(null)
   const socketRef = useRef<Socket | null>(null)
   const [sendRaceAction, setSendRaceAction] = useState<
@@ -101,23 +103,24 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
   useFirst(() => {
     if (socketRef.current?.connected) return
-    let socket = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/race`)
+
+    let socket = io(`${process.env.NEXT_PUBLIC_SERVER_URL}/race`, {
+      withCredentials: true,
+    })
 
     socketRef.current = socket
 
     socket.on("connect", () => {
-      setSendRaceAction(
-        () => (actionType: RaceAction | "updateRaceResult", payload: any) => {
-          if (typeof payload === "object" && !Array.isArray(payload)) {
-            socket?.emit(actionType, {
-              ...payload,
-              clientId: socket.id,
-            })
-          } else {
-            socket?.emit(actionType, payload)
-          }
-        },
-      )
+      setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
+        if (typeof payload === "object" && !Array.isArray(payload)) {
+          socket?.emit(actionType, {
+            ...payload,
+            clientId: socket.id,
+          })
+        } else {
+          socket?.emit(actionType, payload)
+        }
+      })
     })
 
     socket.on("error", (err) => {
@@ -132,33 +135,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       console.error("Connection error: ", err)
     })
 
-    function handleJoinedBattle(msg: Race) {
-      apicalls
-        .getChallengeData(msg.challengeId)
-        .then((challenge) => {
-          setRace((prevRace) => {
-            if (prevRace === null) {
-              return {
-                ...msg,
-                challenge,
-                playerCount: msg.playerCount,
-                isFull: msg.playerCount >= 2,
-              }
-            }
-
-            return {
-              ...prevRace,
-              id: msg.id,
-              playerCount: msg.playerCount,
-              isFull: msg.playerCount >= 2,
-            }
-          })
-        })
-        .catch((err) => {
-          console.error("Error getting challenge data: ", err)
-        })
-    }
-
     socket.on("battleError", () =>
       setRace((prevRace) => {
         if (prevRace === null) return null
@@ -166,7 +142,35 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       }),
     )
 
-    socket.on("joinedBattle", handleJoinedBattle)
+    socket.on("joinedBattle", async (msg: any) => {
+      console.log("Received message:", msg) // Log the received message for debugging
+
+      const { battle, challengeId } = msg
+
+      // Check if the necessary data exists
+      if (battle && typeof challengeId === "number") {
+        try {
+          const challenge = await apicalls.getChallengeData(challengeId)
+
+          if (battle.playerCount >= 2) {
+            setRace((prevRace) => {
+              return {
+                ...prevRace,
+                ...battle,
+                challenge,
+                isFull: true,
+              }
+            })
+          } else {
+            console.log("Waiting for more players to join.")
+          }
+        } catch (error) {
+          console.error("Error getting challenge data: ", error)
+        }
+      } else {
+        console.error("Battle data or Challenge ID is missing or invalid.")
+      }
+    })
 
     socket.on("testResult", (answer: SyntaxError & ConsoleData) => {
       if (answer.clientId === socket.id && answer.didAssertPass === false) {
@@ -183,6 +187,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
           }
         })
       }
+
       if (answer.clientId !== socket.id && answer.didAssertPass === true) {
         setRace((prev) => {
           if (!prev) return null

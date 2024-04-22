@@ -34,7 +34,7 @@ export default function Home() {
 function HomeContent() {
   const { user, isLoggedIn } = useAuth()
   console.log("GITHUB USER OBJECT FROM SESSION CONTROLLER: ", user)
-  console.log("IS LOGGED IN: ", isLoggedIn)
+  console.log("IS LOGGED IN FROM app page.tsx: ", isLoggedIn)
 
   return (
     <>

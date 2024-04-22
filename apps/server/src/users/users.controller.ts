@@ -11,11 +11,10 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Request } from "express";
-import { UserAnalytics } from "./users.service";
 
 interface ResultsData {
   userId: string;
-  results: "win" | "loss";
+  results: "true" | "false";
 }
 
 @Controller("user")
@@ -56,25 +55,38 @@ export class UsersController {
   }
 
   @Get("user-analytics")
-  async getUserAnalytics(@Req() req: any): Promise<UserAnalytics> {
-    const userId = req.user?.id;
-    if (!userId) {
-      throw new UnauthorizedException("User not found");
+  async getUserAnalytics(@Req() req: any) {
+    const sessionId = req.cookies["sessionId"];
+    if (!sessionId) {
+      throw new UnauthorizedException("Session ID not found");
     }
-    return this.usersService.getUserAnalytics(userId);
+    try {
+      return await this.usersService.getUserAnalytics(sessionId);
+    } catch (error) {
+      throw new UnauthorizedException(
+        "User not found for the given session ID",
+      );
+    }
   }
 
   // Listens for Post requests to update the user results and calls the service to update the user's record in the database
   @Post("update-results")
   async updateResult(@Body() resultsData: ResultsData) {
-    if (resultsData.results !== "win" && resultsData.results !== "loss") {
+    console.log("Received results data:", resultsData);
+    if (resultsData.results !== "true" && resultsData.results !== "false") {
       throw new BadRequestException(
         "Invalid result from update-results Post request",
       );
     }
-    return this.usersService.updateUserResult(
-      resultsData.userId,
-      resultsData.results,
-    );
+    try {
+      const update = await this.usersService.updateUserResult(
+        resultsData.userId,
+        resultsData.results,
+      );
+      return update;
+    } catch (error) {
+      console.error("Failed to update user results:", error);
+      throw new InternalServerErrorException("Failed to update user results");
+    }
   }
 }
