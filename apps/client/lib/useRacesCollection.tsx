@@ -59,9 +59,6 @@ export const RacesCollectionProvider: React.FC<{
 
     socketRef.current = socket
 
-    // Import the Battle interface if it's defined in another file
-    // import { Battle } from './path_to_your_battle_interface_definition';
-
     socket.on("availableBattles", (data: Race[]) => {
       const formattedRaces = data.map((race: Race) => ({
         ...race,

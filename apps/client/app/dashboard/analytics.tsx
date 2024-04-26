@@ -29,7 +29,6 @@ export default function UserAnalytics() {
         throw new Error("Failed to fetch results")
       }
       const data = await response.json()
-      console.log("USER ANALYTICS DATA in analytics.tsx", data)
       setUserdata(data)
     } catch (error) {
       console.error("Failed to fetch user race results", error)

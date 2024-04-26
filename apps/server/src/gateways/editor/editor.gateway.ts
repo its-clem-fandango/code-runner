@@ -14,6 +14,8 @@ import { UsersService } from "src/users/users.service";
 import { Socket } from "socket.io"; //for autocomplete
 import { parse } from "cookie";
 
+const rooms = {};
+
 @WebSocketGateway({
   namespace: "/race",
   cors: {
@@ -31,10 +33,6 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
   async handleConnection(@ConnectedSocket() client: Socket) {
-    console.log(
-      "Received headers in editor.gateway:",
-      client.handshake.headers,
-    );
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"];
@@ -111,28 +109,20 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       this.server.emit("testResult", { ...result, clientId: client.id });
 
-      if (client.data.user) {
-        console.log(
-          "USERNAME VALIDATED IN EDITOR.GATEWAY",
-          client.data.user.username,
-        );
-        console.log(
-          `Result to be processed: ${result.didAssertPass ? "true" : "false"}`,
-        );
-
-        if (result.didAssertPass) {
-          await this.usersService.updateUserResult(
-            client.data.user.username,
-            "true",
-          );
-        } else if (!result.didAssertPass) {
-          await this.usersService.updateUserResult(
-            client.data.user.username,
-            "false",
-          );
+      if (result.didAssertPass) {
+        // count the win for the author
+        if (client.data.user?.username) {
+          const sessionId = rooms[data.room][client.id];
+          await this.usersService.updateUserResult(sessionId, "true");
         }
-      } else {
-        console.log("USER DATA NOT SET IN CLIENT DATA");
+
+        const room = rooms[data.room];
+        console.log("roomid", data.room, { room });
+        const opponentId = Object.keys(room).find((id) => id !== client.id);
+        const opponent = room[opponentId];
+        if (!opponent.toLowerCase().startsWith("guest")) {
+          await this.usersService.updateUserResult(opponent, "false");
+        }
       }
     } catch (error) {
       console.error("Error during code submission handling:", error);
@@ -154,6 +144,9 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"]; // or some other user identifier
+    const guestId = parsedCookies["username"];
+
+    console.log("GUEST ID FROM EDITOR.GATEWAY", guestId, typeof guestId);
 
     const battleInfo = this.battleService.getBattle(data.id);
     if (!battleInfo) {
@@ -166,12 +159,20 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return;
     } else {
       this.server.socketsJoin(`room${data.id}`);
+      console.log("Client joined room", `room${data.id}`);
+
+      if (!rooms[data.id]) rooms[data.id] = {};
+      rooms[data.id][client.id] = sessionId || guestId;
 
       try {
         // Await the Promise returned by updateBattle before destructuring
+        console.log(
+          "ATTEMPTING TO UPDATE BATTLE FROME EDITOR.GATEWAY in joinBattle",
+        );
         const { battle, error } = await this.battleService.updateBattle(
           data.id,
           sessionId,
+          guestId,
         );
 
         if (error) {
@@ -180,6 +181,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
         }
 
         if (battle) {
+          console.log("BATTLE UPDATED SUCCESSFULLY in editor.gateway", battle);
           this.server.to(`room${data.id}`).emit("joinedBattle", {
             battle: battle,
             challengeId: battle.challengeId,

@@ -26,10 +26,6 @@ export default function Lobby({ battleId }: { battleId: number }) {
     }
   }, [sendRaceAction, battleId])
 
-  //if new player joins --> Means I need to recieve something from the backend. what?
-  //and is ready
-  //render the new-game
-
   function handleCancel() {
     router.back()
   }

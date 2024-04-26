@@ -60,6 +60,7 @@ function Battle() {
         <ChallengeDescription />
         <div className="w-[50%] h-[90vh] bg-white rounded-lg ">
           <CodeEditor
+            battleId={battleId}
             playerNumber={race.playerCount}
             challengeId={race.challengeId}
           />

@@ -3,8 +3,6 @@ import { battles, Battle } from "src/database/battles";
 import { CodingChallengesService } from "../coding-challenges/coding-challenges.service";
 import { UsersService } from "src/users/users.service";
 
-let counter = 0;
-
 @Injectable()
 export class BattleService {
   constructor(
@@ -25,62 +23,51 @@ export class BattleService {
   async updateBattle(
     id: number,
     sessionId?: string,
+    guestId?: string,
   ): Promise<{ battle?: Battle; error?: string }> {
-    // Check if the battle exists
+    console.log("updateBattle called with:", { id, sessionId, guestId });
     const battleIndex = battles.findIndex((battle) => battle.id === id);
+    console.log("**CALLING UPDATEBATTLE***");
     if (battleIndex === -1) {
       return { error: "Battle not found" };
     }
 
-    // Get the battle object
     const updatedBattle = { ...battles[battleIndex] };
-
-    // Check if the battle is already full
     if (updatedBattle.playerCount >= 2) {
       return { error: "Battle is already full!" };
     }
 
+    let username;
     try {
-      // Check if the user is logged in
-      let username;
       if (sessionId) {
-        // If sessionId is provided, fetch the username from the session
         const user = await this.usersService.findUserBySessionId(sessionId);
-        if (user) {
-          username = user.username;
+        username = user ? user.username : null;
+        if (!username) {
+          console.log(
+            "User not found by session ID, using guest ID in updateBattle",
+          );
+          username = guestId;
         }
       } else {
-        // If no sessionId is provided, and if the battle doesn't already have an anonymous user
-        if (
-          updatedBattle.players.every(
-            (player) => !player.startsWith("Anonymous"),
-          )
-        ) {
-          // Generate an anonymous username
-          username = this.generateAnonymousUsername();
-        }
+        username = guestId;
+        console.log("No session ID provided, using guest ID directly");
       }
 
-      // Add the obtained username to the battle's players list
       if (username && !updatedBattle.players.includes(username)) {
         updatedBattle.players.push(username);
         updatedBattle.playerCount++;
+        console.log("Adding player to battle:", username);
+      } else {
+        console.log("Username already in battle or invalid:", username);
+        return { error: "Player cannot be added or already added" };
       }
     } catch (error) {
-      console.error("Error finding user by session ID:", error);
-      return { error: "Failed to update battle due to user session issue." };
+      console.error("Error processing updateBattle:", error);
+      return { error: "Internal server error during update" };
     }
 
-    // Update the battle in the battles array
     battles[battleIndex] = updatedBattle;
     return { battle: updatedBattle };
-  }
-
-  // Helper method to generate a unique anonymous username
-  generateAnonymousUsername(): string {
-    counter++;
-    console.log("Generate Anon username Counter: ", counter);
-    return `Anonymous-${Date.now()}`;
   }
 
   async createBattle(
@@ -88,29 +75,32 @@ export class BattleService {
     difficulty: string,
     join: string,
     sessionId?: string,
+    guestId?: string,
   ): Promise<Battle[]> {
-    console.log("Attempting to create battle:", {
+    console.log("Attempting to create battle in battle.service:", {
       battleName,
       difficulty,
       join,
       sessionId,
+      guestId,
     });
 
+    console.log("GUEST ID FROM BATTLERSERVICE CREATEBATTLE", guestId);
     let creatorUserName;
     if (sessionId) {
       creatorUserName = await this.getUserFromSession(sessionId);
     } else {
-      creatorUserName = this.generateAnonymousUsername();
+      creatorUserName = guestId;
     }
 
     console.log("Creator username determined as:", creatorUserName);
 
     const randomChallenge =
-      await this.codingChallengesService.getRandomChallengeByDificulty(
-        difficulty,
-      );
-    console.log("Random challenge selected:", randomChallenge);
+      this.codingChallengesService.getRandomChallengeByDificulty(difficulty);
 
+    if (creatorUserName === "") {
+      console.log("No user found, returning empty array");
+    }
     const battle = {
       id: battles.length + 1,
       battleName,
@@ -122,7 +112,10 @@ export class BattleService {
     };
 
     battles.push(battle);
-    console.log("Battle created and added to the list:", battle);
+    console.log(
+      "Battle created and added to the list, battle.service:",
+      battle,
+    );
     return battles;
   }
 

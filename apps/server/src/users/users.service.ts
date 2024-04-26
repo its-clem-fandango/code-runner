@@ -81,14 +81,16 @@ export class UsersService {
   }
 
   async updateUserResult(
-    username: string,
+    sessionId: string,
     result: "true" | "false",
   ): Promise<User> {
     const update =
       result === "true" ? { $inc: { wins: 1 } } : { $inc: { losses: 1 } };
     try {
+      const userId = (await this.findUserBySessionId(sessionId)).id;
+
       const updatedUser = await this.userModel
-        .findOneAndUpdate({ username: username }, update, { new: true })
+        .findByIdAndUpdate(userId, update, { new: true })
         .exec();
 
       console.log(
@@ -103,3 +105,7 @@ export class UsersService {
     }
   }
 }
+
+/**
+ * function n(n){return n%2===0?"Even":"Odd"}
+ */

@@ -6,7 +6,6 @@ import { io } from "socket.io-client"
 import { Socket } from "socket.io-client"
 import { Race } from "./useRacesCollection"
 import { useFirst } from "./useFirst"
-import { useAuth } from "./useAuth"
 
 export interface OngoingRace extends Race {
   challenge: Challenge
@@ -66,7 +65,6 @@ const RaceContext = createContext<RaceContextType>(defaultContextValue)
 export const useRace = () => useContext(RaceContext)
 
 export const RaceProvider = ({ children }: { children: ReactNode }) => {
-  const { user, isLoggedIn } = useAuth()
   const [race, setRace] = useState<OngoingRace | null>(null)
   const socketRef = useRef<Socket | null>(null)
   const [sendRaceAction, setSendRaceAction] = useState<

@@ -11,11 +11,7 @@ import {
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Request } from "express";
-
-interface ResultsData {
-  userId: string;
-  results: "true" | "false";
-}
+import { GameSchema } from "./schemas/game.schema";
 
 @Controller("user")
 export class UsersController {
@@ -71,19 +67,8 @@ export class UsersController {
 
   // Listens for Post requests to update the user results and calls the service to update the user's record in the database
   @Post("update-results")
-  async updateResult(@Body() resultsData: ResultsData) {
-    console.log("Received results data:", resultsData);
-    if (resultsData.results !== "true" && resultsData.results !== "false") {
-      throw new BadRequestException(
-        "Invalid result from update-results Post request",
-      );
-    }
+  async updateResult(@Body() GameSchema) {
     try {
-      const update = await this.usersService.updateUserResult(
-        resultsData.userId,
-        resultsData.results,
-      );
-      return update;
     } catch (error) {
       console.error("Failed to update user results:", error);
       throw new InternalServerErrorException("Failed to update user results");

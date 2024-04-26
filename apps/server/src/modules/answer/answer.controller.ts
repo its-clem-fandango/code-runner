@@ -23,8 +23,6 @@ export class AnswerController {
   ): Promise<string> {
     try {
       const { submittedAnswer, challengeId } = body;
-      console.log("challengeId", challengeId);
-
       const codingChallenge = this.answerService.findChallenge(challengeId);
       if (!codingChallenge) {
         throw new HttpException("Challenge not found", HttpStatus.NOT_FOUND);

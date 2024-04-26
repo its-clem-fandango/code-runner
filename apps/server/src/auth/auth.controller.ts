@@ -37,9 +37,6 @@ export class AuthController {
       const githubUser = await this.fetchGithubUserProfile(
         tokenResponse.access_token,
       );
-
-      console.log("****GITHUB USER OBJECT******", githubUser);
-
       // Use usersService to find or create a user and pass it the githubUser object
       const user = await this.usersService.findOrCreateUser({
         login: githubUser.login,

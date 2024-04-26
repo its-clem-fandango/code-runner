@@ -30,6 +30,7 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.emit("availableBattles", battles);
   }
 
+  // triggered when the client sends a message with the event name "createBattle"
   @SubscribeMessage("createBattle")
   async handleCreateBattle(
     @MessageBody() data: { battleName: string; difficulty: string },
@@ -40,6 +41,8 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"];
+    const guestId = parsedCookies["username"];
+    console.log("GUEST ID FROM BATTLE.GATEWAY", guestId, typeof guestId);
 
     try {
       const battles = await this.battleService.createBattle(
@@ -47,6 +50,7 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
         data.difficulty,
         "random-challenge",
         sessionId,
+        guestId,
       );
       this.server.emit("availableBattles", battles);
       client.emit("battleCreated", battles[battles.length - 1].id);
@@ -58,9 +62,9 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private async handleJoinedBattle(client: Socket, msg: any) {
-    console.log("Received message:", msg); // Log received message
+    console.log("***GAME CREATED ****:, BATTLES.GATEWAY", msg); // Log received message
 
-    // Emit an event back to the client with the challengeId
+    // Emit an event back to the client (useRace) with the challengeId
     client.emit("joinedBattle", { challengeId: msg.challengeId });
   }
 }

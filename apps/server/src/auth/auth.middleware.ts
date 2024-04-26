@@ -4,7 +4,6 @@ import { NextFunction, Request, Response } from "express";
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
-    console.log("AuthMiddleware accessed for path:", req.path);
     next();
   }
 }

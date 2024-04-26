@@ -1,5 +1,6 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Game } from "./game.schema";
 //MongoDB allows you to store documents in a collection
 //with enforcing uniform structure, but as apps grow
 //structure becomes more important. The schema adds
@@ -25,6 +26,9 @@ export class User extends Document {
 
   @Prop()
   realName?: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: "Game" }] }) // Assuming you store references to games
+  gamesPlayed: Game[];
 
   @Prop({ default: 0 })
   wins: 0;
