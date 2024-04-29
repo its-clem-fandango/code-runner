@@ -37,11 +37,7 @@ function Battle() {
   const { race } = useRace()
   const showBattle = race?.isFull && race?.playerCount >= 2
 
-  console.log("Race state:", race)
-  console.log(" THIS IS MY PLAYER ZERO: ", race?.players[0])
-
   if (!showBattle) {
-    console.log("Rendering Lobby because the conditions are not met.")
     return <Lobby battleId={battleId} />
   }
 

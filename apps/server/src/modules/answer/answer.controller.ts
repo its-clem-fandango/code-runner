@@ -43,9 +43,6 @@ export class AnswerController {
         codingChallenge,
       );
 
-      console.log("Test Results: ", result.testResults);
-      console.log("Did the test pass?", result.didAssertPass);
-
       let responseMessage = `Coding Challenge Description: ${codingChallenge.description}, \nSubmitted Answer: ${submittedAnswer}\n`;
       responseMessage += result.didAssertPass
         ? "All tests passed."

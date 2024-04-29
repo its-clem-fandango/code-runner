@@ -37,14 +37,10 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
     data: { battleName: string; difficulty: string; username: string },
     @ConnectedSocket() client: Socket,
   ) {
-    console.log("^^^^^^^^^^^^^Data sent to client:", data); // Add this line to log data sent to the client
-
     const cookies = client.handshake.headers.cookie;
-    console.log("**************COOKIES FROM BATTLE.GATEWAY", cookies);
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"];
     const guestId = data.username;
-    console.log("GUEST ID FROM BATTLE.GATEWAY", guestId, typeof guestId);
 
     try {
       const battles = await this.battleService.createBattle(
@@ -64,8 +60,6 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   private async handleJoinedBattle(client: Socket, msg: any) {
-    console.log("***GAME CREATED ****:, BATTLES.GATEWAY", msg); // Log received message
-
     // Emit an event back to the client (useRace) with the challengeId
     client.emit("joinedBattle", { challengeId: msg.challengeId });
   }

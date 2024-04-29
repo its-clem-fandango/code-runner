@@ -52,7 +52,6 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
     const cookies = parse.parse(document.cookie)
     const username = cookies.username
     const allData = { ...data, username }
-    console.log("Sending createbattle to sendRacesCollectionAction", allData)
     sendRacesCollectionAction?.("createBattle", allData)
   }
 

@@ -25,9 +25,7 @@ export class BattleService {
     sessionId?: string,
     guestId?: string,
   ): Promise<{ battle?: Battle; error?: string }> {
-    console.log("updateBattle called with:", { id, sessionId, guestId });
     const battleIndex = battles.findIndex((battle) => battle.id === id);
-    console.log("**CALLING UPDATEBATTLE FROM BATTLE.SERVICE***");
     if (battleIndex === -1) {
       return { error: "Battle not found" };
     }
@@ -56,9 +54,7 @@ export class BattleService {
       if (username && !updatedBattle.players.includes(username)) {
         updatedBattle.players.push(username);
         updatedBattle.playerCount++;
-        console.log("Adding player to battle:", username);
       } else {
-        console.log("Username already in battle or invalid:", username);
         return { error: "Player cannot be added or already added" };
       }
     } catch (error) {
@@ -77,23 +73,12 @@ export class BattleService {
     sessionId?: string,
     guestId?: string,
   ): Promise<Battle[]> {
-    console.log("Attempting to create battle in battle.service:", {
-      battleName,
-      difficulty,
-      join,
-      sessionId,
-      guestId,
-    });
-
-    console.log("GUEST ID FROM BATTLERSERVICE CREATEBATTLE", guestId);
     let creatorUserName;
     if (sessionId) {
       creatorUserName = await this.getUserFromSession(sessionId);
     } else {
       creatorUserName = guestId;
     }
-
-    console.log("Creator username determined as:", creatorUserName);
 
     const randomChallenge =
       this.codingChallengesService.getRandomChallengeByDificulty(difficulty);
@@ -112,10 +97,6 @@ export class BattleService {
     };
 
     battles.push(battle);
-    console.log(
-      "Battle created and added to the list, battle.service:",
-      battle,
-    );
     return battles;
   }
 

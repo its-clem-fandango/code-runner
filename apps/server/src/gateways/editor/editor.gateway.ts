@@ -39,9 +39,6 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     if (sessionId) {
       try {
-        console.log(
-          "**SEARCHING FOR SESSIONID ON CONNECTION IN EDITOR.GATEWAY***",
-        );
         const user = await this.usersService.findUserBySessionId(sessionId);
         if (user) {
           // Add user data to client object
@@ -49,10 +46,8 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
             id: user._id,
             username: user.username,
           };
-          console.log("FOUND USER DATA IN EDITOR.GATEWAY: ", client.data.user);
         } else {
           client.data.isValidated = false;
-          console.log("USER NOT FOUND BY SESSION ID");
         }
       } catch (error) {
         console.error("Error during session validation", error);
@@ -138,13 +133,10 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { id: number; username: string },
     @ConnectedSocket() client: Socket,
   ) {
-    console.log("Joining battle with ID:", data.id);
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"]; // or some other user identifier
     const guestId = data.username;
-
-    console.log("GUEST ID FROM EDITOR.GATEWAY", guestId, typeof guestId);
 
     const battleInfo = this.battleService.getBattle(data.id);
     if (!battleInfo) {
@@ -164,8 +156,6 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       try {
         // Await the Promise returned by updateBattle before destructuring
-        console.log("**CALLING UPDATEBATTLE FROM EDITOR.GATEWAY***");
-
         const { battle, error } = await this.battleService.updateBattle(
           data.id,
           sessionId,

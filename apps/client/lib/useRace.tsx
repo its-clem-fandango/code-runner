@@ -141,8 +141,6 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
     )
 
     socket.on("joinedBattle", async (msg: any) => {
-      console.log("Received message:", msg) // Log the received message for debugging
-
       const { battle, challengeId } = msg
 
       // Check if the necessary data exists

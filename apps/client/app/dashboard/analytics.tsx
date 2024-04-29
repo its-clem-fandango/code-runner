@@ -30,6 +30,7 @@ export default function UserAnalytics() {
       }
       const data = await response.json()
       setUserdata(data)
+      console.log("WINRATEDATA??", data)
     } catch (error) {
       console.error("Failed to fetch user race results", error)
     }
@@ -44,13 +45,15 @@ export default function UserAnalytics() {
       <Card className="mt-8">
         <CardHeader>
           <CardTitle>Your Data</CardTitle>
-          <CardDescription>Wins: {userData.wins}</CardDescription>
+          <CardDescription>You've won {userData.wins} races!</CardDescription>
         </CardHeader>
         <CardContent>
           <Progress value={userData.winRate} />
         </CardContent>
         <CardFooter>
-          <CardTitle>Win/Loss Ratio: {userData.winRate + "%"}</CardTitle>
+          <CardTitle>
+            You've won {userData.winRate + "%"} of races played
+          </CardTitle>
         </CardFooter>
       </Card>
     </>

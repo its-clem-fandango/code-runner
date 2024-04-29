@@ -49,7 +49,6 @@ export class UsersService {
 
   async findUserBySessionId(sessionId: string): Promise<User | null> {
     try {
-      console.log("Received session ID:", sessionId);
       const session = await this.sessionModel.findById(sessionId).exec();
       console.log("Session data:", session);
       if (!session || session.expiresAt < new Date()) {
@@ -76,7 +75,8 @@ export class UsersService {
     }
 
     const totalGames = user.wins + user.losses;
-    const winRate = totalGames > 0 ? (user.wins / totalGames) * 100 : 0;
+    const winRate =
+      totalGames > 0 ? Math.floor((user.wins / totalGames) * 100) : 0;
     return {
       wins: user.wins,
       losses: user.losses,
