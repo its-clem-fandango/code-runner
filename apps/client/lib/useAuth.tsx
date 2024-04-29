@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         console.error("Error validating session: ", error)
       }
     }
-
+    console.log("called validate session")
     validateSession()
   }, [])
 

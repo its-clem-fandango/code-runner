@@ -49,8 +49,12 @@ export class UsersService {
 
   async findUserBySessionId(sessionId: string): Promise<User | null> {
     try {
+      console.log("Received session ID:", sessionId);
       const session = await this.sessionModel.findById(sessionId).exec();
+      console.log("Session data:", session);
       if (!session || session.expiresAt < new Date()) {
+        console.log("Session is null or expired");
+
         return null;
       }
       return this.userModel.findById(session.userId).exec();

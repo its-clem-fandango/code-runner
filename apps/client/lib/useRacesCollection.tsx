@@ -39,6 +39,13 @@ const RacesCollectionContext =
 
 export const useRacesCollection = () => useContext(RacesCollectionContext)
 
+const getUsernameFromCookie = () => {
+  const usernameCookie = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("username="))
+  return usernameCookie ? usernameCookie.split("=")[1] : null
+}
+
 export const RacesCollectionProvider: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {

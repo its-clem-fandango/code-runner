@@ -1,17 +1,13 @@
 import {
   Controller,
   Get,
-  Post,
   InternalServerErrorException,
   Req,
-  Body,
   UnauthorizedException,
   UnprocessableEntityException,
-  BadRequestException,
 } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Request } from "express";
-import { GameSchema } from "./schemas/game.schema";
 
 @Controller("user")
 export class UsersController {
@@ -62,16 +58,6 @@ export class UsersController {
       throw new UnauthorizedException(
         "User not found for the given session ID",
       );
-    }
-  }
-
-  // Listens for Post requests to update the user results and calls the service to update the user's record in the database
-  @Post("update-results")
-  async updateResult(@Body() GameSchema) {
-    try {
-    } catch (error) {
-      console.error("Failed to update user results:", error);
-      throw new InternalServerErrorException("Failed to update user results");
     }
   }
 }

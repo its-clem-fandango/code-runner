@@ -27,7 +27,7 @@ export class BattleService {
   ): Promise<{ battle?: Battle; error?: string }> {
     console.log("updateBattle called with:", { id, sessionId, guestId });
     const battleIndex = battles.findIndex((battle) => battle.id === id);
-    console.log("**CALLING UPDATEBATTLE***");
+    console.log("**CALLING UPDATEBATTLE FROM BATTLE.SERVICE***");
     if (battleIndex === -1) {
       return { error: "Battle not found" };
     }

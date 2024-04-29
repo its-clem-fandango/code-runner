@@ -11,7 +11,6 @@ import {
 } from "./ui/dialog"
 import { useRouter } from "next/navigation"
 import { useRace } from "@/lib/useRace"
-import { useAuth } from "@/lib/useAuth"
 import Image from "next/image"
 import { PlayIcon } from "@radix-ui/react-icons"
 
@@ -31,7 +30,6 @@ export default function MonacoCodeEditor({
   battleId: number
 }) {
   const { sendRaceAction, race } = useRace()
-  const { user, isLoggedIn } = useAuth()
 
   const router = useRouter()
 

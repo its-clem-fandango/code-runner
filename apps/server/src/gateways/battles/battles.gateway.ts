@@ -33,15 +33,17 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   // triggered when the client sends a message with the event name "createBattle"
   @SubscribeMessage("createBattle")
   async handleCreateBattle(
-    @MessageBody() data: { battleName: string; difficulty: string },
+    @MessageBody()
+    data: { battleName: string; difficulty: string; username: string },
     @ConnectedSocket() client: Socket,
   ) {
-    console.log("Data sent to client:", data); // Add this line to log data sent to the client
+    console.log("^^^^^^^^^^^^^Data sent to client:", data); // Add this line to log data sent to the client
 
     const cookies = client.handshake.headers.cookie;
+    console.log("**************COOKIES FROM BATTLE.GATEWAY", cookies);
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"];
-    const guestId = parsedCookies["username"];
+    const guestId = data.username;
     console.log("GUEST ID FROM BATTLE.GATEWAY", guestId, typeof guestId);
 
     try {

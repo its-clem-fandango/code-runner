@@ -9,6 +9,7 @@ export class SessionController {
   @Get("validateSession")
   async validateSession(@Req() req: Request, @Res() res: Response) {
     const sessionId = req.cookies["sessionId"]; // Assuming you're using cookie-parser middleware
+    console.log("Cookies from session.controller:", req.cookies);
 
     if (!sessionId) {
       const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
@@ -22,22 +23,24 @@ export class SessionController {
         .status(401)
         .json({ message: "Session not found, creating guest cookie" });
     } else {
+      // Users & Guest sessions
+
       const user = await this.usersService.findUserBySessionId(sessionId);
       console.log("User from session.controller:", user);
       if (user) {
+        console.log("CLEARING COOKIE ✅✅✅✅✅✅✅✅");
         res.clearCookie("username", { path: "/" });
+        return res.json({
+          user: {
+            id: user._id,
+            username: user.username,
+            createdAt: user.createdAt,
+            realName: user.realName,
+            wins: user.wins,
+            losses: user.losses,
+          },
+        });
       }
-
-      return res.json({
-        user: {
-          id: user._id,
-          username: user.username,
-          createdAt: user.createdAt,
-          realName: user.realName,
-          wins: user.wins,
-          losses: user.losses,
-        },
-      });
     }
   }
 }

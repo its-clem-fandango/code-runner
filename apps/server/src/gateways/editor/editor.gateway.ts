@@ -36,23 +36,20 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"];
-    console.log(
-      "COOKIES PARSED COOKIES SESSION ID FROM Editor.gateway",
-      sessionId,
-      typeof sessionId,
-    );
 
     if (sessionId) {
       try {
-        console.log("TRYING TO FIND USER BY SESSION ID");
+        console.log(
+          "**SEARCHING FOR SESSIONID ON CONNECTION IN EDITOR.GATEWAY***",
+        );
         const user = await this.usersService.findUserBySessionId(sessionId);
-        console.log("USER FOUND BY SESSION ID", user);
         if (user) {
+          // Add user data to client object
           client.data.user = {
             id: user._id,
             username: user.username,
           };
-          console.log("USER DATA IN EDITOR.GATEWAY", client.data.user);
+          console.log("FOUND USER DATA IN EDITOR.GATEWAY: ", client.data.user);
         } else {
           client.data.isValidated = false;
           console.log("USER NOT FOUND BY SESSION ID");
@@ -118,6 +115,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
         const room = rooms[data.room];
         console.log("roomid", data.room, { room });
+        //find the id that is not the current client
         const opponentId = Object.keys(room).find((id) => id !== client.id);
         const opponent = room[opponentId];
         if (!opponent.toLowerCase().startsWith("guest")) {
@@ -137,14 +135,14 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage("joinBattle")
   async joinBattle(
-    @MessageBody() data: { id: number },
+    @MessageBody() data: { id: number; username: string },
     @ConnectedSocket() client: Socket,
   ) {
     console.log("Joining battle with ID:", data.id);
     const cookies = client.handshake.headers.cookie;
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"]; // or some other user identifier
-    const guestId = parsedCookies["username"];
+    const guestId = data.username;
 
     console.log("GUEST ID FROM EDITOR.GATEWAY", guestId, typeof guestId);
 
@@ -166,9 +164,8 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       try {
         // Await the Promise returned by updateBattle before destructuring
-        console.log(
-          "ATTEMPTING TO UPDATE BATTLE FROME EDITOR.GATEWAY in joinBattle",
-        );
+        console.log("**CALLING UPDATEBATTLE FROM EDITOR.GATEWAY***");
+
         const { battle, error } = await this.battleService.updateBattle(
           data.id,
           sessionId,

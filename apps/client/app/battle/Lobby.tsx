@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import parse from "cookie"
 
 export default function Lobby({ battleId }: { battleId: number }) {
   const { sendRaceAction } = useRace()
@@ -20,8 +21,11 @@ export default function Lobby({ battleId }: { battleId: number }) {
 
   useEffect(() => {
     // Ensure the join action is only performed once upon component mount
+    const cookies = parse.parse(document.cookie)
+    const username = cookies.username
+
     if (first.current && sendRaceAction) {
-      sendRaceAction("joinBattle", { id: battleId })
+      sendRaceAction("joinBattle", { id: battleId, username })
       first.current = false // Prevent future invocations
     }
   }, [sendRaceAction, battleId])
