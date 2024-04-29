@@ -23,11 +23,14 @@ interface File {
 export default function MonacoCodeEditor({
   playerNumber,
   challengeId,
+  battleId,
 }: {
   playerNumber: number | null
   challengeId: number | null
+  battleId: number
 }) {
   const { sendRaceAction, race } = useRace()
+
   const router = useRouter()
 
   const [endGameMessage, setEndGameMessage] = useState<{
@@ -52,10 +55,10 @@ export default function MonacoCodeEditor({
       }),
         setIsDialogOpen(true)
     }
-  }, [race?.victory])
+  }, [race?.victory, sendRaceAction])
 
   const victoryMsg = "You won!"
-  const roomName = 1
+  const roomName = battleId
   const files = {
     name: "script.js",
     language: "javascript",
@@ -65,12 +68,6 @@ export default function MonacoCodeEditor({
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    console.log("submitting", {
-      room: roomName,
-      player: playerNumber,
-      challengeId,
-      message: code,
-    })
     sendRaceAction &&
       sendRaceAction("submit", {
         room: roomName,

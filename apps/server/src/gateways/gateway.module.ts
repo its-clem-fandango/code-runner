@@ -4,9 +4,10 @@ import { AnswerService } from "src/modules/answer/answer.service";
 import { BattleGateway } from "./battles/battles.gateway";
 import { BattleService } from "src/modules/battles/battle.service";
 import { CodingChallengesService } from "src/modules/coding-challenges/coding-challenges.service";
+import { UsersModule } from "src/users/users.module";
 
 @Module({
-  imports: [],
+  imports: [UsersModule],
   controllers: [],
   providers: [
     EditorGateway,

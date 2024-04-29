@@ -23,8 +23,6 @@ export class AnswerController {
   ): Promise<string> {
     try {
       const { submittedAnswer, challengeId } = body;
-      console.log("challengeId", challengeId);
-
       const codingChallenge = this.answerService.findChallenge(challengeId);
       if (!codingChallenge) {
         throw new HttpException("Challenge not found", HttpStatus.NOT_FOUND);
@@ -44,9 +42,6 @@ export class AnswerController {
         runUserFunction,
         codingChallenge,
       );
-
-      console.log("Test Results: ", result.testResults);
-      console.log("Did the test pass?", result.didAssertPass);
 
       let responseMessage = `Coding Challenge Description: ${codingChallenge.description}, \nSubmitted Answer: ${submittedAnswer}\n`;
       responseMessage += result.didAssertPass

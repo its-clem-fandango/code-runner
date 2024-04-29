@@ -45,8 +45,7 @@ export class AnswerService {
 
     console.log = function (...args) {
       const updatedArguments = args.map((arg) => {
-        /* TD Security patch */
-        if (arg === process || arg.includes("process")) {
+        if (typeof arg === "string" && arg.includes("process")) {
           return "process is not available for you to log! ;)";
         } else if (
           typeof arg === "object" &&

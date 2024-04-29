@@ -25,9 +25,7 @@ export default function ButtonPopUp() {
           </div>
 
           <p className="text-xl font-manrope">Create a New Race</p>
-          <p className="text-[#A0A0A0] font-manrope mb-2">
-            Start a Race, wait for a rival
-          </p>
+          <p className="text-[#A0A0A0] font-manrope mb-2">Wait for a Rival</p>
         </Button>
       </DialogTrigger>
 

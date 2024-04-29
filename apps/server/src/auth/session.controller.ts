@@ -9,26 +9,34 @@ export class SessionController {
   @Get("validateSession")
   async validateSession(@Req() req: Request, @Res() res: Response) {
     const sessionId = req.cookies["sessionId"]; // Assuming you're using cookie-parser middleware
-    console.log("COOKIES IN session.controller: ", req.cookies);
 
     if (!sessionId) {
-      return res.status(401).json({ message: "Session ID is missing" });
+      const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
+      res.cookie("username", guest, {
+        httpOnly: false,
+        path: "/",
+        sameSite: "lax",
+      });
+      return res
+        .status(401)
+        .json({ message: "Session not found, creating guest cookie" });
+    } else {
+      // Users & Guest sessions
+
+      const user = await this.usersService.findUserBySessionId(sessionId);
+      if (user) {
+        res.clearCookie("username", { path: "/" });
+        return res.json({
+          user: {
+            id: user._id,
+            username: user.username,
+            createdAt: user.createdAt,
+            realName: user.realName,
+            wins: user.wins,
+            losses: user.losses,
+          },
+        });
+      }
     }
-
-    const user = await this.usersService.findUserBySessionId(sessionId);
-
-    if (!user) {
-      return res.status(401).json({ message: "Invalid session" });
-    }
-
-    // Optionally, return user details
-    return res.json({
-      user: {
-        id: user._id,
-        username: user.username,
-        createdAt: user.createdAt,
-        realName: user.realName,
-      },
-    });
   }
 }

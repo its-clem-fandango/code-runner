@@ -45,4 +45,19 @@ export class UsersController {
       );
     }
   }
+
+  @Get("user-analytics")
+  async getUserAnalytics(@Req() req: any) {
+    const sessionId = req.cookies["sessionId"];
+    if (!sessionId) {
+      throw new UnauthorizedException("Session ID not found");
+    }
+    try {
+      return await this.usersService.getUserAnalytics(sessionId);
+    } catch (error) {
+      throw new UnauthorizedException(
+        "User not found for the given session ID",
+      );
+    }
+  }
 }

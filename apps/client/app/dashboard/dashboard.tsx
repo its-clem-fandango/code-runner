@@ -5,6 +5,7 @@ import { DataTable } from "@/app/dataTable/data-table"
 import NewBattlePopup from "./battle-popup"
 import { useRacesCollection } from "@/lib/useRacesCollection"
 import { useAuth } from "@/lib/useAuth"
+import UserAnalytics from "./analytics"
 // import { useRouter } from "next/navigation" */
 /* import { GetServerSideProps } from "next"
 import { User } from "@/lib/useAuth"
@@ -37,6 +38,7 @@ function Dashboard() {
           <div className="w-[350px]">
             <h1 className="font-bold mb-5 text-xl">Start a Race 🏁</h1>
             <NewBattlePopup />
+            {isLoggedIn ? <UserAnalytics /> : null}
           </div>
         </div>
       </div>
@@ -46,35 +48,5 @@ function Dashboard() {
 
 // Note: Next.js specific function for server-side rendering on this page.
 // It checks for user authentication and loads user data server-side
-
-/* export const getServerSideProps: GetServerSideProps<DashboardProps> = async (
-  context,
-) => {
-  // Retrieve the session Id from cookies attached to incoming request
-  const token = context.req.cookies.sessionId
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    }
-  }
-
-  try {
-    const authenticatedUser = await apicalls.validateSession(token)
-    // If session is valid, return/pass fetched user data to the page
-    return { props: { authenticatedUser } }
-  } catch (error) {
-    console.error("Error validating session: ", error)
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    }
-  }
-} */
 
 export default Dashboard

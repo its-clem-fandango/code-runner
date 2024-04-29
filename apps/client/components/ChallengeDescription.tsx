@@ -28,11 +28,6 @@ const markdownComponents: MarkdownComponents = {
     )
   },
   pre: ({ children, className, ...props }) => {
-    console.log("pre", {
-      children,
-      className,
-      ...props,
-    })
     return <pre className="bg-gray-200 my-2 rounded p-2 px-4">{children}</pre>
   },
 }

@@ -1,8 +1,18 @@
-export const battles = [
+export interface Battle {
+  id: number;
+  battleName: string;
+  players: string[] | null;
+  difficulty: string;
+  playerCount: number;
+  join: string;
+  challengeId: number;
+}
+
+export const battles: Battle[] = [
   {
     id: 0,
     battleName: "Test1",
-    username: "Edu",
+    players: ["Edu"],
     difficulty: "easy",
     playerCount: 0,
     join: "fightme@example.com",
@@ -11,7 +21,7 @@ export const battles = [
   {
     id: 1,
     battleName: "Test2",
-    username: "Gaspar-Noe",
+    players: ["Gaspar-Noe"],
     difficulty: "medium",
     playerCount: 0,
     join: "fightme@example.com",
@@ -20,7 +30,7 @@ export const battles = [
   {
     id: 2,
     battleName: "Test3",
-    username: "DreadFredd",
+    players: ["DreadFredd"],
     difficulty: "hard",
     playerCount: 0,
     join: "fightme@example.com",

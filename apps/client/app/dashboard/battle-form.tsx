@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-
+import parse from "cookie"
 import {
   Form, // Assuming this is correctly aliased to FormProvider
   FormControl,
@@ -48,7 +48,11 @@ export default function BattleForm({ setOpen }: BattleFormProps) {
   })
 
   const handleBattleSubmit: SubmitHandler<FormData> = async (data) => {
-    sendRacesCollectionAction?.("createBattle", data)
+    // Get username from cookie
+    const cookies = parse.parse(document.cookie)
+    const username = cookies.username
+    const allData = { ...data, username }
+    sendRacesCollectionAction?.("createBattle", allData)
   }
 
   return (

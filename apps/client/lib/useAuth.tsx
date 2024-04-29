@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
   //Determines whether a user is logged in or not
 
   useEffect(() => {
-    //Note: cookie is set with HttpOnly flag, so console.logs won't/JS work be able to access it for security reasons
+    //Note: cookie is set with HttpOnly flag, so console logs won't/JS work be able to access it for security reasons
     const validateSession = async () => {
       try {
         const response = await fetch(
@@ -65,7 +65,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
         console.error("Error validating session: ", error)
       }
     }
-
     validateSession()
   }, [])
 
