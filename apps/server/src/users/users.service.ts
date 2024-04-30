@@ -47,6 +47,18 @@ export class UsersService {
     }
   }
 
+  async logoutAndDeleteSession(sessionId: string): Promise<void> {
+    try {
+      await this.sessionModel.findByIdAndDelete(sessionId).exec();
+    } catch (error) {
+      console.error(
+        "Error logging out in users.service, no sessionId found",
+        error,
+      );
+      throw new Error("Error logging out in users.service, no sessionId found");
+    }
+  }
+
   async findUserBySessionId(sessionId: string): Promise<User | null> {
     try {
       const session = await this.sessionModel.findById(sessionId).exec();

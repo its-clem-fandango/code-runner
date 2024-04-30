@@ -6,9 +6,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useState, useEffect } from "react"
+import { useAuth } from "@/lib/useAuth"
 
 export default function UserAvatar() {
+  const { logout, isLoggedIn } = useAuth()
   const [avatarURL, setAvatarURL] = useState<string | undefined>(undefined)
+
+  function handleLogout() {
+    console.log("Logging out...")
+    if (isLoggedIn) {
+      console.log("NO mames guey =...")
+
+      logout()
+    }
+  }
 
   const fetchAvatarURL = async () => {
     try {
@@ -41,8 +52,7 @@ export default function UserAvatar() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

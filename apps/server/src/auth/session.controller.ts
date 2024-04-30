@@ -6,6 +6,24 @@ import { UsersService } from "src/users/users.service";
 export class SessionController {
   constructor(private usersService: UsersService) {}
 
+  @Get("logout")
+  async logout(@Req() req: Request, @Res() res: Response) {
+    const sessionId = req.cookies["sessionId"];
+
+    if (!sessionId) {
+      return res.status(400).json({ message: "No session found" });
+    }
+    try {
+      await this.usersService.logoutAndDeleteSession(sessionId);
+      console.log("Logging out, updating state...");
+      res.clearCookie("sessionId", { path: "/" });
+      return res.json({ message: "Logged out" }); //need this to return to FE or res.clearCookie wont work
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error logging out" });
+    }
+  }
+
   @Get("validateSession")
   async validateSession(@Req() req: Request, @Res() res: Response) {
     const sessionId = req.cookies["sessionId"]; // Assuming you're using cookie-parser middleware
