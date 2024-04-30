@@ -25,12 +25,14 @@ interface AuthContextType {
   user: User | null
   setUser: (user: User | null) => void
   isLoggedIn?: boolean
+  logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setUser: () => {},
   isLoggedIn: false,
+  logout: () => {},
 })
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({
@@ -39,6 +41,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
 }) => {
   const [user, setUser] = useState<User | null>(authenticatedUser ?? null)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined)
+
+  const logout = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/session/logout`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      )
+      if (response.ok) {
+        console.log("Logging out, updating state...")
+
+        setIsLoggedIn(false)
+        setUser(null)
+        console.log("States after logout:", isLoggedIn, user)
+      } else {
+        console.error("Logout failed")
+      }
+    } catch (error) {
+      console.error("Error logging out: ", error)
+    }
+  }
 
   //Determines whether a user is logged in or not
 
@@ -68,7 +93,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     validateSession()
   }, [])
 
-  const value = { user, isLoggedIn, setUser }
+  const value = { user, isLoggedIn, setUser, logout }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
