@@ -41,7 +41,6 @@ export class AuthController {
       const user = await this.usersService.findOrCreateUser({
         login: githubUser.login,
         id: githubUser.id,
-        email: githubUser.email,
         avatar_url: githubUser.avatar_url,
         name: githubUser.name,
       });
