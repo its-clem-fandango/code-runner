@@ -11,12 +11,6 @@ export class User extends Document {
   @Prop({ required: true, unique: true })
   username: string;
 
-  @Prop()
-  email: string;
-
-  @Prop()
-  password: string;
-
   @Prop({ default: Date.now })
   createdAt: Date;
 
@@ -34,5 +28,3 @@ export class User extends Document {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-UserSchema.index({ email: 1 }, { unique: true, sparse: true });
