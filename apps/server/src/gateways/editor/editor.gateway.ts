@@ -19,7 +19,7 @@ const rooms = {};
 @WebSocketGateway({
   namespace: "/race",
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.NEXT_PUBLIC_CLIENT_URL,
     credentials: true,
   },
 })
@@ -137,6 +137,9 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const parsedCookies = parse(cookies || "");
     const sessionId = parsedCookies["sessionId"]; // or some other user identifier
     const guestId = data.username;
+    console.log("JOIN BATTLE in editor.gateway", data);
+    console.log("SessoinId in editor.gateway: ", sessionId);
+    console.log("guestId in editor.gateway: ", guestId);
 
     const battleInfo = this.battleService.getBattle(data.id);
     if (!battleInfo) {

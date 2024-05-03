@@ -16,7 +16,7 @@ export class SessionController {
     try {
       await this.usersService.logoutAndDeleteSession(sessionId);
       console.log("Logging out, updating state...");
-      res.clearCookie("sessionId", { path: "/" });
+      res.clearCookie("sessionId", { path: "/", domain: ".coderacer.xyz" });
       return res.json({ message: "Logged out" }); //need this to return to FE or res.clearCookie wont work
     } catch (error) {
       console.error(error);
@@ -31,9 +31,10 @@ export class SessionController {
     if (!sessionId) {
       const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
       res.cookie("username", guest, {
-        httpOnly: false,
-        path: "/",
+        httpOnly: true,
         sameSite: "lax",
+        domain: ".coderacer.xyz",
+        path: "/",
       });
       return res
         .status(401)
@@ -43,7 +44,7 @@ export class SessionController {
 
       const user = await this.usersService.findUserBySessionId(sessionId);
       if (user) {
-        res.clearCookie("username", { path: "/" });
+        res.clearCookie("username", { path: "/", domain: ".coderacer.xyz" });
         return res.json({
           user: {
             id: user._id,
