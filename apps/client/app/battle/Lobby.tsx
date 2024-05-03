@@ -18,15 +18,18 @@ export default function Lobby({ battleId }: { battleId: number }) {
   const { sendRaceAction } = useRace()
   const first = useRef(true) // Tracks if the join action has been performed
   const router = useRouter()
+  console.log("***JOINED LOBBY***")
 
   useEffect(() => {
     // Ensure the join action is only performed once upon component mount
     const cookies = parse.parse(document.cookie)
     const username = cookies.username
+    console.log("USERNAME PARSED IN LOBBY", username)
 
     if (first.current && sendRaceAction) {
       sendRaceAction("joinBattle", { id: battleId, username })
       first.current = false // Prevent future invocations
+      console.log("SENT JOIN BATTLE ACTION IN LOBBY")
     }
   }, [sendRaceAction, battleId])
 
