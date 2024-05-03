@@ -25,7 +25,7 @@ function ChallengeConsole({
         {testResults
           ? testResults.map((test, index) => {
               return (
-                <div key={index} className="my-4">
+                <div key={index} className="my-4 text-wrap">
                   <h3
                     className={test.passed ? "text-green-500" : "text-red-500"}
                   >

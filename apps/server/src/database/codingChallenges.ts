@@ -678,7 +678,6 @@ reverseWords("This is an example!") // returns "sihT si na !elpmaxe"
     ],
   },
   {
-    //EDIT: FIX CHALLENGE TEXT FLOWING OUT OF EDITOR CONSOLE RESULTS
     challengeId: 27,
     name: "Remove Vowels",
     description: "Write a function that removes all vowels from a string.",
@@ -730,6 +729,407 @@ reverseWords("This is an example!") // returns "sihT si na !elpmaxe"
         description: "Should return 811181",
         input: [9119],
         expected: 811181,
+      },
+    ],
+  },
+  {
+    challengeId: 29,
+    name: "Total Between",
+    description:
+      "Write a function that finds the total of every whole number from one given number to another, including both numbers themselves. These numbers can be any whole numbers, big or small. If the two numbers are the same, the function should just return that number.",
+    difficultyOfChallenge: "medium",
+    example: `The input \`1\` and \`0\` should return \`1\` because 1 plus 0 equals 1
+
+    \`\`\`javascript
+    totalBetween(1, 2) // returns 3 because 1 + 2 = 3
+    totalBetween(-1, 2) // returns 2 because -1 + 0 + 1 + 2 = 2
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description: "Should return -1",
+        input: [-1, 0],
+        expected: -1,
+      },
+      {
+        name: "Test2",
+        description: "Should return 1",
+        input: [1, 1],
+        expected: 1,
+      },
+      {
+        name: "Test3",
+        description: "Should return 3",
+        input: [1, 2],
+        expected: 3,
+      },
+    ],
+  },
+  {
+    challengeId: 30,
+    name: "DNA Complement",
+    description:
+      "Create a function that takes a string representing one side of a DNA strand and returns a string representing the other side. In DNA, each letter stands for a chemical that pairs with another specific chemical: 'A' pairs with 'T', 'C' pairs with 'G', and vice versa.",
+    difficultyOfChallenge: "medium",
+    example: `When given the string \`"ATTGC"\` it should return \`"TAACG"\`
+
+    \`\`\`javascript
+    dnaComplement("GTAT") // returns "CATA"
+    dnaComplement("ACGT") // returns "TGCA"
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description: "Should return GTAT",
+        input: ["CATA"],
+        expected: "GTAT",
+      },
+      {
+        name: "Test2",
+        description: "Should return TGCA",
+        input: ["TGCA"],
+        expected: "ACGT",
+      },
+    ],
+  },
+  {
+    challengeId: 31,
+    name: "List Filtering",
+    description:
+      "Create a function that takes a list of non-negative integers and strings and returns a new list with the strings filtered out.",
+    difficultyOfChallenge: "medium",
+    example: `When given the array \`[1, 'a', 'b', 0, 15]\` it should return \`[1, 0, 15]\`
+
+    \`\`\`javascript
+    filterList([1, 2, 'a', 'b']) // returns [1, 2]
+    filterList([4, 'a', 0, 15]) // returns [4, 0, 15]
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description: "Should return [1, 2, 0, 15]",
+        input: [[1, 2, "aasd", "1", 0, 15]],
+        expected: [1, 2, 0, 15],
+      },
+      {
+        name: "Test2",
+        description: "Should return TGCA",
+        input: [["3", 4, 123, "a", 0, 15]],
+        expected: [4, 123, 0, 15],
+      },
+    ],
+  },
+  {
+    challengeId: 32,
+    name: "Is the Number Square?",
+    description:
+      "Write a function to check if a given whole number is a square number. A square number is an integer that can be made by multiplying an integer by itself. For example, 4 is a square number because 2 x 2 equals 4.",
+    difficultyOfChallenge: "medium",
+    example: `When given the number \`25\` it should return \`true\`
+
+    \`\`\`javascript
+    isSquare(-1) // returns false
+    isSquare(4) // returns true
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return false because negative numbers are not square",
+        input: [-1],
+        expected: false,
+      },
+      {
+        name: "Test2",
+        description: "Should return true because 0 = 0*0",
+        input: [0],
+        expected: true,
+      },
+      {
+        name: "Test3",
+        description: "Should return true because 25 = 5*5",
+        input: [25],
+        expected: true,
+      },
+    ],
+  },
+  {
+    challengeId: 33,
+    name: "Highest and Lowest",
+    description:
+      "Given a string of space separated numbers, return the highest and lowest number.",
+    difficultyOfChallenge: "medium",
+    example: `When given the numbers \`"1 9 3 4 -5"\` it should return \`"9 -5"\`
+
+    \`\`\`javascript
+    highAndLow("1 2 3 4 -5") // returns "4 -5"
+    highAndLow("91 0 -1 3 4") // returns "91 -1"
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return false because negative numbers are not square",
+        input: ["8 3 -5 -1 0 0 7 42 4 -4 5"],
+        expected: "42 -5",
+      },
+      {
+        name: "Test2",
+        description: "Should return true because 0 = 0*0",
+        input: ["1 2 3"],
+        expected: "3 1",
+      },
+    ],
+  },
+  {
+    challengeId: 34,
+    name: "Categorize Members",
+    description:
+      "Write a function that categorizes potential members into 'Senior' or 'Open' based on their age and handicap. If a person is 55 years old or older and has a handicap greater than 7, they should be categorized as 'Senior'. Otherwise, they will be categorized as 'Open'.",
+    difficultyOfChallenge: "medium",
+    example: `When given the array \`[[18, 20], [45, 2], [61, 12], [37, 6]]\` it should return \`["Open", "Open", "Senior", "Open"]\`
+
+    \`\`\`javascript
+    catMembers([[18, 20], [45, 2], [61, 12], [37, 6]]) // returns ["Open", "Open", "Senior", "Open"]
+    catMembers([[55, 8], [60, 12], [61, 6], [37, 6]]) // returns ["Senior", "Senior", "Open", "Open"]
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description: "Should return ['Open', 'Senior', 'Open', 'Senior']",
+        input: [
+          [
+            [45, 12],
+            [55, 21],
+            [19, -2],
+            [104, 20],
+          ],
+        ],
+        expected: ["Open", "Senior", "Open", "Senior"],
+      },
+      {
+        name: "Test2",
+        description:
+          "Should return ['Open', 'Open', 'Open', 'Open'] because all members are younger than 55",
+        input: [
+          [
+            [3, 12],
+            [55, 1],
+            [91, -2],
+            [53, 23],
+          ],
+        ],
+        expected: ["Open", "Open", "Open", "Open"],
+      },
+      {
+        name: "Test3",
+        description:
+          "Should return ['Senior', 'Open', 'Open', 'Open'] because the first member is older than 55 and has a handicap greater than 7",
+        input: [
+          [
+            [59, 12],
+            [55, -1],
+            [12, -2],
+            [12, 12],
+          ],
+        ],
+        expected: ["Senior", "Open", "Open", "Open"],
+      },
+    ],
+  },
+  {
+    challengeId: 35,
+    name: "Sum of Two Lowest Positive Integers",
+    description:
+      "Write a function that finds and sums the two smallest numbers in an array of at least four positive integers. All entries in the array will be positive integers.",
+    difficultyOfChallenge: "medium",
+    example: `When given the array \`[19, 5, 42, 2, 77]\` it should return \`7\` because 2 + 5 = 7
+
+    \`\`\`javascript
+    sumTwoSmallest([5, 8, 12, 19, 22]) // returns 13
+    sumTwoSmallest([15, 28, 4, 2, 43]) // returns 6
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return 13 because 5 + 8 = 13 and 5 and 8 are the two smallest numbers",
+        input: [[5, 8, 12, 19, 22]],
+        expected: 13,
+      },
+      {
+        name: "Test2",
+        description: "Should return 24 because 23 + 1 = 24",
+        input: [[23, 71, 33, 82, 1]],
+        expected: 24,
+      },
+    ],
+  },
+  {
+    challengeId: 36,
+    name: "Capitalize Every Word",
+    description:
+      "Write a function that capitalizes the first letter of every word in a string.",
+    difficultyOfChallenge: "medium",
+    example: `When given the string \`"hey! ho! let's go!"\` it should return \`"Hey! Ho! Let's Go!"\`
+
+    \`\`\`javascript
+    captalizeWords("succulent chinese meal") // returns "Succulent Chinese Meal"
+
+    captalizeWords("the quick brown fox") // returns "The Quick Brown Fox"
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return 'I Was Driving Doing Nothing On The Shores Of Great Salt Lake",
+        input: ["i was driving doing nothing on the shores of great salt lake"],
+        expected:
+          "I Was Driving Doing Nothing On The Shores Of Great Salt Lake",
+      },
+      {
+        name: "Test2",
+        description: "Should return 'I've Got A Cupboard With Cans Of Food'",
+        input: ["i've got a cupboard with cans of food"],
+        expected: "I've Got A Cupboard With Cans Of Food",
+      },
+    ],
+  },
+  {
+    challengeId: 37,
+    name: "Find the Middle Character",
+    description:
+      "Write a function that returns the middle character of a word. If the word's length is even, return the middle two characters.",
+    difficultyOfChallenge: "medium",
+    example: `When given the word \`"coderacer"\` it should return \`"er"\`
+
+    \`\`\`javascript
+    middleChar("testing") // returns "t"
+    middleChar("middle") // returns "dd"
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return 'r' because 'jerry' has an odd number of characters",
+        input: ["jerry"],
+        expected: "r",
+      },
+      {
+        name: "Test2",
+        description:
+          "Should return 'in' because 'seinfeld' has an even number of characters",
+        input: ["seinfeld"],
+        expected: "nf",
+      },
+    ],
+  },
+  {
+    challengeId: 38,
+    name: "Accumulated Strings",
+    description:
+      "Write a function that transforms a given string into a new string where each character is repeated a number of times equal to its position in the original string (counting from 1). The first letter of each repeated group is capitalized and the rest are lowercase. Each group should be separated by a hyphen ('-').",
+    difficultyOfChallenge: "medium",
+    example: `When given the string \`"abcd"\` it should return \`"A-Bb-Ccc-Dddd"\`
+
+    \`\`\`javascript
+    accumulator("RqaEzt") // returns "R-Qq-Aaa-Eeee-Zzzzz-Tttttt"
+    accumulator("cwAt") // returns "C-Ww-Aaa-Tttt"
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description: "Should return 'O-Aa-Sss-Kkkk-Ooooo-Aaaaaa-Ppppppp",
+        input: ["OasKoaP"],
+        expected: "O-Aa-Sss-Kkkk-Ooooo-Aaaaaa-Ppppppp",
+      },
+      {
+        name: "Test2",
+        description: "Should return 'P-Oo-Mmm-Vvvv-Aaaaa-Zzzzzz'",
+        input: ["PoMvAZ"],
+        expected: "P-Oo-Mmm-Vvvv-Aaaaa-Zzzzzz",
+      },
+    ],
+  },
+  {
+    challengeId: 39,
+    name: "Isograms",
+    description:
+      "Write a function that determines if a word is an isogram. An isogram is a word that has no repeating letters. Assume an empty string is an isogram and ignore letter case.",
+    difficultyOfChallenge: "medium",
+    example: `When given the string \`"Dermatoglyphics"\` it should return \`true\`
+
+    \`\`\`javascript
+    checkIso("isogram") // returns true
+    checkIso("aba") // returns false
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return false because 'moOse' has repeating letters",
+        input: ["moOse"],
+        expected: false,
+      },
+      {
+        name: "Test2",
+        description: "Should return true",
+        input: [""],
+        expected: true,
+      },
+      {
+        name: "Test3",
+        description:
+          "Should return true because 'Dermatoglyphics' has no repeating letters",
+        input: ["Dermatoglyphics"],
+        expected: true,
+      },
+    ],
+  },
+  {
+    challengeId: 40,
+    name: "Find Second Occurence",
+    description:
+      "Write a function that searches for the second occurrence of a specified letter within a given string. The function should return the index position of this second occurrence. If the letter does not appear twice, the function should return -1.",
+    difficultyOfChallenge: "medium",
+    example: `When given the string \`Hello world\` and the letter \`l\` it should return \`3\`
+
+    \`\`\`javascript
+    findSecond("Werewolves of London", "o") // returns 11
+    findSecond("Meet Me After Midnight", "M") // returns 5
+    \`\`\`
+        `,
+    tests: [
+      {
+        name: "Test1",
+        description:
+          "Should return false because 'moOse' has repeating letters",
+        input: ["CodeRacing Addict", "d"],
+        expected: 12,
+      },
+      {
+        name: "Test2",
+        description: "Should return true",
+        input: ["", "o"],
+        expected: -1,
+      },
+      {
+        name: "Test3",
+        description:
+          "Should return true because 'Dermatoglyphics' has no repeating letters",
+        input: ["Hello!", "?"],
+        expected: -1,
       },
     ],
   },

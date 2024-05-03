@@ -28,7 +28,11 @@ const markdownComponents: MarkdownComponents = {
     )
   },
   pre: ({ children, className, ...props }) => {
-    return <pre className="bg-gray-200 my-2 rounded p-2 px-4">{children}</pre>
+    return (
+      <pre className="bg-gray-200 my-2 rounded p-2 px-4 text-wrap">
+        {children}
+      </pre>
+    )
   },
 }
 
