@@ -22,8 +22,11 @@ export default function Lobby({ battleId }: { battleId: number }) {
 
   useEffect(() => {
     // Ensure the join action is only performed once upon component mount
+    console.log("Available cookies:", document.cookie)
     const cookies = cookie.parse(document.cookie)
     const username = cookies.username
+    console.log("Parsed username:", username)
+
     alert("USERNAME PARSED IN LOBBY: " + (username || "No username found"))
 
     console.log("USERNAME PARSED IN LOBBY", username)
