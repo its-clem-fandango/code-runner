@@ -98,7 +98,11 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
         runUserFunction,
         challenge,
       );
-
+      console.log(
+        "emmiging test result",
+        { ...result, clientId: client.id },
+        `method: ${this.server.emit}`,
+      );
       this.server.emit("testResult", { ...result, clientId: client.id });
 
       if (result.didAssertPass) {
