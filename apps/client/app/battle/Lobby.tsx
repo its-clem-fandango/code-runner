@@ -24,7 +24,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: { username } }
 }
 
-export default function Lobby({ battleId }: { battleId: number }) {
+export default function Lobby({
+  battleId,
+  username,
+}: {
+  battleId: number
+  username: string
+}) {
   const { sendRaceAction } = useRace()
   const first = useRef(true) // Tracks if the join action has been performed
   const router = useRouter()
@@ -32,10 +38,8 @@ export default function Lobby({ battleId }: { battleId: number }) {
 
   useEffect(() => {
     // Ensure the join action is only performed once upon component mount
-    console.log("Available cookies:", document.cookie)
-    const cookies = cookie.parse(document.cookie)
-    const username = cookies.username
-    console.log("Parsed username:", username)
+
+    console.log("Parsed username from props:", username)
 
     alert("USERNAME PARSED IN LOBBY: " + (username || "No username found"))
 
@@ -46,7 +50,7 @@ export default function Lobby({ battleId }: { battleId: number }) {
       first.current = false // Prevent future invocations
       console.log("SENT JOIN BATTLE ACTION IN LOBBY")
     }
-  }, [sendRaceAction, battleId])
+  }, [sendRaceAction, battleId, username])
 
   function handleCancel() {
     router.back()
