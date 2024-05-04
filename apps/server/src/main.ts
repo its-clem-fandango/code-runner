@@ -12,9 +12,10 @@ async function bootstrap() {
   }
 
   app.enableCors({
-    origin: clientUrl,
+    origin: [clientUrl],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE, OPTIONS",
     credentials: true,
+    allowedHeaders: "Content-Type, Accept",
   });
 
   app.use(cookieParser());
