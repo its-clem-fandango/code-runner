@@ -12,17 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
-
-import { GetServerSideProps } from "next"
-import { parseCookies } from "@/lib/utils"
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req } = context
-  const cookies = parseCookies(req)
-  const username = cookies.username || "No username found"
-
-  return { props: { username } }
-}
+import cookie from "cookie"
 
 export default function Lobby({ battleId }: { battleId: number }) {
   const { sendRaceAction } = useRace()

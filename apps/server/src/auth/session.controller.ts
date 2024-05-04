@@ -31,7 +31,7 @@ export class SessionController {
     if (!sessionId) {
       const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
       res.cookie("username", guest, {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: "lax",
         domain: ".coderacer.xyz",
         path: "/",
