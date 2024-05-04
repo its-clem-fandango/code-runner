@@ -42,6 +42,8 @@ export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const sessionId = parsedCookies["sessionId"];
     const guestId = data.username;
 
+    console.log("guestId from battles.gateway: ", guestId);
+
     try {
       const battles = await this.battleService.createBattle(
         data.battleName,
