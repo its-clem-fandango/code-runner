@@ -56,9 +56,9 @@ export class AuthController {
       );
       res = res.cookie("sessionId", session._id.toString(), {
         httpOnly: true,
-        secure: true,
+        secure: process.env.COOKIE_SECURE === "true",
         sameSite: "lax",
-        domain: ".coderacer.xyz",
+        domain: process.env.COOKIE_DOMAIN,
         expires: expiresCurrentTimeZone,
         path: "/",
       });

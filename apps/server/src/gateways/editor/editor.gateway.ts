@@ -19,7 +19,14 @@ const rooms = {};
 @WebSocketGateway({
   namespace: "/race",
   cors: {
-    origin: process.env.NEXT_PUBLIC_CLIENT_URL,
+    origin: (requestOrigin, callback) => {
+      const validOrigins = ["http://localhost:3000", "app.coderacer.xyz"];
+      if (validOrigins.includes(requestOrigin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   },
 })
