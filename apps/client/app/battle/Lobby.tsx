@@ -25,10 +25,6 @@ export default function Lobby({ battleId }: { battleId: number }) {
     console.log("Available cookies:", document.cookie)
     const cookies = cookie.parse(document.cookie)
     const username = cookies.username
-    console.log("Parsed username:", username)
-
-    alert("USERNAME PARSED IN LOBBY: " + (username || "No username found"))
-
     console.log("USERNAME PARSED IN LOBBY", username)
 
     if (first.current && sendRaceAction) {

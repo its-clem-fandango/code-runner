@@ -16,7 +16,10 @@ export class SessionController {
     try {
       await this.usersService.logoutAndDeleteSession(sessionId);
       console.log("Logging out, updating state...");
-      res.clearCookie("sessionId", { path: "/", domain: ".coderacer.xyz" });
+      res.clearCookie("sessionId", {
+        path: "/",
+        domain: process.env.COOKIE_DOMAIN,
+      });
       return res.json({ message: "Logged out" }); //need this to return to FE or res.clearCookie wont work
     } catch (error) {
       console.error(error);
@@ -33,7 +36,7 @@ export class SessionController {
       res.cookie("username", guest, {
         httpOnly: false,
         sameSite: "lax",
-        domain: ".coderacer.xyz",
+        domain: process.env.COOKIE_DOMAIN,
         path: "/",
       });
       return res
@@ -44,7 +47,10 @@ export class SessionController {
 
       const user = await this.usersService.findUserBySessionId(sessionId);
       if (user) {
-        res.clearCookie("username", { path: "/", domain: ".coderacer.xyz" });
+        res.clearCookie("username", {
+          path: "/",
+          domain: process.env.COOKIE_DOMAIN,
+        });
         return res.json({
           user: {
             id: user._id,

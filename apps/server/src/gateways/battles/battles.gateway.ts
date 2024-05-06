@@ -11,9 +11,24 @@ import { Server, Socket } from "socket.io";
 import { parse } from "cookie";
 import { BattleService } from "src/modules/battles/battle.service";
 
-@WebSocketGateway({ namespace: "race-collection", cors: true })
+@WebSocketGateway({
+  namespace: "race-collection",
+  cors: {
+    origin: (requestOrigin, callback) => {
+      const validOrigins = ["http://localhost:3000", "app.coderacer.xyz"];
+      if (validOrigins.includes(requestOrigin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  },
+})
 export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private readonly battleService: BattleService) {}
+  constructor(private readonly battleService: BattleService) {
+    console.log("whereami", process.env.NEXT_PUBLIC_CLIENT_URL);
+  }
   @WebSocketServer() server: Server;
 
   handleConnection(client: any) {
