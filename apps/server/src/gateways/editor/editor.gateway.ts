@@ -16,7 +16,8 @@ import { parse } from "cookie";
 
 const rooms = {};
 
-@WebSocketGateway({
+//SWITCH ORIGIN DURING DEVELOPMENT
+/* @WebSocketGateway({
   namespace: "/race",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -27,6 +28,14 @@ const rooms = {};
         callback(new Error("Not allowed by CORS"));
       }
     },
+    credentials: true,
+  },
+}) */
+
+@WebSocketGateway({
+  namespace: "/race",
+  cors: {
+    origin: "https://app.coderacer.xyz",
     credentials: true,
   },
 })

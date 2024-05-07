@@ -11,7 +11,8 @@ import { Server, Socket } from "socket.io";
 import { parse } from "cookie";
 import { BattleService } from "src/modules/battles/battle.service";
 
-@WebSocketGateway({
+//SWITCH ORIGIN DURING DEVELOPMENT
+/* @WebSocketGateway({
   namespace: "race-collection",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -22,6 +23,14 @@ import { BattleService } from "src/modules/battles/battle.service";
         callback(new Error("Not allowed by CORS"));
       }
     },
+    credentials: true,
+  },
+}) */
+
+@WebSocketGateway({
+  namespace: "race-collection",
+  cors: {
+    origin: "https://app.coderacer.xyz",
     credentials: true,
   },
 })
