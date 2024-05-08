@@ -20,6 +20,13 @@ export class SessionController {
         path: "/",
         domain: process.env.COOKIE_DOMAIN,
       });
+      const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
+      res.cookie("username", guest, {
+        httpOnly: false,
+        sameSite: "lax",
+        domain: process.env.COOKIE_DOMAIN,
+        path: "/",
+      });
       return res.json({ message: "Logged out" }); //need this to return to FE or res.clearCookie wont work
     } catch (error) {
       console.error(error);
