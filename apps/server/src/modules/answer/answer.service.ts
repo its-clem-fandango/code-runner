@@ -14,7 +14,7 @@ interface TestResult {
 }
 interface TestResults {
   didAssertPass: boolean;
-  testResults: any[];
+  testResults: TestResult[];
 }
 
 @Injectable()
@@ -28,20 +28,12 @@ export class AnswerService {
 
   async runTest(userFunction, codingChallenge): Promise<TestResults> {
     const mocha = new Mocha();
+
     let didAssertPass = false;
+
     const testResults: TestResult[] = [];
     const consoleLogs = [];
     const oldLog = console.log;
-    const realProcess = process;
-
-    process = {
-      ...process,
-      //these functions are needed for Mocha to work.
-      removeListener: realProcess.removeListener,
-      listenerCount: realProcess.listenerCount,
-      on: realProcess.on,
-      nextTick: process.nextTick,
-    } as NodeJS.Process;
 
     console.log = function (...args) {
       const updatedArguments = args.map((arg) => {

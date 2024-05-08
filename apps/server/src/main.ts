@@ -23,7 +23,7 @@ async function bootstrap() {
   }
 
   app.enableCors({
-    origin: [clientUrl], // Only one origin allowed, as per your logs
+    origin: [clientUrl],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE, OPTIONS",
     credentials: true,
     allowedHeaders: "Content-Type, Accept",
@@ -31,6 +31,5 @@ async function bootstrap() {
 
   app.use(cookieParser());
   await app.listen(8080, "0.0.0.0");
-  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
