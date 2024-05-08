@@ -17,7 +17,7 @@ import { parse } from "cookie";
 const rooms = {};
 
 //SWITCH ORIGIN DURING DEVELOPMENT
-@WebSocketGateway({
+/* @WebSocketGateway({
   namespace: "/race",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -30,15 +30,14 @@ const rooms = {};
     },
     credentials: true,
   },
-})
-
-/* @WebSocketGateway({
+}) */
+@WebSocketGateway({
   namespace: "/race",
   cors: {
     origin: "https://app.coderacer.xyz",
     credentials: true,
   },
-}) */
+})
 export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly answerService: AnswerService,
@@ -109,6 +108,19 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ) {
     const challenge = this.answerService.findChallenge(data.challengeId);
     try {
+      interface TestResult {
+        name: string;
+        input: any[];
+        expected: any;
+        result: any;
+        error?: any;
+        passed: boolean;
+      }
+      interface TestResults {
+        didAssertPass: boolean;
+        testResults: TestResult[];
+      }
+
       const runUserFunction = eval(`(${data.message})`);
       const result = await this.answerService.runTest(
         runUserFunction,
@@ -119,6 +131,19 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
         { ...result, clientId: client.id },
         `method: ${this.server.emit}`,
       );
+      /*       const result: TestResults = {
+        didAssertPass: false,
+        testResults: [
+          {
+            name: "test",
+            input: [],
+            expected: "expected",
+            result: "result",
+            error: "error",
+            passed: false,
+          },
+        ],
+      }; */
       this.server.emit("testResult", { ...result, clientId: client.id });
 
       if (result.didAssertPass) {
