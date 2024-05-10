@@ -198,8 +198,8 @@ export default function MonacoCodeEditor({
                 height={390}
                 alt="car"
               />
-              <DialogTitle>{endGameMessage.title}</DialogTitle>
-              <DialogDescription>{endGameMessage.message}</DialogDescription>
+              <DialogTitle>{endGameMessage?.title}</DialogTitle>
+              <DialogDescription>{endGameMessage?.message}</DialogDescription>
               <DialogClose asChild>
                 <button
                   onClick={goToDashboard}

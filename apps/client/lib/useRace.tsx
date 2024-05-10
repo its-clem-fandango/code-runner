@@ -201,7 +201,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
           if (!prev) return null
           return {
             ...prev,
-            receivedCode: msg.message,
+            receivedCode: msg?.message,
           }
         })
       }

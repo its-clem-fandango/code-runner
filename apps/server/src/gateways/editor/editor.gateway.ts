@@ -90,7 +90,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit("opponentCode", {
       room: 1,
       clientId: client.id,
-      message: data.message,
+      message: data?.message,
     });
   }
 
@@ -121,7 +121,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
         testResults: TestResult[];
       }
 
-      const runUserFunction = eval(`(${data.message})`);
+      const runUserFunction = eval(`(${data?.message})`);
       const result = await this.answerService.runTest(
         runUserFunction,
         challenge,
@@ -165,7 +165,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (error) {
       console.error("Error during code submission handling:", error);
       const errorMsg = {
-        error: `${error.message}`,
+        error: `${error?.message}`,
         clientId: data.clientId,
         didAssertPass: false,
       };
@@ -226,7 +226,7 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
           console.error("Battle update failed, battle object not returned.");
         }
       } catch (e) {
-        console.error("Error updating battle:", e.message);
+        console.error("Error updating battle:", e?.message);
       }
     }
   }
