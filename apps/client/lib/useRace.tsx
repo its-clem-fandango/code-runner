@@ -207,7 +207,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
       }
     })
 
-    socket.on("disconnect", (reason, details: any) => {
+    /*     socket.on("disconnect", (reason, details: any) => {
       // the reason of the disconnection, for example "transport error"
       console.log(reason)
 
@@ -219,7 +219,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
       // some additional context, for example the XMLHttpRequest object
       console.log(details.context)
-    })
+    }) */
 
     return () => {
       if (socketRef.current?.connected) {
