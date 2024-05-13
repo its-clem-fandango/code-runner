@@ -24,7 +24,7 @@ export default function ButtonPopUp() {
             <p className="text-black text-xl">+</p>
           </div>
 
-          <p className="text-xl font-manrope">Create a New Race</p>
+          <p className="text-xl font-manrope">Start a CodeRace</p>
           <p className="text-[#A0A0A0] font-manrope mb-2">Wait for a Rival</p>
         </Button>
       </DialogTrigger>
@@ -32,7 +32,7 @@ export default function ButtonPopUp() {
       {openRacePopup && (
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Create a New Race</DialogTitle>
+            <DialogTitle>Start a CodeRace</DialogTitle>
             <DialogDescription>Customize your game.</DialogDescription>
           </DialogHeader>
           <BattleForm setOpen={setOpenRacePopup} />{" "}
