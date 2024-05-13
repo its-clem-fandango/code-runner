@@ -18,6 +18,7 @@ import Image from "next/image"
 import { AuthProvider, useAuth } from "@/lib/useAuth"
 import Login from "./login/page"
 import UserAvatar from "./login/UserAvatar"
+import { Analytics } from "@vercel/analytics/react"
 
 const rowdies = Rowdies({
   weight: ["400"],
@@ -60,6 +61,7 @@ function HomeContent() {
           <Dashboard />
         </main>
       </RacesCollectionProvider>
+      <Analytics />
     </>
   )
 }

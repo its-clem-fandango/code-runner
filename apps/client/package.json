@@ -24,6 +24,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-toggle": "^1.0.3",
     "@tanstack/react-table": "^8.11.8",
+    "@vercel/analytics": "^1.2.2",
     "bufferutil": "^4.0.8",
     "card": "^2.5.4",
     "class-variance-authority": "^0.7.0",
