@@ -11,7 +11,7 @@ import { Server, Socket } from "socket.io";
 import { parse } from "cookie";
 import { BattleService } from "src/modules/battles/battle.service";
 
-//SWITCH ORIGIN DURING DEVELOPMENT
+//CHANGE TO THIS ORIGIN DURING DEVELOPMENT
 /* @WebSocketGateway({
   namespace: "race-collection",
   cors: {

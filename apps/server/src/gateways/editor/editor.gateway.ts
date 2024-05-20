@@ -16,7 +16,7 @@ import { parse } from "cookie";
 
 const rooms = {};
 
-//SWITCH ORIGIN DURING DEVELOPMENT
+//CHANGE TO THIS ORIGIN DURING DEVELOPMENT
 /* @WebSocketGateway({
   namespace: "/race",
   cors: {
