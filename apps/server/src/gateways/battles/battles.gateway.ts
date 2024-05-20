@@ -11,8 +11,8 @@ import { Server, Socket } from "socket.io";
 import { parse } from "cookie";
 import { BattleService } from "src/modules/battles/battle.service";
 
-//SWITCH ORIGIN DURING DEVELOPMENT
-/* @WebSocketGateway({
+//CHANGE TO THIS ORIGIN DURING DEVELOPMENT
+@WebSocketGateway({
   namespace: "race-collection",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -25,15 +25,15 @@ import { BattleService } from "src/modules/battles/battle.service";
     },
     credentials: true,
   },
-}) */
+})
 
-@WebSocketGateway({
+/* @WebSocketGateway({
   namespace: "race-collection",
   cors: {
     origin: "https://app.coderacer.xyz",
     credentials: true,
   },
-})
+}) */
 export class BattleGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly battleService: BattleService) {
     console.log("whereami", process.env.NEXT_PUBLIC_CLIENT_URL);

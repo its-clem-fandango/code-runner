@@ -1,6 +1,6 @@
-# Turborepo starter
+# CodeRacer
 
-This is an official starter Turborepo.
+CodeRacer is a javascript based coding challenge platform designed to help users improve their problem solving skills under pressure.
 
 ## What's inside?
 
@@ -10,11 +10,10 @@ This Turborepo includes the following packages/apps:
 
 - `client`: a [Next.js](https://nextjs.org/) app
 - `server`: [Nest.js](https://docs.nestjs.com/) app
-- `@repo/ui`: a stub React component library shared by both `client` and `server` applications
 - `monaco editor`: a [Monaco](https://microsoft.github.io/monaco-editor/) text editor
-- `cors`: a [cors](https://www.npmjs.com/package/cors) node.js package that can be used to enable CORS
-- `morgan`: [Morgan](https://www.npmjs.com/package/morgan) to keep track of HTTP requests
-- `nodemon`: [nodemon](https://www.npmjs.com/package/nodemon) to automatically restart the node application on file changes
+- `mocha`: a [testing](https://mochajs.org/) framework running on Node.js and in the browser
+- `mongoose`: a [mongoDB](https://mongoosejs.com/docs/) library for creating schemas
+- `cors`: a [cors](https://www.npmjs.com/package/cors) package that can be used to enable Cross-Origin-Resource-Sharing
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -40,6 +39,35 @@ To develop all apps and packages, run the following command:
 
 ```
 yarn dev
+
+```
+
+### Installation
+
+When running locally make sure to comment out the @WebSocketGateway for app.coderacer.xyz in battles.gateway and editors.gateway
+
+### Environment Variables
+
+Frontend:
+[NEXT_PUBLIC_GITHUB_CLIENT_ID]
+[NEXT_PUBLIC_REDIRECT_URI]
+[NEXT_PUBLIC_SERVER_URL]
+
+Backend:
+[GITHUB_CLIENT_ID]
+[GITHUB_CLIENT_SECRET]
+[MONGO_URL]
+[NEXT_PUBLIC_CLIENT_URL]
+[NEXT_PUBLIC_REDIRECT_URI]
+[COOKIE_SECURE=false]
+[COOKIE_DOMAIN=localhost]
+
+### Prerequisites
+
+This project uses Yarn as a package manager
+
+```
+ npm install --global yarn
 ```
 
 ### Remote Caching
