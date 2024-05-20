@@ -48,19 +48,19 @@ When running locally make sure to comment out the @WebSocketGateway for app.code
 
 ### Environment Variables
 
-Frontend:
-[NEXT_PUBLIC_GITHUB_CLIENT_ID]
-[NEXT_PUBLIC_REDIRECT_URI]
-[NEXT_PUBLIC_SERVER_URL]
+#### Frontend:
+- `NEXT_PUBLIC_GITHUB_CLIENT_ID`
+- `NEXT_PUBLIC_REDIRECT_URI`
+- `NEXT_PUBLIC_SERVER_URL`
 
-Backend:
-[GITHUB_CLIENT_ID]
-[GITHUB_CLIENT_SECRET]
-[MONGO_URL]
-[NEXT_PUBLIC_CLIENT_URL]
-[NEXT_PUBLIC_REDIRECT_URI]
-[COOKIE_SECURE=false]
-[COOKIE_DOMAIN=localhost]
+#### Backend:
+- `GITHUB_CLIENT_ID`
+- `GITHUB_CLIENT_SECRET`
+- `MONGO_URL`
+- `NEXT_PUBLIC_CLIENT_URL`
+- `NEXT_PUBLIC_REDIRECT_URI`
+- `COOKIE_SECURE=false`
+- `COOKIE_DOMAIN=localhost`
 
 ### Prerequisites
 
