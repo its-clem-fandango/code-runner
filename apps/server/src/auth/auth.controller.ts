@@ -66,7 +66,10 @@ export class AuthController {
       // Redirect to dashboard
       res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
     } catch (error) {
-      console.error("Error during GitHub authentication:", error);
+      console.error(
+        "Error during GitHub authentication. Cookie not set :",
+        error,
+      );
       // res.status(500).send("Authentication failed");
       res.redirect(process.env.NEXT_PUBLIC_CLIENT_URL);
     }

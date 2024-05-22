@@ -14,9 +14,13 @@ import { UserSchema } from "./users/schemas/user.schema";
 import { SessionSchema } from "./users/schemas/session.schema";
 import { SessionController } from "./auth/session.controller";
 import { UsersModule } from "./users/users.module";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRoot(process.env.MONGO_URL),
     MongooseModule.forFeature([
       { name: "User", schema: UserSchema },

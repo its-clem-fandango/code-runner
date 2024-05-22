@@ -46,7 +46,4 @@ function Dashboard() {
   )
 }
 
-// Note: Next.js specific function for server-side rendering on this page.
-// It checks for user authentication and loads user data server-side
-
 export default Dashboard

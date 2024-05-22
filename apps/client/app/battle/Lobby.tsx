@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useRace } from "@/lib/useRace" // Ensure this import is correct
 import {
   Card,
@@ -35,8 +35,18 @@ export default function Lobby({ battleId }: { battleId: number }) {
   }, [sendRaceAction, battleId])
 
   function handleCancel() {
+    const username = cookie.parse(document.cookie).username
+    if (sendRaceAction) {
+      sendRaceAction("leaveBattle", { id: battleId, username })
+    }
     router.back()
   }
+  /* const handleCancel = useCallback(function() {
+  const username = cookie.parse(document.cookie).username;
+  sendRaceAction("leaveBattle", { id: battleId, username });
+  router.back();
+}, [sendRaceAction, battleId, router]); */
+
   return (
     <div className="flex justify-center items-center h-screen">
       <Card className="w-[350px] flex flex-col justify-center items-center">

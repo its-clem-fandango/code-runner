@@ -17,7 +17,7 @@ import { parse } from "cookie";
 const rooms = {};
 
 //CHANGE TO THIS ORIGIN DURING DEVELOPMENT
-/* @WebSocketGateway({
+@WebSocketGateway({
   namespace: "/race",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -30,14 +30,15 @@ const rooms = {};
     },
     credentials: true,
   },
-}) */
-@WebSocketGateway({
+})
+/* @WebSocketGateway({
+  //a gateway in nestJS is a point for websocket communication, handling real-time events between client and server
   namespace: "/race",
   cors: {
     origin: "https://app.coderacer.xyz",
     credentials: true,
   },
-})
+}) */
 export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly answerService: AnswerService,
@@ -228,6 +229,75 @@ export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
       } catch (e) {
         console.error("Error updating battle:", e?.message);
       }
+    }
+  }
+
+  @SubscribeMessage("leaveBattle") //tells nestjs this function should handle a specific websocket event
+  async leaveBattle(
+    @MessageBody() data: { id: number; username: string }, //extracts the payload of the websocket message from the FE
+    @ConnectedSocket() client: Socket, //provides access to the clients socket, allowing interaction w/ the connection
+  ) {
+    const cookies = client.handshake.headers.cookie;
+    const parsedCookies = parse(cookies || "");
+    const sessionId = parsedCookies["sessionId"]; // or some other user identifier
+    const guestId = data.username;
+    console.log("LEAVE BATTLE in editor.gateway", data);
+    console.log("SessoinId in LeaveBattle/editor.gateway: ", sessionId);
+    console.log("guestId in LeaveBattle/editor.gateway: ", guestId);
+
+    const battleInfo = this.battleService.getBattle(data.id);
+    if (!battleInfo) {
+      console.log("LeaveBattle Error: Battle not found for ID:", data.id);
+      return;
+    }
+
+    client.leave(`room${data.id}`); //leave specific room
+    console.log("Client left room: ", `room${data.id}`);
+
+    this.server.to(`room${data.id}`).emit("playerLeft"),
+      {
+        username: data.username,
+        battleId: data.id,
+        message: "Player has left the race",
+      };
+
+    // remove client session from the room object
+    if (rooms[data.id]) {
+      delete rooms[data.id][client.id]; // Delete the client's session entry
+
+      // Check if the room is empty, if it is remove it
+
+      console.log("Object Keys: ", Object.keys);
+      if (Object.keys(rooms[data.id]).length === 0) {
+        delete rooms[data.id]; // Delete the room if it's empty
+        console.log(`Room ${data.id} is empty and has been deleted.`);
+      }
+    }
+
+    try {
+      // battle and error are destructed from removePlayerFromBattle's return
+      const { battle, error } = await this.battleService.removePlayerFromBattle(
+        data.id,
+        sessionId,
+        guestId,
+      );
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      if (battle) {
+        console.log("BATTLE UPDATED SUCCESSFULLY after player left", battle);
+        this.server.to(`room${data.id}`).emit("playerLeft", {
+          battle: battle,
+          clientId: client.id,
+        });
+      } else {
+        console.error("Battle update failed, battle object not returned.");
+      }
+    } catch (e) {
+      console.error("Error updating battle:", e?.message);
     }
   }
 }
