@@ -45,7 +45,12 @@ export interface SyntaxError {
   error: string
 }
 
-type RaceAction = "submit" | "codeChanged" | "joinBattle"
+export interface LeaveBattle {
+  id: number
+  username: string
+}
+
+type RaceAction = "submit" | "codeChanged" | "joinBattle" | "leaveBattle"
 
 // eslint-disable-next-line no-unused-vars
 type SendRaceAction = (action: RaceAction, payload: any) => void
@@ -108,6 +113,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
 
     socketRef.current = socket
 
+    //takes any RaceAction and emits it automatically
     socket.on("connect", () => {
       setSendRaceAction(() => (actionType: RaceAction, payload: any) => {
         if (typeof payload === "object" && !Array.isArray(payload)) {
@@ -151,7 +157,7 @@ export const RaceProvider = ({ children }: { children: ReactNode }) => {
           if (battle.playerCount >= 2) {
             setRace((prevRace) => {
               return {
-                ...prevRace,
+                ...prevRace, //spread the properties of prevRace and battle into new object
                 ...battle,
                 challenge,
                 isFull: true,

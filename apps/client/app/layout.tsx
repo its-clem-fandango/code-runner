@@ -3,6 +3,8 @@ import { Metadata } from "next"
 import { cn } from "../../client/lib/utils"
 import "./globals.css"
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/sonner"
+import Head from "next/head"
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -22,6 +24,9 @@ export default function RootLayout({
 }>) {
   return (
     <html>
+      <Head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </Head>
       <body
         className={cn(
           "min-h-screen bg-background antialiased",
@@ -30,6 +35,7 @@ export default function RootLayout({
       >
         {children}
         <Analytics />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   )

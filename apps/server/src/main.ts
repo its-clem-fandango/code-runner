@@ -26,7 +26,7 @@ async function bootstrap() {
     origin: [clientUrl],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE, OPTIONS",
     credentials: true,
-    allowedHeaders: "Content-Type, Accept",
+    allowedHeaders: "Content-Type, Accept, baggage, sentry-trace",
   });
 
   app.use(cookieParser());

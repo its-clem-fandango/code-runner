@@ -104,4 +104,53 @@ export class BattleService {
     const user = await this.usersService.findUserBySessionId(sessionId);
     return user ? user.username : "";
   }
+
+  //called by leaveBattle in editor.gateway
+  async removePlayerFromBattle(
+    id: number,
+    sessionId?: string,
+    guestId?: string,
+  ): Promise<{ battle?: Battle; error?: string }> {
+    const battleIndex = battles.findIndex((battle) => battle.id === id);
+
+    if (battleIndex === -1) {
+      return { error: "Battle not found" };
+    }
+
+    //the spread operator creates a shallow copy of the battles object so original isnt modified
+    const updatedBattle = { ...battles[battleIndex] };
+
+    let username;
+    try {
+      if (sessionId) {
+        const user = await this.usersService.findUserBySessionId(sessionId);
+        username = user ? user.username : null;
+
+        if (!username) {
+          console.log(
+            "User not found by session ID, using guestID to remove player",
+          );
+          username = guestId;
+        }
+      } else {
+        username = guestId;
+        console.log("No session ID provided, using guest ID");
+      }
+
+      if (username && updatedBattle.players.includes(username)) {
+        updatedBattle.players = updatedBattle.players.filter(
+          (player) => player !== username,
+        );
+        updatedBattle.playerCount--;
+      } else {
+        return { error: "player not found in battle" };
+      }
+    } catch (error) {
+      console.error("error processing removePlayerFromBattle: ", error);
+      return { error: "Internal server error during removal" };
+    }
+
+    battles[battleIndex] = updatedBattle;
+    return { battle: updatedBattle };
+  }
 }

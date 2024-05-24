@@ -59,6 +59,7 @@ export const RacesCollectionProvider: React.FC<{
 
     socketRef.current = socket
 
+    //show the available battles in dashboard
     socket.on("availableBattles", (data: Race[]) => {
       const formattedRaces = data.map((race: Race) => ({
         ...race,
@@ -67,6 +68,27 @@ export const RacesCollectionProvider: React.FC<{
         clientId: "", // Assuming this needs to be fetched or set elsewhere
       }))
       setRaces(formattedRaces)
+    })
+
+    //listens for playerLeft from the editor.gateway leaveBattle
+    socket.on("playerLeft", (data) => {
+      //the data callback function is executed whenever playerLeft is received
+      console.log("Player left message received by useRacesCollection", data)
+      setRaces((currentRaces) => {
+        //currentRaces represents the arry of races stored in the state before its updated. This is automatically provided by React when you use a function to update state
+        return currentRaces.map((race) => {
+          if (race.id === data.raceId) {
+            return {
+              ...race,
+              players: race.players.filter(
+                (player) => player !== data.username,
+              ),
+              playerCount: race.playerCount - 1,
+            }
+          }
+          return race
+        })
+      })
     })
 
     setSendRacesCollectionAction(() => {
