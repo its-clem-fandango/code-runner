@@ -43,10 +43,10 @@ export default function Lobby({ battleId }: { battleId: number }) {
     router.back()
   }
 
-  function handleCopyUrl() {
+  /*   function handleCopyUrl() {
     console.log("click handle copy URL")
     CopyUrlButton()
-  }
+  } */
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -61,9 +61,9 @@ export default function Lobby({ battleId }: { battleId: number }) {
           <Button variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
-          <Button variant="outline" onClick={handleCopyUrl}>
+          {/*           <Button variant="outline" onClick={handleCopyUrl}>
             Copy URL to Clipboard
-          </Button>
+          </Button> */}
         </CardFooter>
       </Card>
     </div>
