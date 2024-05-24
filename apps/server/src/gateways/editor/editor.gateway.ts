@@ -17,7 +17,7 @@ import { parse } from "cookie";
 const rooms = {};
 
 //CHANGE TO THIS ORIGIN DURING DEVELOPMENT
-@WebSocketGateway({
+/* @WebSocketGateway({
   namespace: "/race",
   cors: {
     origin: (requestOrigin, callback) => {
@@ -30,15 +30,15 @@ const rooms = {};
     },
     credentials: true,
   },
-})
-/* @WebSocketGateway({
+}) */
+@WebSocketGateway({
   //a gateway in nestJS is a point for websocket communication, handling real-time events between client and server
   namespace: "/race",
   cors: {
     origin: "https://app.coderacer.xyz",
     credentials: true,
   },
-}) */
+})
 export class EditorGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly answerService: AnswerService,
