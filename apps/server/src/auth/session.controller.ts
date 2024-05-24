@@ -20,7 +20,7 @@ export class SessionController {
         path: "/",
         domain: process.env.COOKIE_DOMAIN,
       });
-      const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
+      const guest = `Guest${Math.floor(Math.random() * 1000 + 1)}`;
       res.cookie("username", guest, {
         httpOnly: false,
         sameSite: "lax",
@@ -39,7 +39,7 @@ export class SessionController {
     const sessionId = req.cookies["sessionId"]; // Assuming you're using cookie-parser middleware
 
     if (!sessionId) {
-      const guest = `Guest${Math.floor(Math.random() * 100 + 1)}`;
+      const guest = `Guest${Math.floor(Math.random() * 1000 + 1)}`;
       res.cookie("username", guest, {
         httpOnly: false,
         sameSite: "lax",

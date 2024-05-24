@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useRace } from "@/lib/useRace" // Ensure this import is correct
 import {
   Card,
@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import cookie from "cookie"
+import { CopyUrlButton } from "@/lib/utils"
 
 export default function Lobby({ battleId }: { battleId: number }) {
   const { sendRaceAction } = useRace()
@@ -41,11 +42,11 @@ export default function Lobby({ battleId }: { battleId: number }) {
     }
     router.back()
   }
-  /* const handleCancel = useCallback(function() {
-  const username = cookie.parse(document.cookie).username;
-  sendRaceAction("leaveBattle", { id: battleId, username });
-  router.back();
-}, [sendRaceAction, battleId, router]); */
+
+  function handleCopyUrl() {
+    console.log("click handle copy URL")
+    CopyUrlButton()
+  }
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -56,10 +57,12 @@ export default function Lobby({ battleId }: { battleId: number }) {
           <CardTitle>Waiting for another player to join the race...</CardTitle>
           <CardDescription>On your mark, get set...</CardDescription>
         </CardHeader>
-        <CardContent></CardContent>
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex gap-4">
           <Button variant="outline" onClick={handleCancel}>
             Cancel
+          </Button>
+          <Button variant="outline" onClick={handleCopyUrl}>
+            Copy URL to Clipboard
           </Button>
         </CardFooter>
       </Card>
