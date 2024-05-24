@@ -1,5 +1,5 @@
-import { codingChallengesList } from "./codingChallenges";
-
+/* import { codingChallengesList } from "./codingChallenges";
+ */
 export interface Battle {
   id: number;
   battleName: string;
@@ -10,7 +10,8 @@ export interface Battle {
   challengeId: number;
 }
 
-export const battles = codingChallengesList.map((challenge, index) => {
+// UNCOMMENT TO SEE ALL CHALLENGES IN FE
+/* export const battles = codingChallengesList.map((challenge, index) => {
   return {
     id: index,
     battleName: challenge.name,
@@ -20,12 +21,10 @@ export const battles = codingChallengesList.map((challenge, index) => {
     join: "linkToJoinBattle",
     challengeId: challenge.challengeId,
   };
-});
-
-/*
+}); */
 
 export const battles: Battle[] = [
-  {
+  /* {
     id: 0,
     battleName: "Test1",
     players: ["Edu"],
@@ -60,6 +59,5 @@ export const battles: Battle[] = [
     playerCount: 0, // You can set this to the number of players you expect
     join: "linkToJoinBattle", // Replace "linkToJoinBattle" with an actual link or identifier for joining
     challengeId: 11, // The 'challengeId' from the challenge details
-  },
+  }, */
 ];
- */
