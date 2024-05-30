@@ -1,6 +1,6 @@
 # CodeRacer
 
-CodeRacer is a javascript based coding challenge platform designed to help users improve their problem solving skills under pressure.
+CodeRacer is a javascript based coding challenge platform designed to help users improve their problem solving skills under pressure. When you create or join a game or "race", a coding challenge is randomly selected based on the difficulty chosen. You will see both your editor and your opponents editor (which you can disable with the eye icon). The first person to solve and submit the correct result wins the race! 
 
 ## What's inside?
 
@@ -10,18 +10,6 @@ This Turborepo includes the following packages/apps:
 
 - `client`: a [Next.js](https://nextjs.org/) app
 - `server`: [Nest.js](https://docs.nestjs.com/) app
-- `monaco editor`: a [Monaco](https://microsoft.github.io/monaco-editor/) text editor
-- `mocha`: a [testing](https://mochajs.org/) framework running on Node.js and in the browser
-- `mongoose`: a [mongoDB](https://mongoosejs.com/docs/) library for creating schemas
-- `cors`: a [cors](https://www.npmjs.com/package/cors) package that can be used to enable Cross-Origin-Resource-Sharing
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
